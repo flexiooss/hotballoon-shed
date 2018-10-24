@@ -25,8 +25,14 @@ const compiler = webpack(webpackDev)
 
 let server = new WebpackDevServer(compiler, options)
 server.listen(CONFIG.port, CONFIG.host, (err) => {
-  console.log('server listen : '+ webpackDev.output.publicPath)
-  if (err) {
-    console.error(err)
+  if (isVerbose) {
+    console.log('_________________ SERVER LISTEN _________________')
+    console.log(webpackDev.output.publicPath)
+    console.log('_________________')
+    if (err) {
+      console.log('_________________ SERVER ERROR _________________')
+      console.error(err)
+      console.log('_________________')
+    }
   }
 })

@@ -3,6 +3,13 @@
 const CONFIG = require('./config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
+const babelOptions = require('../babel/babel-options')
+const fs = require('fs')
+
+if (fs.existsSync(path.resolve('./build/babel-options.js'))) {
+  const customBabelOptions = require(path.resolve('./build/babel-options.js'))
+  Object.assign(babelOptions, customBabelOptions)
+}
 
 module.exports = {
   entry: CONFIG.entry,
@@ -23,8 +30,8 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        // exclude: [/node_modules/, /libs/],
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        options: babelOptions
       },
       {
         test: /\.worker\.js$/,
@@ -46,6 +53,6 @@ module.exports = {
     ]
   },
   resolveLoader: {
-    modules: [path.resolve(__dirname, '../../node_modules'), 'node_modules']
+    modules: [path.resolve(__dirname, '../../node_modules'), 'node_modules'],
   }
 }

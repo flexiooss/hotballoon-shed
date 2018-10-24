@@ -3,20 +3,20 @@ const {spawn, exec} = require('child_process')
 const path = require('path');
 
 (function (cmdArguments, exec, spawn, path) {
+
   const OPTIONS = (function constructOptions(cmdArguments) {
     const ret = {}
     cmdArguments.forEach(function (val, index, array) {
       if (val.startsWith('--')) {
         let option = val.split('=')
-        ret[option[0].substr(2)] = option[1]
+        ret[option[0].substr(2)] = (typeof option[1] === 'undefined') ? true : option[1]
       }
     })
     if (isVerbose(ret)) {
       console.log(ret)
     }
     return ret
-  }(cmdArguments))
-
+  }(cmdArguments));
 
   (function controller(options) {
     if (typeof options.mk === 'undefined') {
@@ -54,8 +54,8 @@ const path = require('path');
 
   function _mkClb(error, stdout, stderr) {
     if (isVerbose()) {
-      console.log('stdout: ' + stdout)
-      console.error('stderr: ' + stderr)
+      console.log(stdout)
+      console.error(stderr)
     }
     if (error !== null) {
       console.error('exec error: ' + error)
@@ -65,10 +65,10 @@ const path = require('path');
   function _processConsoleOut(process) {
     if (isVerbose()) {
       process.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`)
+        console.log(`${data}`)
       })
       process.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`)
+        console.error(`${data}`)
       })
       process.on('close', (code) => {
         console.log(`child process exited with code ${code}`)
