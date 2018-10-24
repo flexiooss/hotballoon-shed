@@ -2,10 +2,10 @@
 const {spawn, exec} = require('child_process')
 const path = require('path');
 
-(function(cmdArguments, exec, spawn, path) {
+(function (cmdArguments, exec, spawn, path) {
   const OPTIONS = (function constructOptions(cmdArguments) {
     const ret = {}
-    cmdArguments.forEach(function(val, index, array) {
+    cmdArguments.forEach(function (val, index, array) {
       if (val.startsWith('--')) {
         let option = val.split('=')
         ret[option[0].substr(2)] = option[1]
@@ -17,46 +17,62 @@ const path = require('path');
     return ret
   }(cmdArguments))
 
-  if (typeof OPTIONS.mk === 'undefined') {
-    console.error('--mk option should not be empty : production | development | test')
-    process.exit(1)
-  }
 
-  switch (OPTIONS.mk) {
-    case 'production':
-      exec('webpack --config ' + path.resolve(__dirname, './webpack.prod.js'), _mkClb)
-      break
-    case 'development':
-      const pr = spawn('node', [path.resolve(__dirname, './server.js')])
+  (function controller(options) {
+    if (typeof options.mk === 'undefined') {
+      console.error('`--mk` argument should not be empty choose : production | development | test')
+      process.exit(1)
+    }
 
-      if (isVerbose()) {
-        pr.stdout.on('data', (data) => {
-          console.log(`stdout: ${data}`)
-        })
+    const COMPILER = 'webpack4'
 
-        pr.stderr.on('data', (data) => {
-          console.log(`stderr: ${data}`)
-        })
+    switch (options.mk) {
+      case 'production':
+        _processConsoleOut(
+          spawn(
+            'node',
+            [path.resolve(__dirname, './' + COMPILER + '/production.js'),
+              isVerbose()]
+          )
+        )
+        break
+      case 'development':
+        _processConsoleOut(
+          spawn(
+            'node',
+            [path.resolve(__dirname, './' + COMPILER + '/server.js'),
+              isVerbose()]
+          )
+        )
+        break
 
-        pr.on('close', (code) => {
-          console.log(`child process exited with code ${code}`)
-        })
-      }
-      break
-
-    case 'test':
-      console.log(path.resolve())
-      exec('jest', _mkClb)
-      break
-  }
+      case 'test':
+        exec('jest', _mkClb)
+        break
+    }
+  }(OPTIONS))
 
   function _mkClb(error, stdout, stderr) {
     if (isVerbose()) {
       console.log('stdout: ' + stdout)
-      console.log('stderr: ' + stderr)
+      console.error('stderr: ' + stderr)
     }
     if (error !== null) {
-      console.log('exec error: ' + error)
+      console.error('exec error: ' + error)
+    }
+  }
+
+  function _processConsoleOut(process) {
+    if (isVerbose()) {
+      process.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`)
+      })
+      process.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`)
+      })
+      process.on('close', (code) => {
+        console.log(`child process exited with code ${code}`)
+      })
     }
   }
 

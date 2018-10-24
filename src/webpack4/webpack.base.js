@@ -2,6 +2,7 @@
 
 const CONFIG = require('./config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
 
 module.exports = {
   entry: CONFIG.entry,
@@ -43,5 +44,8 @@ module.exports = {
 
       }
     ]
+  },
+  resolveLoader: {
+    modules: [path.resolve(__dirname, '../../node_modules'), 'node_modules']
   }
 }

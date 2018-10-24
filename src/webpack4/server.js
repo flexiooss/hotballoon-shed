@@ -8,10 +8,16 @@ const options = require('./server-options')
 const WebpackDevServer = require('webpack-dev-server')
 const fs = require('fs')
 
-if (fs.existsSync(path.resolve('server-options.js'))) {
-  const serverOptions = require(path.resolve('server-options.js'))
-  console.log(serverOptions)
+const isVerbose = process.argv[2]
+
+if (fs.existsSync(path.resolve('./build/server-options.js'))) {
+  const serverOptions = require(path.resolve('./build/server-options.js'))
   Object.assign(options, serverOptions)
+  if (isVerbose) {
+    console.log('_________________ CUSTOM OPTIONS SERVER _________________')
+    console.log(serverOptions)
+    console.log('_________________')
+  }
 }
 WebpackDevServer.addDevServerEntrypoints(webpackDev, options)
 
@@ -19,8 +25,8 @@ const compiler = webpack(webpackDev)
 
 let server = new WebpackDevServer(compiler, options)
 server.listen(CONFIG.port, CONFIG.host, (err) => {
-  console.log(webpackDev.output.publicPath)
+  console.log('server listen : '+ webpackDev.output.publicPath)
   if (err) {
-    console.log(err)
+    console.error(err)
   }
 })
