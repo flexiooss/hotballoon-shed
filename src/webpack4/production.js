@@ -4,6 +4,6 @@ const webpack = require('webpack')
 
 const compiler = webpack(webpackProd)
 compiler.run((err, stats) => {
-  console.log(err)
+  console.error(err)
   // console.log(stats)
 })
