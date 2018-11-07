@@ -24,10 +24,8 @@ const path = require('path');
   const CMD_CONTEXT = _buildContextCmd(cmdArguments);
 
   (function controller(cmdContext) {
-
     _showHelp(cmdContext)
     _execOperation(cmdContext)
-
   }(CMD_CONTEXT))
 
 
@@ -191,17 +189,6 @@ const path = require('path');
               isVerbose()]
           )
         )
-        break
-
-      case 'test':
-        _processConsoleOut(
-          spawn(
-            'node',
-            [path.resolve(__dirname, './test/test.js'),
-              isVerbose()]
-          )
-        )
-        // exec('jest', _mkClb)
         break
     }
   }
