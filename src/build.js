@@ -1,13 +1,14 @@
 'use strict'
+const utils = require('./childProcessStdLog.js')
 const {spawn, exec} = require('child_process')
 const path = require('path');
 
-(function (cmdArguments, exec, spawn, path) {
+(function (cmdArguments, exec, spawn, path, _childProcessStdLog) {
 
   const OPTIONS = {
     operation: {
       alias: 'op',
-      values: ['production', 'development', 'test']
+      values: ['production', 'development']
     },
     help: {
       alias: 'h'
@@ -19,22 +20,47 @@ const path = require('path');
       alias: 'comp',
       values: ['webpack4']
     },
+    test: {
+      alias: 't'
+    }
   }
 
   const CMD_CONTEXT = _buildContextCmd(cmdArguments);
 
   (function controller(cmdContext) {
     _showHelp(cmdContext)
-    _execOperation(cmdContext)
+    if (hasTestOption(cmdContext)) {
+      _execTest(cmdContext, _execOperation, cmdContext).on('close', (code) => {
+        if (code === 0) {
+          _execOperation(cmdContext).on('close', (code) => {
+            if (code === 0) {
+              process.exit(0)
+            }
+          })
+        }
+      })
+    } else {
+      _execOperation(cmdContext)
+    }
   }(CMD_CONTEXT))
 
 
   /**
    *
+   * @param cmdContext
    * @return {boolean}
    */
   function isVerbose(cmdContext = CMD_CONTEXT) {
     return typeof cmdContext.verbose !== 'undefined' && !!cmdContext.verbose
+  }
+
+  /**
+   *
+   * @param cmdContext
+   * @return {boolean}
+   */
+  function hasTestOption(cmdContext = CMD_CONTEXT) {
+    return typeof cmdContext.test !== 'undefined' && !!cmdContext.test
   }
 
   /**
@@ -106,35 +132,6 @@ const path = require('path');
     return null
   }
 
-  function _mkClb(error, stdout, stderr) {
-    if (isVerbose()) {
-      console.log(stdout)
-      console.error(stderr)
-    }
-    if (error !== null) {
-      console.error('exec error: ' + error)
-    }
-  }
-
-  /**
-   *
-   * @param process
-   * @private
-   */
-  function _processConsoleOut(process) {
-    if (isVerbose()) {
-      process.stdout.on('data', (data) => {
-        console.log(`${data}`)
-      })
-      process.stderr.on('data', (data) => {
-        console.error(`${data}`)
-      })
-      process.on('close', (code) => {
-        console.log(`child process exited with code ${code}`)
-      })
-    }
-  }
-
   /**
    *
    * @param {Object} cmdContext
@@ -171,25 +168,39 @@ const path = require('path');
 
     const COMPILER = cmdContext.compiler || 'webpack4'
 
+
     switch (cmdContext.operation) {
       case 'production':
-        _processConsoleOut(
+        return _childProcessStdLog(
           spawn(
             'node',
             [path.resolve(__dirname, './' + COMPILER + '/production.js'),
               isVerbose()]
-          )
+          ),
+          isVerbose()
         )
-        break
       case 'development':
-        _processConsoleOut(
+        return _childProcessStdLog(
           spawn(
             'node',
             [path.resolve(__dirname, './' + COMPILER + '/server.js'),
               isVerbose()]
-          )
+          ),
+          isVerbose()
         )
-        break
     }
   }
-}(process.argv, exec, spawn, path))
+
+  function _execTest() {
+
+    return _childProcessStdLog(
+      spawn(
+        'node',
+        [path.resolve(__dirname, './test/test.js'),
+          isVerbose()]
+      ),
+      isVerbose()
+    )
+
+  }
+}(process.argv, exec, spawn, path, utils.childProcessStdLog))
