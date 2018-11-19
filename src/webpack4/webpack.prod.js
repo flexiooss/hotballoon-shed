@@ -2,11 +2,11 @@
 
 const path = require('path')
 const webpack = require('webpack')
-// const ExtractTextPlugin = require('extract-text-webpack-plugin')
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const Terser = require('terser')
 
 
 const webpackBase = require('./webpack.base')
@@ -20,27 +20,26 @@ webpackBase.devtool = false
 
 webpackBase.optimization = {
   minimizer: [
-    //   new UglifyJsPlugin({
-    //     test: /\.js(\?.*)?$/i,
-    //     cache: false,
-    //     sourceMap: true,
-    //     extractComments: false,
-    //     uglifyOptions: {
-    //       compress: true
-    //     }
-    //   })
-    new OptimizeCSSAssetsPlugin({})
-  ],
-  splitChunks: {
-    cacheGroups: {
-      styles: {
-        name: 'styles',
-        test: /\.css$/,
-        chunks: 'all',
-        enforce: true
+    new UglifyJsPlugin({
+      sourceMap: true,
+      minify(file, sourceMap) {
+        const uglifyJsOptions = {}
+
+        if (sourceMap) {
+          uglifyJsOptions.sourceMap = {
+            content: sourceMap
+          }
+        }
+
+        return Terser.minify(file, uglifyJsOptions)
       }
-    }
-  }
+    }),
+    new OptimizeCSSAssetsPlugin({
+      cssProcessorPluginOptions: {
+        preset: ['default', {discardComments: {removeAll: true}}],
+      }
+    })
+  ]
 }
 
 webpackBase.plugins.push(
@@ -66,20 +65,5 @@ webpackBase.module.rules.push({
     'css-loader'
   ]
 })
-
-// webpackBase.module.rules.forEach(function(rule, k) {
-//   if ('.css'.match(rule.test)) {
-//     rule.use.shift()
-//     webpackBase.module.rules[k].use = ExtractTextPlugin.extract({
-//       fallback: 'style-loader',
-//       use: [{
-//         loader: rule.use[0].loader,
-//         options: {
-//           minimize: true
-//         }
-//       }]
-//     })
-//   }
-// })
 
 module.exports = webpackBase
