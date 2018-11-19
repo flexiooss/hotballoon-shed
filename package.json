@@ -7,6 +7,7 @@
   "author": "Thomas Chatelain (https://github.com/TomAchT)",
   "license": "Apache-2.0",
   "devDependencies": {
+    "optimize-css-assets-webpack-plugin": "^5.0.1"
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
@@ -15,6 +16,7 @@
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
+    "babel-polyfill": "^6.26.0",
     "chokidar": "^2.0.4",
     "circular-dependency-plugin": "^5.0.2",
     "clean-webpack-plugin": "^0.1.17",
@@ -46,7 +48,6 @@
     "webpack-dev-middleware": "^3.4.0",
     "webpack-dev-server": "^3.1.9",
     "webpack-hot-middleware": "^2.21.0",
-    "worker-loader": "^2.0.0",
-    "babel-polyfill": "^6.26.0"
+    "worker-loader": "^2.0.0"
   }
 }

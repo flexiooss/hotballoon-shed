@@ -6,6 +6,8 @@ const webpack = require('webpack')
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+
 
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
@@ -17,17 +19,18 @@ webpackBase.mode = 'production'
 webpackBase.devtool = false
 
 webpackBase.optimization = {
-  // minimizer: [
-  //   new UglifyJsPlugin({
-  //     test: /\.js(\?.*)?$/i,
-  //     cache: false,
-  //     sourceMap: true,
-  //     extractComments: false,
-  //     uglifyOptions: {
-  //       compress: true
-  //     }
-  //   })
-  // ],
+  minimizer: [
+    //   new UglifyJsPlugin({
+    //     test: /\.js(\?.*)?$/i,
+    //     cache: false,
+    //     sourceMap: true,
+    //     extractComments: false,
+    //     uglifyOptions: {
+    //       compress: true
+    //     }
+    //   })
+    new OptimizeCSSAssetsPlugin({})
+  ],
   splitChunks: {
     cacheGroups: {
       styles: {
