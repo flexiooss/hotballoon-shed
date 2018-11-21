@@ -1,5 +1,5 @@
 'use strict'
-const utils = require('./childProcessStdLog.js')
+const utils = require('../childProcessStdLog.js')
 const {spawn, exec} = require('child_process')
 const path = require('path');
 

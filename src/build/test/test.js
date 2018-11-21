@@ -2,7 +2,7 @@
 
 const path = require('path')
 const {spawn, exec} = require('child_process')
-const utils = require('../childProcessStdLog.js')
+const utils = require('../../childProcessStdLog.js')
 const callerPackage = require(path.resolve('package.json'))
 const isVerbose = process.argv[2];
 

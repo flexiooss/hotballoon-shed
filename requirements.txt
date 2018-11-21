@@ -1,0 +1,15 @@
+certifi==2018.10.15
+chardet==3.0.4
+enum34==1.1.6
+get==1.0.3
+idna==2.7
+pipenv==2018.11.14
+post==1.0.2
+public==2.0.1
+query-string==1.0.2
+request==1.0.2
+requests==2.20.1
+typing==3.6.6
+urllib3==1.24.1
+virtualenv==16.1.0
+virtualenv-clone==0.4.0
