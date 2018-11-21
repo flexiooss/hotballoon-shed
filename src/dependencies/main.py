@@ -18,7 +18,6 @@ def main(argv):
 
     for opt, arg in opts:
         arg = re.sub('[\s+]', '', arg)
-        print (opt, arg)
         if opt in ("-h", "--help"):
             print 'packageHandler.py -i <inputfile> -u <url> -r <repository_id>'
             sys.exit()

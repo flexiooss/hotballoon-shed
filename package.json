@@ -1,17 +1,16 @@
 {
   "name": "hotballoon-shed",
   "version": "1.0.0",
-  "description": "Build and development environement for Hotballon applications",
+  "description": "Build and development environment for Hotballon applications",
   "main": "index.js",
   "repository": "git@github.com:flexiooss/hotballoon-shed.git",
   "author": "Thomas Chatelain (https://github.com/TomAchT)",
   "license": "Apache-2.0",
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
     "css-loader": "^1.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "terser": "^3.10.11"
-  },
-  "dependencies": {
+    "terser": "^3.10.11",
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "autoprefixer": "^9.2.1",
