@@ -3,6 +3,9 @@ class ModuleHandler:
     SPEC_DOCKER_PREFIX = 'docker::'
     DEFAULT_VERSION = 'master'
 
+    def __init__(self):
+        pass
+
     def module_item(self, spec, version):
         # type: (str, str) -> dict
 

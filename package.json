@@ -6,6 +6,9 @@
   "repository": "git@github.com:flexiooss/hotballoon-shed.git",
   "author": "Thomas Chatelain (https://github.com/TomAchT)",
   "license": "Apache-2.0",
+  "scripts": {
+    "ci:update_meta": "python ./src/ci/dependencies/main.py"
+  },
   "devDependencies": {},
   "dependencies": {
     "css-loader": "^1.0.1",

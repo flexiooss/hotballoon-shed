@@ -9,9 +9,9 @@ const StyleLintPlugin = require('stylelint-webpack-plugin')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 CONFIG.entry.app = [
-  path.resolve( './src/js/_before.js'),
-  path.resolve( './src/js/bootstrap.js'),
-  path.resolve( './src/js/_after.js')
+  path.resolve('./src/js/_before.js'),
+  path.resolve('./src/js/bootstrap.js'),
+  path.resolve('./src/js/_after.js')
 ]
 webpackBase.output.globalObject = 'this'
 
@@ -34,12 +34,20 @@ webpackBase.plugins.push(
   new StyleLintPlugin()
 )
 
-webpackBase.module.rules.push({
-  test: /\.css$/,
-  use: [
-    'style-loader',
-    'css-loader'
-  ]
-})
+webpackBase.module.rules.push(
+  {
+    test: /\.css$/,
+    use: [
+      'style-loader',
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 1,
+          localIdentName: '[local]'
+        }
+      }
+    ]
+  })
 
 module.exports = webpackBase

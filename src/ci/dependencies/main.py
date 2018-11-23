@@ -9,10 +9,55 @@ from PackageHandler import PackageHandler
 from CiDependencyApi import CiDependencyApiUrl, CiDependencyApiHandler
 from ProducesHandler import ProducesHandler
 
+def get_env():
+    repository = os.environ['REPOSITORY']
+    repository_id = os.environ['REPOSITORY_ID']
+    checkout_spec = os.environ['CHECKOUT_SPEC']
+
+    return repository, repository_id, checkout_spec
+
+
+def parse_options(argv):
+    # type: (list) -> tuple(str,str,str)
+
+    package_file = ''  # type: str
+    dependencies_url = ''  # type: str
+    version = ''  # type: str
+    docker_image = ''  # type: str
+
+    try:
+        opts, args = getopt.getopt(argv, "hi:u:v:d:", ["help", "ifile=", "url=", "version=", "docker_image="])
+    except getopt.GetoptError:
+        print 'hotballoon-shed:ci:update_meta -i <package_file> -u <dependencies_url> -v <version> -d <docker_image>'
+        sys.exit(2)
+
+    for opt, arg in opts:
+        arg = re.sub('[\s+]', '', arg)
+        if opt in ("-h", "--help"):
+            print 'hotballoon-shed:ci:update_meta -i <package_file> -u <dependencies_url> -v <version> -d <docker_image>'
+            sys.exit()
+        elif opt in ("-i", "--ifile"):
+            package_file = arg
+        elif opt in ("-u", "--url"):
+            dependencies_url = arg
+        elif opt in ("-v", "--version"):
+            version = arg
+        elif opt in ("-d", "--docker_image"):
+            docker_image = arg
+
+    return package_file, dependencies_url, version, docker_image
+
+
+def log_response(response):
+    pprint(response.request)
+    pprint(response.status_code)
+    pprint(response.url)
+    pprint(response.content)
+
 
 def main(argv):
+    package_file, dependencies_url, version, docker_image = parse_options(argv)
     repository, repository_id, checkout_spec = get_env()
-    package_file, dependencies_url, docker_image = parse_options(argv)
 
     api_handler = CiDependencyApiHandler(
         repository=repository,
@@ -31,7 +76,7 @@ def main(argv):
     produces_handler = ProducesHandler(
         docker_image=docker_image,
         repository=repository,
-        version=package_handler.version
+        version=version
     ).process()
 
     r = api_handler.put_repo_meta()
@@ -53,44 +98,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-
-
-def get_env():
-    repository = os.environ['REPOSITORY']
-    repository_id = os.environ['REPOSITORY_ID']
-    checkout_spec = os.environ['CHECKOUT_SPEC']
-
-    return repository, repository_id, checkout_spec
-
-
-def parse_options(argv):
-    package_file = ''  # type: str
-    dependencies_url = ''  # type: str
-    docker_image = ''  # type: str
-
-    try:
-        opts, args = getopt.getopt(argv, "hi:u:d", ["help", "ifile=", "url=", "docker_image="])
-    except getopt.GetoptError:
-        print 'hotballoon-shed:ci:dependencies:meta -i <package_file> -u <dependencies_url> -d <docker_image>'
-        sys.exit(2)
-
-    for opt, arg in opts:
-        arg = re.sub('[\s+]', '', arg)
-        if opt in ("-h", "--help"):
-            print 'hotballoon-shed:ci:dependencies:meta -i <package_file> -u <dependencies_url> -d <docker_image>'
-            sys.exit()
-        elif opt in ("-i", "--ifile"):
-            package_file = arg
-        elif opt in ("-u", "--url"):
-            dependencies_url = arg
-        elif opt in ("-d", "--docker_image"):
-            docker_image = arg
-
-    return package_file, dependencies_url, docker_image
-
-
-def log_response(response):
-    pprint(response.request)
-    pprint(response.status_code)
-    pprint(response.url)
-    pprint(response.content)
