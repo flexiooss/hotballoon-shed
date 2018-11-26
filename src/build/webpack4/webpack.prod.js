@@ -7,7 +7,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
-
+const LinkMediaHtmlWebpackPlugin = require('link-media-html-webpack-plugin')
+const SriPlugin = require( 'webpack-subresource-integrity')
+const AppCachePlugin = require('appcache-webpack-plugin')
 
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
@@ -17,6 +19,7 @@ CONFIG.entry.app = ['babel-polyfill', './src/js/bootstrap.js']
 webpackBase.devtool = false
 webpackBase.mode = 'production'
 webpackBase.devtool = false
+webpackBase.output.crossOriginLoading= 'anonymous'
 
 webpackBase.optimization = {
   minimizer: [
@@ -55,7 +58,18 @@ webpackBase.plugins.push(
   new MiniCssExtractPlugin({
     filename: '[name].[hash].css',
     chunkFilename: '[id].[hash].css'
-  })
+  }),
+  new SriPlugin({
+    hashFuncNames: ['sha256', 'sha384']
+  }),
+  new AppCachePlugin({
+//      cache: ['someOtherAsset.jpg'],
+//      network: null,  // No network access allowed!
+//      fallback: ['failwhale.jpg'],
+//      settings: ['prefer-online'],
+//      exclude: ['file.txt', /.*\.js$/],  // Exclude file.txt and all .js files
+      output: 'manifest.appcache'
+    })
 )
 
 webpackBase.module.rules.push({
