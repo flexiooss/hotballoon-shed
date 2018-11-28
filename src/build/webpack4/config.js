@@ -17,5 +17,9 @@ module.exports = {
   dist_path: path.resolve('./dist'),
   root_path: path.resolve(),
   template_html: path.resolve('./src/index.html'),
-  https: true
+  https: true,
+  mediaqueries: {
+    desktop: 'screen min-width(800px)',
+    print: 'print'
+  }
 }

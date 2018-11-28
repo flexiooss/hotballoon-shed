@@ -5,21 +5,23 @@ const webpack = require('webpack')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
-const LinkMediaHtmlWebpackPlugin = require('link-media-html-webpack-plugin')
-const SriPlugin = require( 'webpack-subresource-integrity')
-const AppCachePlugin = require('appcache-webpack-plugin')
+const LinkStylesheetHtmlWebpackPlugin = require('link-stylesheet-html-webpack-plugin')
+const SriPlugin = require('webpack-subresource-integrity')
+// const AppCachePlugin = require('appcache-webpack-plugin')
+// const MediaQueryPlugin = require('media-query-plugin')
 
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
-CONFIG.entry.app = ['babel-polyfill', './src/js/bootstrap.js']
+webpackBase.entry.app = ['babel-polyfill', './src/js/bootstrap.js']
 
 webpackBase.devtool = false
 webpackBase.mode = 'production'
 webpackBase.devtool = false
-webpackBase.output.crossOriginLoading= 'anonymous'
+webpackBase.output.crossOriginLoading = 'anonymous'
 
 webpackBase.optimization = {
   minimizer: [
@@ -36,7 +38,8 @@ webpackBase.optimization = {
 
         return Terser.minify(file, uglifyJsOptions)
       }
-    }),
+    })
+    ,
     new OptimizeCSSAssetsPlugin({
       cssProcessorPluginOptions: {
         preset: ['default', {discardComments: {removeAll: true}}],
@@ -44,6 +47,10 @@ webpackBase.optimization = {
     })
   ]
 }
+
+// const cssPrint = new LinkStylesheetHtmlWebpackPlugin({
+//   'media': 'print'
+// })
 
 webpackBase.plugins.push(
   new CleanWebpackPlugin([CONFIG.dist_path + '/*'], {
@@ -61,31 +68,32 @@ webpackBase.plugins.push(
   }),
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
-  }),
-  new AppCachePlugin({
-//      cache: ['someOtherAsset.jpg'],
-//      network: null,  // No network access allowed!
-//      fallback: ['failwhale.jpg'],
-//      settings: ['prefer-online'],
-//      exclude: ['file.txt', /.*\.js$/],  // Exclude file.txt and all .js files
-      output: 'manifest.appcache'
-    })
+  })
 )
 
-webpackBase.module.rules.push({
-  test: /\.css$/,
-  use: [
-    MiniCssExtractPlugin.loader,
-    {
-      loader: 'css-loader',
-      options: {
-        modules: true,
-        importLoaders: 1,
-        localIdentName: '[sha1:hash:hex:4]'
+webpackBase.module.rules.push(
+  {
+    test: /\.css$/,
+    use: [
+      // {
+      //   loader: 'link-stylesheet-html-webpack-plugin',
+      // },
+      MiniCssExtractPlugin.loader,
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 1,
+          localIdentName: '[sha1:hash:hex:4]'
+        }
+      },
+      {
+        loader: 'css-media-queries-loader',
+        options: CONFIG.mediaqueries
       }
-    }
-  ]
-})
+    ]
+  }
+)
 
 
 module.exports = webpackBase

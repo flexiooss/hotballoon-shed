@@ -46,8 +46,13 @@ webpackBase.module.rules.push(
           importLoaders: 1,
           localIdentName: '[local]'
         }
+      },
+      {
+        loader: 'css-media-queries-loader',
+        options: CONFIG.mediaqueries
       }
     ]
-  })
+  }
+)
 
 module.exports = webpackBase
