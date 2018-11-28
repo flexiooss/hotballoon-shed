@@ -8,10 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
-const LinkStylesheetHtmlWebpackPlugin = require('link-stylesheet-html-webpack-plugin')
 const SriPlugin = require('webpack-subresource-integrity')
-// const AppCachePlugin = require('appcache-webpack-plugin')
-// const MediaQueryPlugin = require('media-query-plugin')
 
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
@@ -48,10 +45,6 @@ webpackBase.optimization = {
   ]
 }
 
-// const cssPrint = new LinkStylesheetHtmlWebpackPlugin({
-//   'media': 'print'
-// })
-
 webpackBase.plugins.push(
   new CleanWebpackPlugin([CONFIG.dist_path + '/*'], {
     root: path.resolve(),
@@ -68,16 +61,13 @@ webpackBase.plugins.push(
   }),
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
-  })
+  }),
 )
 
 webpackBase.module.rules.push(
   {
     test: /\.css$/,
     use: [
-      // {
-      //   loader: 'link-stylesheet-html-webpack-plugin',
-      // },
       MiniCssExtractPlugin.loader,
       {
         loader: 'css-loader',

@@ -37,7 +37,6 @@
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^23.6.0",
-    "link-stylesheet-html-webpack-plugin": "https://github.com/flexiooss/link-stylesheet-html-webpack-plugin.git",
     "mini-css-extract-plugin": "^0.4.4",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "regenerator-runtime": "^0.12.1",
