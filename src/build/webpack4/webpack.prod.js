@@ -5,6 +5,7 @@ const webpack = require('webpack')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const LinkStylesheetHtmlWebpackPlugin = require('link-stylesheet-html-webpack-plugin')
 
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
@@ -14,13 +15,15 @@ const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
 webpackBase.entry.app = ['babel-polyfill', './src/js/bootstrap.js']
-
 webpackBase.devtool = false
 webpackBase.mode = 'production'
 webpackBase.devtool = false
 webpackBase.output.crossOriginLoading = 'anonymous'
 
 webpackBase.optimization = {
+  splitChunks: {
+    chunks: 'all',
+  },
   minimizer: [
     new UglifyJsPlugin({
       sourceMap: true,
@@ -52,8 +55,7 @@ webpackBase.plugins.push(
     watch: true
   }),
   new webpack.DefinePlugin({
-    'window.__DEVELOPPEMENT__': JSON.stringify(false)
-    // 'process.env.NODE_ENV': JSON.stringify('production')
+    'window.__DEVELOPMENT__': JSON.stringify(false)
   }),
   new MiniCssExtractPlugin({
     filename: '[name].[hash].css',
@@ -62,6 +64,7 @@ webpackBase.plugins.push(
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
   }),
+  // new LinkStylesheetHtmlWebpackPlugin()
 )
 
 webpackBase.module.rules.push(
@@ -84,6 +87,5 @@ webpackBase.module.rules.push(
     ]
   }
 )
-
 
 module.exports = webpackBase

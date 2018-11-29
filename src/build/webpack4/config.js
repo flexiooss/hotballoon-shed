@@ -16,5 +16,6 @@ module.exports = {
   mediaqueries: {
     desktop: 'screen min-width(800px)',
     print: 'print'
-  }
+  },
+  vendors_path: path.resolve(__dirname,'../../../node_modules')
 }

@@ -15,7 +15,7 @@ module.exports = {
   entry: CONFIG.entry,
   output: {
     path: CONFIG.dist_path,
-    filename: '[name].js'
+    filename: '[name].[contenthash].js'
   },
   plugins: [
     new HtmlWebpackPlugin(
@@ -52,7 +52,6 @@ module.exports = {
     ]
   },
   resolveLoader: {
-    // modules: [path.resolve(__dirname, '../../node_modules'), 'node_modules'],
-    modules: ['node_modules', path.resolve(__dirname, '../../../node_modules')]
+    modules: ['node_modules', CONFIG.vendors_path]
   }
 }
