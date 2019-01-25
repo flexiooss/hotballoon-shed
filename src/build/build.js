@@ -30,6 +30,7 @@ const path = require('path');
   (function controller(cmdContext) {
     _showHelp(cmdContext)
     if (hasTestOption(cmdContext)) {
+      console.log('test')
       _execTest(cmdContext, _execOperation, cmdContext).on('close', (code) => {
         if (code === 0) {
           _execOperation(cmdContext).on('close', (code) => {
@@ -95,7 +96,7 @@ const path = require('path');
    * @private
    */
   function _addOption(options, key, value = true) {
-    if (typeof  OPTIONS[key] !== 'undefined') {
+    if (typeof OPTIONS[key] !== 'undefined') {
       const VAL = _setOptionValue(key, value)
       if (VAL !== null) {
         options[key] = VAL
@@ -162,8 +163,12 @@ const path = require('path');
    */
   function _execOperation(cmdContext = CMD_CONTEXT) {
     if (typeof cmdContext.operation === 'undefined') {
-      console.error('`--operation` argument should not be empty choose : ' + OPTIONS.operation.values.join(' | '))
-      process.exit(1)
+      if (hasTestOption(cmdContext)) {
+        process.exit(0)
+      } else {
+        console.error('`--operation` argument should not be empty choose : ' + OPTIONS.operation.values.join(' | '))
+        process.exit(1)
+      }
     }
 
     const COMPILER = cmdContext.compiler || 'webpack4'
@@ -192,7 +197,7 @@ const path = require('path');
   }
 
   function _execTest() {
-
+    console.log(path.resolve())
     return _childProcessStdLog(
       spawn(
         'node',
@@ -201,6 +206,14 @@ const path = require('path');
       ),
       isVerbose()
     )
+    // return _childProcessStdLog(
+    //   spawn(
+    //     'node',
+    //     [path.resolve(__dirname, './test/test.js'),
+    //       isVerbose()]
+    //   ),
+    //   isVerbose()
+    // )
 
   }
 }(process.argv, exec, spawn, path, utils.childProcessStdLog))

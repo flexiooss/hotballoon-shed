@@ -8,15 +8,17 @@
   "license": "Apache-2.0",
   "scripts": {
     "ci:update_meta": "python ./src/ci/dependencies/main.py",
-    "test":"./src/version/version.py"
+    "test": "./src/version/version.py"
   },
+  "jest": {},
   "devDependencies": {
+    "jest-webpack": "^0.5.1"
   },
   "dependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "autoprefixer": "^9.2.1",
-    "babel-core": "^6.26.3",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "babel-polyfill": "^6.26.0",
@@ -41,7 +43,7 @@
     "link-stylesheet-html-webpack-plugin": "https://github.com/flexiooss/link-stylesheet-html-webpack-plugin.git",
     "mini-css-extract-plugin": "^0.4.4",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "regenerator-runtime": "^0.12.1",
+    "regenerator-runtime": "^0.13.1",
     "shelljs": "^0.8.2",
     "style-loader": "^0.23.1",
     "stylelint": "^9.6.0",
