@@ -1,7 +1,5 @@
-const path = require('path')
 const webpackTest = require('./webpack.test')
 const webpack = require('webpack')
-const CodeAltimeter = require('code-altimeter-js')
 
 /**
  *
@@ -21,15 +19,10 @@ module.exports = function(testId, testsPath, env, clb) {
   }
   webpackTest.plugins.push(
     new webpack.DefinePlugin(Object.assign(env, {
-      // 'window': {},
-      // 'window.document': {},
-      // 'window.__DEVELOPMENT__': JSON.stringify(true),
-      // 'window.__ASSERT__': JSON.stringify(true),
-      // 'window.__DEBUG__': JSON.stringify(true),
-      'process.env.NODE_ENV': JSON.stringify('test'),
-      'context': CodeAltimeter.executionContext
+      'process.env.NODE_ENV': JSON.stringify('test')
     }))
   )
+  webpackTest.target = 'node'
   const compiler = webpack(webpackTest)
 
   compiler.run((err, stats) => {

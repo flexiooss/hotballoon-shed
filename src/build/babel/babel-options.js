@@ -17,5 +17,6 @@ module.exports = {
       }
     ]
   ],
-  plugins: ['transform-modern-regexp']
+  plugins:
+    ['transform-modern-regexp']
 }
