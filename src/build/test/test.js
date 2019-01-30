@@ -1,18 +1,21 @@
 'use strict'
+/* global require */
 
 const path = require('path')
 const {exec} = require('child_process')
 const verbose = process.argv[2] === 'true'
 const testTransformer = require('./transformer')
-const TEST_ID = Date.now()
+const TEST_ID = Date.now() + ''
 const CodeAltimeter = require('code-altimeter-js')
 
 CodeAltimeter.testsPath(path.resolve(), (testsPath) => {
   if (verbose) {
-    console.log('Find tests entries :')
+    console.log('\x1b[46m%s\x1b[0m', ' Find tests entries :')
     console.log(testsPath)
   }
-  testsPath.unshift(CodeAltimeter.pathForExecutionContext)
+  testsPath.unshift(CodeAltimeter.entries.before)
+  testsPath.push(CodeAltimeter.entries.after)
+
   testTransformer(
     TEST_ID,
     testsPath,
