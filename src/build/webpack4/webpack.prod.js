@@ -22,7 +22,7 @@ webpackBase.output.crossOriginLoading = 'anonymous'
 
 webpackBase.optimization = {
   splitChunks: {
-    chunks: 'all',
+    chunks: 'all'
   },
   minimizer: [
     new UglifyJsPlugin({
@@ -38,11 +38,10 @@ webpackBase.optimization = {
 
         return Terser.minify(file, uglifyJsOptions)
       }
-    })
-    ,
+    }),
     new OptimizeCSSAssetsPlugin({
       cssProcessorPluginOptions: {
-        preset: ['default', {discardComments: {removeAll: true}}],
+        preset: ['default', {discardComments: {removeAll: true}}]
       }
     })
   ]
@@ -63,7 +62,7 @@ webpackBase.plugins.push(
   }),
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
-  }),
+  })
   // new LinkStylesheetHtmlWebpackPlugin()
 )
 

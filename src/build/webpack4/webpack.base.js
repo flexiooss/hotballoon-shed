@@ -3,13 +3,8 @@
 const CONFIG = require('./config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
-const babelOptions = require('../babel/babel-options')
+const babelOptions = require('../babel/getBabelConfig')
 const fs = require('fs')
-
-if (fs.existsSync(path.resolve('./build/babel-options.js'))) {
-  const customBabelOptions = require(path.resolve('./build/babel-options.js'))
-  Object.assign(babelOptions, customBabelOptions)
-}
 
 module.exports = {
   entry: CONFIG.entry,

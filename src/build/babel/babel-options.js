@@ -3,6 +3,7 @@
 const path = require('path')
 
 module.exports = {
+  root: path.resolve(),
   presets: [
     [
       // path.resolve(__dirname, '../../node_modules/@babel/preset-env'),
@@ -16,9 +17,5 @@ module.exports = {
       }
     ]
   ],
-  'env': {
-    'test': {
-      'presets': ['@babel/preset-env']
-    }
-  }
+  plugins: ['transform-modern-regexp']
 }

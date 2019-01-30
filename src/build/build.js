@@ -3,8 +3,7 @@ const utils = require('../childProcessStdLog.js')
 const {spawn, exec} = require('child_process')
 const path = require('path');
 
-(function (cmdArguments, exec, spawn, path, _childProcessStdLog) {
-
+(function(cmdArguments, exec, spawn, path, _childProcessStdLog) {
   const OPTIONS = {
     operation: {
       alias: 'op',
@@ -45,7 +44,6 @@ const path = require('path');
     }
   }(CMD_CONTEXT))
 
-
   /**
    *
    * @param cmdContext
@@ -71,7 +69,7 @@ const path = require('path');
    */
   function _buildContextCmd(cmdArguments) {
     const ret = {}
-    cmdArguments.forEach(function (val, index, array) {
+    cmdArguments.forEach(function(val, index, array) {
       if (val.startsWith('--')) {
         let option = val.split('=')
         const OPTION_KEY = option[0].substr(2)
@@ -173,7 +171,6 @@ const path = require('path');
 
     const COMPILER = cmdContext.compiler || 'webpack4'
 
-
     switch (cmdContext.operation) {
       case 'production':
         return _childProcessStdLog(
@@ -197,14 +194,17 @@ const path = require('path');
   }
 
   function _execTest() {
-    console.log(path.resolve())
+    process.env.TEST_VERBOSE = isVerbose()
+    process.env.NODE_ENV = 'test2'
     return _childProcessStdLog(
       spawn(
         'node',
-        [path.resolve(__dirname, './test/test.js'),
-          isVerbose()]
+        [
+          path.resolve(__dirname, './test/test.js'),
+          isVerbose()
+        ]
       ),
-      isVerbose()
+      true
     )
     // return _childProcessStdLog(
     //   spawn(
@@ -214,6 +214,5 @@ const path = require('path');
     //   ),
     //   isVerbose()
     // )
-
   }
 }(process.argv, exec, spawn, path, utils.childProcessStdLog))
