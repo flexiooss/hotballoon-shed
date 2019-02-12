@@ -26,7 +26,7 @@ def parse_options(argv):
     docker_image = ''  # type: str
 
     try:
-        opts, args = getopt.getopt(argv, "hi:u:v:d:", ["help", "ifile=", "url=", "version=", "docker_image="])
+        opts, args = getopt.getopt(argv, "hi:u:v:d:", ["help", "ifile=", "pathname=", "version=", "docker_image="])
     except getopt.GetoptError:
         print 'hotballoon-shed:ci:update_meta -i <package_file> -u <dependencies_url> -v <version> -d <docker_image>'
         sys.exit(2)
@@ -38,7 +38,7 @@ def parse_options(argv):
             sys.exit()
         elif opt in ("-i", "--ifile"):
             package_file = arg
-        elif opt in ("-u", "--url"):
+        elif opt in ("-u", "--pathname"):
             dependencies_url = arg
         elif opt in ("-v", "--version"):
             version = arg
@@ -51,7 +51,7 @@ def parse_options(argv):
 def log_response(response):
     pprint(response.request)
     pprint(response.status_code)
-    pprint(response.url)
+    pprint(response.pathname)
     pprint(response.content)
 
 

@@ -38,7 +38,7 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
         use: [{
-          loader: 'url-loader',
+          loader: 'pathname-loader',
           query: {
             limit: 10
           }
