@@ -1,5 +1,5 @@
 'use strict'
-
+const path = require('path')
 const babelOptions = require('../babel/getBabelConfig')
 const CONFIG = require('../webpack4/config')
 
@@ -9,6 +9,44 @@ const webpackBase = {
 
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        loader: 'cache-loader',
+        options: {
+          cacheDirectory: path.resolve('/tmp/hotballoon-shed/cache')
+        }
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          'root': true,
+          'parser': 'babel-eslint',
+          'parserOptions': {
+            'sourceType': 'module'
+          },
+          'extends': 'standard',
+          'plugins': ['html'],
+          'rules': {
+            'no-unused-vars': ['warn', {
+              'vars': 'local',
+              'args': 'none',
+              'ignoreRestSiblings': false
+            }],
+            'arrow-parens': 0,
+            'generator-star-spacing': 0,
+            'no-debugger': 0,
+            'no-new': 0,
+            'space-before-function-paren': ['error', {
+              'anonymous': 'never',
+              'named': 'never',
+              'asyncArrow': 'never'
+            }]
+          }
+        }
+      },
       {
         test: /\.js$/,
         loader: 'babel-loader',

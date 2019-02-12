@@ -8,21 +8,25 @@ const webpack = require('webpack')
  * @param {Object} env
  * @param {Transformer~transformedCallback} clb
  */
-module.exports = function(testId, testsPath, env, clb) {
-  const filePath = '/tmp/hotballon-shed/tests'
+module.exports = function (testId, testsPath, env, clb) {
+  const filePath = '/tmp/hotballoon-shed/tests'
   const fileName = 'test_' + testId + '.js'
+  const sourceMapFileNameOut = 'test_' + testId + '.map'
 
   webpackTest.entry.app = testsPath
   webpackTest.output = {
     filename: fileName,
-    path: filePath
+    path: filePath,
+    sourceMapFilename: sourceMapFileNameOut
   }
   webpackTest.plugins.push(
     new webpack.DefinePlugin(Object.assign(env, {
       'process.env.NODE_ENV': JSON.stringify('test')
     }))
   )
-  webpackTest.target = 'node'
+  webpackTest.devtool = 'eval-source-map'
+
+  // webpackTest.target = 'node'
   const compiler = webpack(webpackTest)
 
   compiler.run((err, stats) => {

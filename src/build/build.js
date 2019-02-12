@@ -29,7 +29,6 @@ const path = require('path');
   (function controller(cmdContext) {
     _showHelp(cmdContext)
     if (hasTestOption(cmdContext)) {
-      console.log('test')
       _execTest(cmdContext, _execOperation, cmdContext).on('close', (code) => {
         if (code === 0) {
           _execOperation(cmdContext).on('close', (code) => {
