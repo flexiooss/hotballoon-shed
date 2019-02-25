@@ -62,7 +62,7 @@ const webpackBase = {
       {
         test: /\.(css|png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
         use: [{
-          loader: 'pathname-loader',
+          loader: 'url-loader',
           query: {
             limit: 10
           }
