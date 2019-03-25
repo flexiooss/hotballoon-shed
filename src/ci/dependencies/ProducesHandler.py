@@ -2,13 +2,13 @@ from ModuleHandler import ModuleHandler
 
 
 class ProducesHandler(ModuleHandler):
-    produces = []  # type: list
-    docker_image = ''  # type: str
-    repository = ''  # type: str
-    version = ''  # type: str
+    produces = []  # params: list
+    docker_image = ''  # params: str
+    repository = ''  # params: str
+    version = ''  # params: str
 
     def __init__(self, docker_image, repository, version):
-        # type: (str, str, str) -> None
+        # params: (str, str, str) -> None
 
         self.docker_image = docker_image
         self.repository = repository

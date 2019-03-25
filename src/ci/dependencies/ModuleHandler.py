@@ -7,7 +7,7 @@ class ModuleHandler:
         pass
 
     def module_item(self, spec, version):
-        # type: (str, str) -> dict
+        # params: (str, str) -> dict
 
         return {
             'spec': spec,
@@ -16,7 +16,7 @@ class ModuleHandler:
 
     @staticmethod
     def merge_dicts(x, y):
-        # type: (dict, dict) -> dict
+        # params: (dict, dict) -> dict
         if isinstance(x, dict) and len(x) and isinstance(y, dict) and len(y):
             z = x.copy()
             z.update(y)

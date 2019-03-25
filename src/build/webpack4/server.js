@@ -8,7 +8,7 @@ const options = require('./server-options')
 const WebpackDevServer = require('webpack-dev-server')
 const fs = require('fs')
 
-const isVerbose = process.argv[2]
+const isVerbose = process.argv[2] == '-v'
 
 if (fs.existsSync(path.resolve('./build/server-options.js'))) {
   const serverOptions = require(path.resolve('./build/server-options.js'))

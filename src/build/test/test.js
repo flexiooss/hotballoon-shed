@@ -3,7 +3,8 @@
 
 const path = require('path')
 const {exec} = require('child_process')
-const verbose = process.argv[2] === 'true'
+console.log(process.argv)
+const verbose = process.argv[2] === '-v'
 const testTransformer = require('./transformer')
 const TEST_ID = Date.now() + ''
 const CodeAltimeter = require('code-altimeter-js')

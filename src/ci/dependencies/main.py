@@ -18,12 +18,12 @@ def get_env():
 
 
 def parse_options(argv):
-    # type: (list) -> tuple(str,str,str)
+    # params: (list) -> tuple(str,str,str)
 
-    package_file = ''  # type: str
-    dependencies_url = ''  # type: str
-    version = ''  # type: str
-    docker_image = ''  # type: str
+    package_file = ''  # params: str
+    dependencies_url = ''  # params: str
+    version = ''  # params: str
+    docker_image = ''  # params: str
 
     try:
         opts, args = getopt.getopt(argv, "hi:u:v:d:", ["help", "ifile=", "url=", "version=", "docker_image="])

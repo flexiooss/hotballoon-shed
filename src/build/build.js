@@ -4,6 +4,7 @@ const {spawn, exec} = require('child_process')
 const path = require('path');
 
 (function(cmdArguments, exec, spawn, path, _childProcessStdLog) {
+
   const OPTIONS = {
     operation: {
       alias: 'op',

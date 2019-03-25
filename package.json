@@ -7,7 +7,10 @@
   "author": "Thomas Chatelain (https://github.com/TomAchT)",
   "license": "Apache-2.0",
   "scripts": {
+    "build": "echo 'toto'",
     "ci:update_meta": "python ./src/ci/dependencies/main.py",
+    "clean-install": "yarn install --no-lockfile --force",
+    "value-object-generator:run": "node ./src/generator/generator.js $CALLER_PATH",
     "test": "./src/version/version.py"
   },
   "devDependencies": {},
@@ -51,6 +54,7 @@
     "terser": "^3.10.11",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.1.2",
+    "value-object-generator": "../value-object-generator",
     "webpack": "^4.21.0",
     "webpack-cli": "^3.1.2",
     "webpack-dev-middleware": "^3.4.0",
