@@ -8,6 +8,9 @@ fi
 CURRENT_PWD=$PWD
 SCRIPT_DIR=$(dirname $(readlink -f $0))
 
+echo ${CURRENT_PWD}
+echo ${SCRIPT_DIR}
+
 cd ${SCRIPT_DIR}
 python3.7 -m venv ${SCRIPT_DIR}/venv
 source ${SCRIPT_DIR}/venv/bin/activate
