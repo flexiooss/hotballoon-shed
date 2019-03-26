@@ -1,12 +1,13 @@
 from typing import List
 
 from cmd.Options import Options
+from cmd.options.HelpOption import HelpOption
 from cmd.options.Option import Option
 from cmd.options.VerboseOption import VerboseOption
 
 
 class Resolver:
-    options: List[Option] = [VerboseOption]
+    options: List[Option] = [VerboseOption, HelpOption]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option
