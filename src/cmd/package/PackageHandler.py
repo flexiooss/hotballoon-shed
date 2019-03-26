@@ -8,6 +8,7 @@ class PackageHandler:
     FILE_NAME: str = 'package.json'
     VERSION_KEY: str = 'version'
     HOTBALLOON_SHED_KEY: str = 'hotballoon-shed'
+    MODULES_KEY: str = 'modules'
 
     def __init__(self, dir_path: Path):
         self.__file_path: Path = dir_path / self.FILE_NAME
