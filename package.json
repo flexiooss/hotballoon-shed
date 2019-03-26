@@ -54,7 +54,6 @@
     "terser": "^3.10.11",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.1.2",
-    "value-object-generator": "../value-object-generator",
     "webpack": "^4.21.0",
     "webpack-cli": "^3.1.2",
     "webpack-dev-middleware": "^3.4.0",
