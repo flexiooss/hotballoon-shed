@@ -1,5 +1,4 @@
 import getopt
-import os
 import re
 import sys
 from pathlib import Path
@@ -7,14 +6,14 @@ from subprocess import Popen, PIPE
 
 from typing import List, Optional
 
-from cmd.CaseBuilder import CaseBuilder
+from cmd.Tasks.TaskBuilder import CaseBuilder
 from cmd.Options import Options
-from cmd.Subject import Subject
+from cmd.Tasks.Tasks import Tasks
 from cmd.options.Resolver import Resolver
 
 
 class Executor:
-    subject: Optional[Subject] = None
+    tasks: Optional[Tasks] = None
     options: Optional[Options] = None
 
     def __init__(self, cwd: Path) -> None:
@@ -34,7 +33,7 @@ class Executor:
         return stdout.strip().decode('utf-8')
 
     def extract_argv(self, argv: List[str]):
-        self.__extract_subject(argv)
+        self.__extract_tasks(argv)
         self.__extract_options(argv)
 
     def __extract_options(self, argv: List[str]):
@@ -56,17 +55,17 @@ class Executor:
             self.__options_resolver.resolve(opt=opt, arg=arg, options=options)
         self.options = options
 
-    def __extract_subject(self, argv: List[str]):
+    def __extract_tasks(self, argv: List[str]):
 
         arg: str
         for arg in argv:
             arg = re.sub('[\s+]', '', arg).lower()
-            if Subject.has_value(arg):
-                self.subject = Subject[arg.upper()]
+            if Tasks.has_value(arg):
+                self.tasks = Tasks[arg.replace('-', '_').upper()]
 
-        if self.subject is None:
-            raise ValueError('No subject for this command')
+        if self.tasks is None:
+            raise ValueError('No tasks for this command')
 
     def exec(self):
-        case: CaseBuilder = CaseBuilder(self.subject, self.options, self.__cwd)
+        case: CaseBuilder = CaseBuilder(self.tasks, self.options, self.__cwd)
         case.process()

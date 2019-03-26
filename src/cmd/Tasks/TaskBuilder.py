@@ -7,15 +7,17 @@ from typing import List
 
 from cmd.Directories import Directories
 from cmd.Options import Options
-from cmd.Subject import Subject
+from cmd.Tasks.SelfInstall import SelfInstall
+from cmd.Tasks.Tasks import Tasks
+from cmd.Tasks.Test import Test
 
 
 class CaseBuilder:
 
-    def __init__(self, subject: Subject, options: Options, cwd: Path) -> None:
+    def __init__(self, tasks: Tasks, options: Options, cwd: Path) -> None:
         self.__cwd: Path = cwd
-        self.__subject: Subject = subject
-        self.__options: options = options
+        self.__subject: Tasks = tasks
+        self.__options: Options = options
 
     def __exec(self, args: List[str]) -> Popen:
         child: Popen = Popen(args, cwd=self.__cwd.as_posix())
@@ -30,29 +32,20 @@ class CaseBuilder:
         return stdout.strip().decode('utf-8')
 
     def process(self):
-        if self.__subject == Subject.TEST:
-            self.test_case()
-        elif self.__subject == Subject.INSTALL:
+        if self.__subject == Tasks.TEST:
+            Test(self.__options, self.__cwd).process()
+        elif self.__subject == Tasks.SELF_INSTALL:
+            SelfInstall(self.__options, self.__cwd).process()
+        elif self.__subject == Tasks.INSTALL:
             self.install_case()
-        elif self.__subject == Subject.CLEAN:
+        elif self.__subject == Tasks.CLEAN:
             self.clean_case()
-        elif self.__subject == Subject.DEV:
+        elif self.__subject == Tasks.DEV:
             self.dev_case()
-        elif self.__subject == Subject.BUILD:
+        elif self.__subject == Tasks.BUILD:
             self.build_case()
         else:
-            raise ValueError('no subject for this command')
-
-
-    def test_case(self):
-        print('TEST')
-        print(self.__options.verbose)
-        print(self.__cwd.as_posix())
-        p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../build/test/test.js')
-        p.resolve()
-        print(p.as_posix())
-        verbose: str = '-v' if self.__options.verbose is True else ''
-        self.__exec(['node', p.as_posix(), verbose])
+            raise ValueError('no tasks for this command')
 
     def install_case(self):
         print('INSTALL')
@@ -60,16 +53,16 @@ class CaseBuilder:
 
     def clean_case(self):
         print('CLEAN')
-        if Path(self.__cwd.as_posix()+('/'+Directories.NODE_MODULES )).is_dir():
-            shutil.rmtree(Path(self.__cwd.as_posix()+('/'+Directories.NODE_MODULES)).as_posix())
+        if Path(self.__cwd.as_posix() + ('/' + Directories.NODE_MODULES)).is_dir():
+            shutil.rmtree(Path(self.__cwd.as_posix() + ('/' + Directories.NODE_MODULES)).as_posix())
             print('CLEAN : node_modules')
 
-        if Path(self.__cwd.as_posix()+('/'+Directories.GENERATED)).is_dir():
-            shutil.rmtree(Path(self.__cwd.as_posix()+('/'+Directories.GENERATED)).as_posix())
+        if Path(self.__cwd.as_posix() + ('/' + Directories.GENERATED)).is_dir():
+            shutil.rmtree(Path(self.__cwd.as_posix() + ('/' + Directories.GENERATED)).as_posix())
             print('CLEAN : generated')
 
-        if Path(self.__cwd.as_posix()+('/'+Directories.DIST)).is_dir():
-            shutil.rmtree(Path(self.__cwd.as_posix()+('/'+Directories.DIST)).as_posix())
+        if Path(self.__cwd.as_posix() + ('/' + Directories.DIST)).is_dir():
+            shutil.rmtree(Path(self.__cwd.as_posix() + ('/' + Directories.DIST)).as_posix())
             print('CLEAN : dist')
 
     def dev_case(self):

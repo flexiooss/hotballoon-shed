@@ -1,13 +1,8 @@
 #! /usr/bin/env python3.7
-import os
-import re
 import sys
 from pathlib import Path
-from subprocess import Popen
-from typing import Optional, Dict, List
 
 from cmd.Executor import Executor
-from cmd.Subject import Subject
 
 
 def main(argv) -> None:
