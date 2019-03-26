@@ -10,10 +10,13 @@ class Test(Task):
 
     def process(self):
         print('TEST')
-        print(self.options.verbose)
-        print(self.cwd.as_posix())
-        p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../build/test/test.js')
+
+        if self.package.config().get('test') is None:
+            raise KeyError('No tester found into `hotballoon-shed` configuration')
+        p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../build/' + self.package.config().get(
+            'test') + '/test.js')
         p.resolve()
-        print(p.as_posix())
+        if not p.is_file():
+            raise FileNotFoundError('No tester file found for this tester : ' + self.package.config().get('test'))
         verbose: str = '-v' if self.options.verbose is True else ''
         self.exec(['node', p.as_posix(), verbose])

@@ -10,31 +10,25 @@ from cmd.Tasks.TaskBuilder import CaseBuilder
 from cmd.Options import Options
 from cmd.Tasks.Tasks import Tasks
 from cmd.options.Resolver import Resolver
+from cmd.package.PackageHandler import PackageHandler
 
 
 class Executor:
     tasks: Optional[List[Tasks]] = None
     options: Optional[Options] = None
+    package: Optional[PackageHandler]= None
 
     def __init__(self, cwd: Path) -> None:
         self.__cwd: Path = cwd
         self.__options_resolver: Resolver = Resolver()
 
-    def __exec(self, args: List[str]) -> Popen:
-        child: Popen = Popen(args, cwd=self.__cwd.as_posix())
-        child.communicate()
-        return child
-
-    def __exec_for_stdout(self, args: List[str]) -> str:
-        stdout, stderr = Popen(args, stdout=PIPE, cwd=self.__cwd.as_posix()).communicate()
-        return self.__decode_stdout(stdout)
-
-    def __decode_stdout(self, stdout) -> str:
-        return stdout.strip().decode('utf-8')
-
     def extract_argv(self, argv: List[str]):
         self.__extract_options(argv)
         self.__extract_tasks(argv)
+
+    def load_package(self):
+        self.package = PackageHandler(self.__cwd)
+        self.package.config()
 
     def __extract_options(self, argv: List[str]):
         options: Options = Options()
@@ -69,5 +63,5 @@ class Executor:
         self.tasks = tasks
 
     def exec(self):
-        case: CaseBuilder = CaseBuilder(self.tasks, self.options, self.__cwd)
+        case: CaseBuilder = CaseBuilder(self.tasks, self.options, self.package, self.__cwd)
         case.process()

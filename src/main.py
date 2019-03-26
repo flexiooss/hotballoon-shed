@@ -7,6 +7,7 @@ from cmd.Executor import Executor
 
 def main(argv) -> None:
     executor: Executor = Executor(cwd=Path.cwd())
+    executor.load_package()
     executor.extract_argv(argv)
 
     executor.exec()

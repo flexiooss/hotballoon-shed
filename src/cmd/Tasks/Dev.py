@@ -12,8 +12,13 @@ class Dev(Task):
 
     def process(self):
         print('DEV')
-        p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../build/webpack4/server.js')
+
+        if self.package.config().get('builder') is None:
+            raise KeyError('No builder found into `hotballoon-shed` configuration')
+        p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../build/' + self.package.config().get(
+            'builder') + '/server.js')
         p.resolve()
-        print(p.as_posix())
+        if not p.is_file():
+            raise FileNotFoundError('No server found for this builder : ' + self.package.config().get('builder'))
         verbose: str = '-v' if self.options.verbose is True else ''
         self.exec(['node', p.as_posix(), verbose])

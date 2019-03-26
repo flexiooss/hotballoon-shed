@@ -9,31 +9,34 @@ from cmd.Tasks.Install import Install
 from cmd.Tasks.SelfInstall import SelfInstall
 from cmd.Tasks.Tasks import Tasks
 from cmd.Tasks.Test import Test
+from cmd.package.PackageHandler import PackageHandler
 
 
 class CaseBuilder:
 
-    def __init__(self, tasks: List[Tasks], options: Options, cwd: Path) -> None:
+    def __init__(self, tasks: List[Tasks], options: Options, package: PackageHandler, cwd: Path) -> None:
         self.__cwd: Path = cwd
+        self.__package: PackageHandler = package
         self.__tasks: List[Tasks] = tasks
         self.__options: Options = options
+        print(self.__package.config())
 
     def process(self):
         task: Tasks
         for task in self.__tasks:
             if task == Tasks.TEST:
-                Test(self.__options, self.__cwd).process()
+                Test(self.__options, self.__package, self.__cwd).process()
             elif task == Tasks.SELF_INSTALL:
-                SelfInstall(self.__options, self.__cwd).process()
+                SelfInstall(self.__options, self.__package, self.__cwd).process()
             elif task == Tasks.INSTALL:
-                Install(self.__options, self.__cwd).process()
+                Install(self.__options, self.__package, self.__cwd).process()
             elif task == Tasks.CLEAN:
-                Clean(self.__options, self.__cwd).process()
+                Clean(self.__options, self.__package, self.__cwd).process()
             elif task == Tasks.DEV:
-                Dev(self.__options, self.__cwd).process()
+                Dev(self.__options, self.__package, self.__cwd).process()
             elif task == Tasks.BUILD:
-                Build(self.__options, self.__cwd).process()
+                Build(self.__options, self.__package, self.__cwd).process()
             elif task == Tasks.GENERATE:
-                Generate(self.__options, self.__cwd).process()
+                Generate(self.__options, self.__package, self.__cwd).process()
             else:
                 raise ValueError('no tasks for this command')
