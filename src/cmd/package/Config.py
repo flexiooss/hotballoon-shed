@@ -1,9 +1,13 @@
 from pathlib import Path
 
+from typing import List
+
 
 class Config:
     BUILD_KEY: str = 'build'
     BUILDER_KEY: str = 'builder'
+    BUILD_ENTRIES_KEY: str = 'entries'
+    BUILD_HTML_TEMPLATE_KEY: str = 'html_template'
     MODULES_KEY: str = 'modules'
     TEST_KEY: str = 'test'
     TESTER_KEY: str = 'tester'
@@ -64,6 +68,38 @@ class Config:
 
     def build(self) -> dict:
         return self.__data.get(self.BUILD_KEY)
+
+    def has_build_entries(self) -> bool:
+        return self.has_build() and self.build().get(self.BUILD_ENTRIES_KEY) is not None
+
+    def build_entries(self) -> List[Path]:
+        if not self.has_build_entries():
+            raise ValueError('No build entries defined')
+        entries: List[Path] = []
+        v: str
+        for v in self.build().get(self.BUILD_ENTRIES_KEY):
+
+            p: Path = Path(self.__cwd / v)
+            p.resolve()
+            if not p.is_file():
+                raise FileNotFoundError('Not found entry path : ' + p.as_posix())
+            entries.append(p)
+
+        return entries
+
+    def has_build_html_template(self) -> bool:
+        return self.has_build() and self.build().get(self.BUILD_HTML_TEMPLATE_KEY) is not None
+
+    def build_html_template(self) -> Path:
+        if not self.has_build_html_template():
+            raise ValueError('No html template path defined')
+
+        p: Path = Path(self.__cwd / self.build().get(self.BUILD_HTML_TEMPLATE_KEY))
+        p.resolve()
+
+        if not p.is_file():
+            raise FileNotFoundError('Not found html template : ' + p.as_posix())
+        return p
 
     def has_builder(self) -> bool:
         return self.has_build() and self.build().get(self.BUILDER_KEY) is not None

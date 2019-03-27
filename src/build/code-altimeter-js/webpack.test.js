@@ -1,10 +1,8 @@
 'use strict'
 const path = require('path')
 const babelOptions = require('../babel/getBabelConfig')
-const CONFIG = require('../webpack4/config')
 
 const webpackBase = {
-  entry: CONFIG.entry,
   plugins: [],
 
   module: {
@@ -71,7 +69,7 @@ const webpackBase = {
     ]
   },
   resolveLoader: {
-    modules: ['node_modules', CONFIG.vendors_path]
+    modules: [CONFIG.vendors_path]
   }
 }
 webpackBase.mode = 'development'

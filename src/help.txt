@@ -26,7 +26,7 @@ hshed
 
               clean
               install
-              generate
+              generate-sources
 
               dev
               build

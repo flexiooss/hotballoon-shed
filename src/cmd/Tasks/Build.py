@@ -24,4 +24,11 @@ class Build(Task):
             raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())
 
         verbose: str = '-v' if self.options.verbose is True else ''
-        self.exec(['node', p.as_posix(), verbose])
+
+        self.exec([
+            'node',
+            p.as_posix(),
+            verbose,
+            ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            self.package.config().build_html_template().as_posix()]
+        )
