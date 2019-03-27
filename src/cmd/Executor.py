@@ -35,7 +35,7 @@ class Executor:
 
         except getopt.GetoptError:
             print('OUPS !!!')
-            print('Try `hshed -H`')
+            print('Oh buddy try `hbshed -H`')
             sys.exit(2)
 
         for opt, arg in opts:
