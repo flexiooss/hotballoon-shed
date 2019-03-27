@@ -26,7 +26,7 @@ package.json
     },
     "generate-sources": {
       "value-objects": {
-        "extension": ".spec.yaml"
+        "extension": ".spec"
       }
     }
   }
