@@ -2,15 +2,13 @@ import getopt
 import re
 import sys
 from pathlib import Path
-from subprocess import Popen, PIPE
 
 from typing import List, Optional
 
-from cmd.Tasks.TaskBuilder import CaseBuilder
+from cmd.Tasks.TaskBuilder import TaskBuilder
 from cmd.Options import Options
 from cmd.Tasks.Tasks import Tasks
 from cmd.options.Resolver import Resolver
-from cmd.package.PackageHandler import PackageHandler
 
 
 class Executor:
@@ -24,8 +22,6 @@ class Executor:
     def extract_argv(self, argv: List[str]):
         self.__extract_options(argv)
         self.__extract_tasks(argv)
-
-
 
     def __extract_options(self, argv: List[str]):
         options: Options = Options()
@@ -60,5 +56,4 @@ class Executor:
         self.tasks = tasks
 
     def exec(self):
-        case: CaseBuilder = CaseBuilder(self.tasks, self.options,  self.__cwd)
-        case.process()
+        taskbuilder: TaskBuilder = TaskBuilder(self.tasks, self.options, self.__cwd).process()

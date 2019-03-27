@@ -12,7 +12,7 @@ from cmd.Tasks.Test import Test
 from cmd.package.PackageHandler import PackageHandler
 
 
-class CaseBuilder:
+class TaskBuilder:
     __package: Optional[PackageHandler] = None
 
     def __init__(self, tasks: List[Tasks], options: Options, cwd: Path) -> None:
