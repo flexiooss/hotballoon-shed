@@ -27,8 +27,6 @@ class Test(Task):
             p: Path = Path(os.path.dirname(
                 os.path.realpath(__file__)) + '/../../build/' + self.package.config().tester() + '/test.js')
             p.resolve()
-            print(p.as_posix())
-            print(self.package.config().test_dir().as_posix())
 
             if not p.is_file():
                 raise FileNotFoundError('No tester file found for this tester : ' + self.package.config().tester())

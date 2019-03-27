@@ -1,10 +1,11 @@
 'use strict'
 const path = require('path')
 const babelOptions = require('../babel/getBabelConfig')
+const CONFIG = require('../webpack4/config')
 
 const webpackBase = {
+  entry: CONFIG.entry,
   plugins: [],
-
   module: {
     rules: [
       {
