@@ -16,7 +16,6 @@ from cmd.package.PackageHandler import PackageHandler
 class Executor:
     tasks: Optional[List[Tasks]] = None
     options: Optional[Options] = None
-    package: Optional[PackageHandler]= None
 
     def __init__(self, cwd: Path) -> None:
         self.__cwd: Path = cwd
@@ -26,9 +25,7 @@ class Executor:
         self.__extract_options(argv)
         self.__extract_tasks(argv)
 
-    def load_package(self):
-        self.package = PackageHandler(self.__cwd)
-        # self.package.config()
+
 
     def __extract_options(self, argv: List[str]):
         options: Options = Options()
@@ -63,5 +60,5 @@ class Executor:
         self.tasks = tasks
 
     def exec(self):
-        case: CaseBuilder = CaseBuilder(self.tasks, self.options, self.package, self.__cwd)
+        case: CaseBuilder = CaseBuilder(self.tasks, self.options,  self.__cwd)
         case.process()

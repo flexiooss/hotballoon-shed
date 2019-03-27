@@ -3,7 +3,7 @@ import abc
 from pathlib import Path
 from subprocess import Popen, PIPE
 
-from typing import List
+from typing import List, Optional
 
 from cmd.Options import Options
 from cmd.Tasks import Tasks
@@ -13,9 +13,9 @@ from cmd.package.PackageHandler import PackageHandler
 class Task(abc.ABC):
     NAME: Tasks
 
-    def __init__(self, options: Options, package: PackageHandler, cwd: Path) -> None:
+    def __init__(self, options: Options, package: Optional[PackageHandler], cwd: Path) -> None:
         self.options: Options = options
-        self.package: PackageHandler = package
+        self.package: Optional[PackageHandler] = package
         self.cwd: Path = cwd
 
     @abc.abstractmethod
