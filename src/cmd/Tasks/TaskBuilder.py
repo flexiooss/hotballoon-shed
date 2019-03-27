@@ -19,11 +19,10 @@ class TaskBuilder:
         self.__cwd: Path = cwd
         self.__tasks: List[Tasks] = tasks
         self.__options: Options = options
-        print(self.__package.config())
 
     def __ensure_load_package(self):
         self.__package = PackageHandler(self.__cwd)
-        self.package.config()
+        self.__package.config()
 
     def process(self):
         task: Tasks
