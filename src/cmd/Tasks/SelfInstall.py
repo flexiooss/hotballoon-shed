@@ -11,6 +11,7 @@ class SelfInstall(Task):
 
     def process(self):
         print('SELF_INSTALL')
+        print(os.environ['USER'])
 
         p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../..')
         p.resolve()
