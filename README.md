@@ -1,2 +1,5 @@
 # hotballoon-shed
-Build and development environement for Hotballon applications
+Test, Develop, Manage, Generate sources, Build Hotballoon applications
+
+### Installation
+https://github.com/flexiooss/hotballoon-shed-playbook

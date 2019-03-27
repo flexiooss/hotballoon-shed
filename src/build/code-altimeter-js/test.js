@@ -3,13 +3,13 @@
 
 const path = require('path')
 const {exec} = require('child_process')
-console.log(process.argv)
-const verbose = process.argv[2] === '-v'
+const argTestPath = process.argv[2]
+const verbose = process.argv[3] === '-v'
 const testTransformer = require('./transformer')
 const TEST_ID = Date.now() + ''
 const CodeAltimeter = require('code-altimeter-js')
 
-CodeAltimeter.testsPath(path.resolve(), (testsPath) => {
+CodeAltimeter.testsPath(argTestPath, (testsPath) => {
   if (verbose) {
     console.log('\x1b[46m%s\x1b[0m', ' Find tests entries :')
     console.log(testsPath)

@@ -7,7 +7,7 @@ class Tasks(Enum):
     CLEAN: str = 'clean'
     DEV: str = 'dev'
     INSTALL: str = 'install'
-    GENERATE: str = 'generate'
+    GENERATE_SOURCES: str = 'generate-sources'
     TEST: str = 'test'
     SELF_INSTALL:str = 'self-install'
 

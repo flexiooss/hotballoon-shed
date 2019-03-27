@@ -11,14 +11,17 @@ class Dev(Task):
     NAME = Tasks.DEV
 
     def process(self):
-        print('DEV')
+        print('DEV : ' + self.package.name())
 
-        if self.package.config().get('builder') is None:
+        if not self.package.config().has_builder():
             raise KeyError('No builder found into `hotballoon-shed` configuration')
-        p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../build/' + self.package.config().get(
-            'builder') + '/server.js')
+
+        p: Path = Path(os.path.dirname(
+            os.path.realpath(__file__)) + '/../../build/' + self.package.config().builder() + '/server.js')
         p.resolve()
+
         if not p.is_file():
             raise FileNotFoundError('No server found for this builder : ' + self.package.config().get('builder'))
+
         verbose: str = '-v' if self.options.verbose is True else ''
         self.exec(['node', p.as_posix(), verbose])

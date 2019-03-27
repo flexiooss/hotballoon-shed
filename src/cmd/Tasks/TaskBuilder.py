@@ -4,7 +4,7 @@ from cmd.Options import Options
 from cmd.Tasks.Build import Build
 from cmd.Tasks.Clean import Clean
 from cmd.Tasks.Dev import Dev
-from cmd.Tasks.Generate import Generate
+from cmd.Tasks.GenerateSources import GenerateSources
 from cmd.Tasks.Install import Install
 from cmd.Tasks.SelfInstall import SelfInstall
 from cmd.Tasks.Tasks import Tasks
@@ -30,22 +30,30 @@ class TaskBuilder:
             if task == Tasks.TEST:
                 self.__ensure_load_package()
                 Test(self.__options, self.__package, self.__cwd).process()
+
             elif task == Tasks.SELF_INSTALL:
+                self.__ensure_load_package()
                 SelfInstall(self.__options, self.__package, self.__cwd).process()
+
             elif task == Tasks.INSTALL:
                 self.__ensure_load_package()
                 Install(self.__options, self.__package, self.__cwd).process()
+
             elif task == Tasks.CLEAN:
                 self.__ensure_load_package()
                 Clean(self.__options, self.__package, self.__cwd).process()
+
             elif task == Tasks.DEV:
                 self.__ensure_load_package()
                 Dev(self.__options, self.__package, self.__cwd).process()
+
             elif task == Tasks.BUILD:
                 self.__ensure_load_package()
                 Build(self.__options, self.__package, self.__cwd).process()
-            elif task == Tasks.GENERATE:
+
+            elif task == Tasks.GENERATE_SOURCES:
                 self.__ensure_load_package()
-                Generate(self.__options, self.__package, self.__cwd).process()
+                GenerateSources(self.__options, self.__package, self.__cwd).process()
+
             else:
                 raise ValueError('no tasks for this command')

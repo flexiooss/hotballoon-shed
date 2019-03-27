@@ -1,19 +1,18 @@
 {
   "name": "hotballoon-shed",
   "version": "1.0.0",
-  "description": "Build and development environment for Hotballon applications",
+  "description": "Test, Develop, Manage, Generate sources, Build Hotballoon applications",
   "main": "index.js",
   "repository": "git@github.com:flexiooss/hotballoon-shed.git",
   "author": "Thomas Chatelain (https://github.com/TomAchT)",
   "license": "Apache-2.0",
-  "scripts": {
-    "build": "echo 'toto'",
-    "ci:update_meta": "python ./src/ci/dependencies/main.py",
-    "clean-install": "yarn install --no-lockfile --force",
-    "value-object-generator:run": "node ./src/generator/generator.js $CALLER_PATH",
-    "test": "./src/version/version.py"
+  "hotballoon-shed": {
+     "generate-sources": {
+      "value-objects": {
+        "version": "1.2.0-SNAPSHOT"
+      }
+    }
   },
-  "devDependencies": {},
   "dependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",

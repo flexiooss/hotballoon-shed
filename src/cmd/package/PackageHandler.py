@@ -3,15 +3,18 @@ import json
 
 from pathlib import Path
 
+from cmd.package.Config import Config
+
 
 class PackageHandler:
     FILE_NAME: str = 'package.json'
-    VERSION_KEY: str = 'version'
     HOTBALLOON_SHED_KEY: str = 'hotballoon-shed'
-    MODULES_KEY: str = 'modules'
+    NAME_KEY: str = 'name'
+    VERSION_KEY: str = 'version'
 
-    def __init__(self, dir_path: Path):
-        self.__file_path: Path = dir_path / self.FILE_NAME
+    def __init__(self, cwd: Path):
+        self.cwd: Path = cwd
+        self.__file_path: Path = cwd / self.FILE_NAME
         self.__data: dict = self.__load_file()
 
     @property
@@ -25,10 +28,13 @@ class PackageHandler:
             d = json.load(json_data)
             return d
 
+    def name(self) -> str:
+        return self.__data[self.NAME_KEY]
+
     def version(self) -> str:
         return self.__data[self.VERSION_KEY]
 
-    def config(self) -> dict:
+    def config(self) -> Config:
         if self.__data[self.HOTBALLOON_SHED_KEY] is None:
             raise ValueError('No `hotballoon-shed` configuration founded')
-        return self.__data[self.HOTBALLOON_SHED_KEY]
+        return Config(self.__data[self.HOTBALLOON_SHED_KEY], self.cwd)
