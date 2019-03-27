@@ -44,6 +44,8 @@ class ValueObjectGenerator:
                 __file__)) + '/../../' + Directories.LIB + '/' + Directories.VALUE_OBJECT_GENERATOR + '/' + 'run.sh')
             generator.resolve()
 
+            print(generator.as_posix())
+
             if not generator.is_file():
                 raise FileNotFoundError('No value-object generator found')
 
