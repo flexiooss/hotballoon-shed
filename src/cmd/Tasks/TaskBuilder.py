@@ -33,7 +33,6 @@ class TaskBuilder:
                 Test(self.__options, self.__package, self.__cwd).process()
 
             elif task == Tasks.SELF_INSTALL:
-                self.__ensure_load_package()
                 p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../..')
                 p.resolve()
                 SelfInstall(self.__options, PackageHandler(p), p).process()
