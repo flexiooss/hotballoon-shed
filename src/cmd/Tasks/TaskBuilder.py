@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import List, Optional
 from cmd.Options import Options
@@ -33,7 +34,9 @@ class TaskBuilder:
 
             elif task == Tasks.SELF_INSTALL:
                 self.__ensure_load_package()
-                SelfInstall(self.__options, self.__package, self.__cwd).process()
+                p: Path = Path(os.path.dirname(os.path.realpath(__file__)) + '/../../..')
+                p.resolve()
+                SelfInstall(self.__options, PackageHandler(p), p).process()
 
             elif task == Tasks.INSTALL:
                 self.__ensure_load_package()

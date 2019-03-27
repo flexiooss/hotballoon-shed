@@ -7,7 +7,7 @@
   "author": "Thomas Chatelain (https://github.com/TomAchT)",
   "license": "Apache-2.0",
   "hotballoon-shed": {
-     "generate-sources": {
+    "generate-sources": {
       "value-objects": {
         "version": "1.2.0-SNAPSHOT"
       }

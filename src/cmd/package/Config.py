@@ -48,8 +48,16 @@ class Config:
         return self.has_generate_sources() and self.has_value_object() and self.value_object().get(
             self.VALUE_OBJECT_PATH_KEY) is not None
 
-    def value_object_path(self) -> str:
-        return self.value_object().get(self.VALUE_OBJECT_PATH_KEY)
+    def value_object_path(self) -> Path:
+        if not self.has_value_object_path():
+            raise ValueError('No directory for value-object-generator defined')
+
+        p: Path = Path(self.__cwd / self.value_object().get(self.VALUE_OBJECT_PATH_KEY))
+        p.resolve()
+
+        if not p.is_dir():
+            raise FileNotFoundError('Not found directory for value-object-generator')
+        return p
 
     def has_build(self) -> bool:
         return self.__data.get(self.BUILD_KEY) is not None
