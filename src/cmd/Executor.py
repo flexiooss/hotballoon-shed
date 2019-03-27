@@ -28,7 +28,7 @@ class Executor:
 
     def load_package(self):
         self.package = PackageHandler(self.__cwd)
-        self.package.config()
+        # self.package.config()
 
     def __extract_options(self, argv: List[str]):
         options: Options = Options()
