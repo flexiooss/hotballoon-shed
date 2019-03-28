@@ -1,4 +1,3 @@
-import os
 import shutil
 from pathlib import Path
 
@@ -29,8 +28,8 @@ class Clean(Task):
             shutil.rmtree(Path(self.cwd.as_posix() + ('/' + Directories.GENERATED)).as_posix())
             print('****     CLEAN : generated')
 
-        if Path(self.cwd.as_posix() + ('/' + Directories.DIST)).is_dir():
-            shutil.rmtree(Path(self.cwd.as_posix() + ('/' + Directories.DIST)).as_posix())
-            print('****     CLEAN : dist')
+        if self.package.config().has_build_output() and self.package.config().build_output().is_dir():
+            shutil.rmtree(self.package.config().build_output().as_posix())
+            print('****     CLEAN : build output')
 
         self.__modules_clean()

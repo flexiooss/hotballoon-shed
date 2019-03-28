@@ -14,7 +14,8 @@ package.json
       "entries": [
         "src/main/js/bootstrap.js"
       ],
-      "html_template": "src/main/js/index.html"
+      "html_template": "src/main/js/index.html",
+      "ouput": "dist"
     },
     "test": {
       "tester": "code-altimeter-js",

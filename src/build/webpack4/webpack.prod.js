@@ -17,12 +17,14 @@ const CONFIG = require('./config')
 
 const entries = process.argv[3].split(',')
 const html_template = process.argv[4]
+const dist_path = process.argv[5]
 
 webpackBase.entry.app = entries.unshift('babel-polyfill')
 webpackBase.devtool = false
 webpackBase.mode = 'production'
 webpackBase.devtool = false
 webpackBase.output.crossOriginLoading = 'anonymous'
+webpackBase.output.path = dist_path
 
 webpackBase.optimization = {
   splitChunks: {

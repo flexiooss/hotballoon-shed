@@ -8,6 +8,7 @@ class Config:
     BUILDER_KEY: str = 'builder'
     BUILD_ENTRIES_KEY: str = 'entries'
     BUILD_HTML_TEMPLATE_KEY: str = 'html_template'
+    BUILD_OUTPUT_KEY: str = 'output'
     MODULES_KEY: str = 'modules'
     TEST_KEY: str = 'test'
     TESTER_KEY: str = 'tester'
@@ -86,6 +87,18 @@ class Config:
             entries.append(p)
 
         return entries
+
+    def has_build_output(self) -> bool:
+        return self.has_build() and self.build().get(self.BUILD_OUTPUT_KEY) is not None
+
+    def build_output(self) -> Path:
+        if not self.has_build_output():
+            raise ValueError('No output build path defined')
+
+        p: Path = Path(self.__cwd / self.build().get(self.BUILD_OUTPUT_KEY))
+        p.resolve()
+
+        return p
 
     def has_build_html_template(self) -> bool:
         return self.has_build() and self.build().get(self.BUILD_HTML_TEMPLATE_KEY) is not None
