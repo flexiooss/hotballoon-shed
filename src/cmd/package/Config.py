@@ -95,8 +95,13 @@ class Config:
         if not self.has_build_output():
             raise ValueError('No output build path defined')
 
-        p: Path = Path(self.__cwd / self.build().get(self.BUILD_OUTPUT_KEY))
-        p.resolve()
+        p: Path
+
+        if self.build().get(self.BUILD_OUTPUT_KEY).startwith('/'):
+            p = Path(self.build().get(self.BUILD_OUTPUT_KEY))
+        else:
+            p = Path(self.__cwd / self.build().get(self.BUILD_OUTPUT_KEY))
+            p.resolve()
 
         return p
 
