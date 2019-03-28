@@ -33,3 +33,27 @@ package.json
   }
 }
 ```
+
+### Usage
+```bash
+hbshed
+              <...task> <...option>
+              
+              <options>
+              --help, -H
+              --verbose, -V
+
+
+              <tasks>
+              self-install      Install dependancies & generator
+              self-update       Not implemented yet !!!
+
+              clean             Remove dependancies & generate sources 
+              install           Install dependancies
+              generate-sources  Generate value objects...
+
+              dev               Build a dev server       
+              build             Build code
+
+              test              Test
+```
