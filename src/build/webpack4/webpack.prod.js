@@ -19,7 +19,9 @@ const entries = process.argv[3].split(',')
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
 
-webpackBase.entry.app = entries.unshift('babel-polyfill')
+entries.unshift(path.resolve(__dirname, '../../../node_modules/babel-polyfill'))
+webpackBase.entry.app = entries
+
 webpackBase.devtool = false
 webpackBase.mode = 'production'
 webpackBase.devtool = false
@@ -61,7 +63,7 @@ new HtmlWebpackPlugin(
         inject: true
       }
     ),
-  new CleanWebpackPlugin([CONFIG.dist_path + '/*'], {
+  new CleanWebpackPlugin([dist_path + '/*'], {
     root: path.resolve(),
     verbose: true,
     watch: true

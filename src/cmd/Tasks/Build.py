@@ -1,6 +1,8 @@
 import os
 import shutil
+import sys
 from pathlib import Path
+from subprocess import Popen
 
 from cmd.Directories import Directories
 from cmd.Tasks.Task import Task
@@ -28,7 +30,7 @@ class Build(Task):
 
         verbose: str = '-v' if self.options.verbose is True else ''
 
-        self.exec([
+        child: Popen = self.exec([
             'node',
             p.as_posix(),
             verbose,
@@ -36,3 +38,4 @@ class Build(Task):
             self.package.config().build_html_template().as_posix(),
             self.package.config().build_output()
         ])
+        sys.exit(child.returncode)
