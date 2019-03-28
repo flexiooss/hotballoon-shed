@@ -15,20 +15,22 @@ https://github.com/flexiooss/hotballoon-shed
 
 
 hbshed
+              <...task> <...option>
+
+              <options>
               --help, -H
               --verbose, -V
 
 
-   --------   <...task> <...option>
+              <tasks>
+              self-install      Install dependencies & generator
+              self-update       Not implemented yet !!!
 
-              self-install
-              self-update   Not implemented yet !!!
+              clean             Remove dependencies & generate sources
+              install           Install dependencies
+              generate-sources  Generate value objects...
 
-              clean
-              install
-              generate-sources
+              dev               Build a dev server
+              build             Build code
 
-              dev
-              build
-
-              test
+              test              Test

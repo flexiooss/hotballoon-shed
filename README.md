@@ -45,11 +45,11 @@ hbshed
 
 
               <tasks>
-              self-install      Install dependancies & generator
+              self-install      Install dependencies & generator
               self-update       Not implemented yet !!!
 
-              clean             Remove dependancies & generate sources 
-              install           Install dependancies
+              clean             Remove dependencies & generate sources 
+              install           Install dependencies
               generate-sources  Generate value objects...
 
               dev               Build a dev server       
