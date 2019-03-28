@@ -7,9 +7,22 @@ const path = require('path')
 const options = require('./server-options')
 const WebpackDevServer = require('webpack-dev-server')
 const fs = require('fs')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const isVerbose = process.argv[2]
+const isVerbose = process.argv[2] == '-v'
+const entries = process.argv[3].split(',')
+const html_template = process.argv[4]
 
+webpackDev.entry.app = entries
+webpackDev.plugins.push(
+new HtmlWebpackPlugin(
+      {
+        filename: 'index.html',
+        template: html_template,
+        inject: true
+      }
+    )
+    )
 if (fs.existsSync(path.resolve('./build/server-options.js'))) {
   const serverOptions = require(path.resolve('./build/server-options.js'))
   Object.assign(options, serverOptions)

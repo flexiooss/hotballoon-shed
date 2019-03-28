@@ -9,11 +9,11 @@ class PackageHandler(ModuleHandler):
     DEV_DEPENDENCIES_PACKAGE_KEY = 'devDependencies'
     VERSION_KEY = 'version'
 
-    dependencies = []  # type: list
-    version = ''  # type: str
+    dependencies = []  # params: list
+    version = ''  # params: str
 
     def __init__(self, package_file, repository):
-        # type: (str, str) -> None
+        # params: (str, str) -> None
         if not os.path.exists(package_file):
             raise ValueError(package_file + ' : File not exists')
 
@@ -27,7 +27,7 @@ class PackageHandler(ModuleHandler):
         return self
 
     def _get_package_dependencies(self):
-        # type: () -> dict
+        # params: () -> dict
         with open(self.package_file) as f:
             data = json.load(f)
             dependencies = self.merge_dicts(
@@ -38,7 +38,7 @@ class PackageHandler(ModuleHandler):
             return dependencies
 
     def _built_dependencies_modules(self, dependencies):
-        # type: (dict) -> list
+        # params: (dict) -> list
 
         ret = []
         for dependency in dependencies.items():
@@ -51,7 +51,7 @@ class PackageHandler(ModuleHandler):
         return ret
 
     def _process_version(self, package_version):
-        # type: (str) -> str
+        # params: (str) -> str
         if package_version.find('.git') is -1:
             return re.sub(r'[^\d.]', '', package_version)
         else:

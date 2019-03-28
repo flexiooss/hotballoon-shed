@@ -10,8 +10,8 @@ class CiDependencyApiUrl:
     PRODUCES = 'produces'
     DEPENDS_ON = 'depends-on'
 
-    base_url = ''  # type: str
-    repository_id = ''  # type: str
+    base_url = ''  # params: str
+    repository_id = ''  # params: str
 
     def __init__(self, base_url, repository_id):
         self.base_url = base_url.rstrip('/') + '/'
@@ -21,22 +21,22 @@ class CiDependencyApiUrl:
         return self.base_url + self.REPOSITORIES + '/' + self.repository_id
 
     def produces(self):
-        # type: () -> str
+        # params: () -> str
         return self.repository + '/' + self.PRODUCES
 
     def depends_on(self):
-        # type: () -> str
+        # params: () -> str
         return self.repository + '/' + self.DEPENDS_ON
 
 
 class CiDependencyApiHandler:
-    ci_dependency_api_url = None  # type: CiDependencyApiUrl
-    VERIFY_SSL = False  # type: bool
-    repository = ''  # type: str
-    checkout_spec = ''  # type: str
+    ci_dependency_api_url = None  # params: CiDependencyApiUrl
+    VERIFY_SSL = False  # params: bool
+    repository = ''  # params: str
+    checkout_spec = ''  # params: str
 
     def __init__(self, repository, checkout_spec, ci_dependency_api_url):
-        # type: (str, str, CiDependencyApiUrl)-> None
+        # params: (str, str, CiDependencyApiUrl)-> None
 
         self.repository = repository
         self.checkout_spec = checkout_spec
@@ -45,7 +45,7 @@ class CiDependencyApiHandler:
         self.ci_dependency_api_url = ci_dependency_api_url
 
     def put_repo_meta(self):
-        # type: () -> requests.Response
+        # params: () -> requests.Response
         print "uploading repo metas : "
 
         repo = {
@@ -61,7 +61,7 @@ class CiDependencyApiHandler:
         )
 
     def post_produced(self, produces):
-        # type: (list) -> requests.Response
+        # params: (list) -> requests.Response
         print "uploading produced modules meta : "
         pprint(produces)
 
@@ -72,7 +72,7 @@ class CiDependencyApiHandler:
         )
 
     def post_depends_on(self, dependencies):
-        # type: (list) -> requests.Response
+        # params: (list) -> requests.Response
         print "uploading depends-on modules meta :"
         pprint(dependencies)
 

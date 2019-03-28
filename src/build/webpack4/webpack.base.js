@@ -1,7 +1,6 @@
 'use strict'
 
 const CONFIG = require('./config')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const babelOptions = require('../babel/getBabelConfig')
 const fs = require('fs')
@@ -12,15 +11,7 @@ module.exports = {
     path: CONFIG.dist_path,
     filename: '[name].[hash].js'
   },
-  plugins: [
-    new HtmlWebpackPlugin(
-      {
-        filename: 'index.html',
-        template: CONFIG.template_html,
-        inject: true
-      }
-    )
-  ],
+  plugins: [ ],
   module: {
     rules: [
       {
@@ -47,6 +38,6 @@ module.exports = {
     ]
   },
   resolveLoader: {
-    modules: ['node_modules', CONFIG.vendors_path]
+    modules: [CONFIG.vendors_path]
   }
 }

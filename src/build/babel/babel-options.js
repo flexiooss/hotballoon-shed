@@ -3,11 +3,10 @@
 const path = require('path')
 
 module.exports = {
-  root: path.resolve(),
+  root: path.resolve(__dirname, '../../..'),
   presets: [
     [
-      // path.resolve(__dirname, '../../node_modules/@babel/preset-env'),
-      '@babel/preset-env',
+      path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
       {
         targets: {
           'browsers': [
@@ -18,5 +17,5 @@ module.exports = {
     ]
   ],
   plugins:
-    ['transform-modern-regexp']
+    [path.resolve(__dirname, '../../../node_modules/babel-plugin-transform-modern-regexp')]
 }

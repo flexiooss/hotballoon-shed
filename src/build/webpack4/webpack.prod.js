@@ -10,15 +10,23 @@ const LinkStylesheetHtmlWebpackPlugin = require('link-stylesheet-html-webpack-pl
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
 const SriPlugin = require('webpack-subresource-integrity')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
-webpackBase.entry.app = ['babel-polyfill', './src/js/bootstrap.js']
+const entries = process.argv[3].split(',')
+const html_template = process.argv[4]
+const dist_path = process.argv[5]
+
+entries.unshift(path.resolve(__dirname, '../../../node_modules/babel-polyfill'))
+webpackBase.entry.app = entries
+
 webpackBase.devtool = false
 webpackBase.mode = 'production'
 webpackBase.devtool = false
 webpackBase.output.crossOriginLoading = 'anonymous'
+webpackBase.output.path = dist_path
 
 webpackBase.optimization = {
   splitChunks: {
@@ -48,7 +56,14 @@ webpackBase.optimization = {
 }
 
 webpackBase.plugins.push(
-  new CleanWebpackPlugin([CONFIG.dist_path + '/*'], {
+new HtmlWebpackPlugin(
+      {
+        filename: 'index.html',
+        template: html_template,
+        inject: true
+      }
+    ),
+  new CleanWebpackPlugin([dist_path + '/*'], {
     root: path.resolve(),
     verbose: true,
     watch: true

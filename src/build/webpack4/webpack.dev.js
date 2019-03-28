@@ -8,11 +8,6 @@ const path = require('path')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 
-CONFIG.entry.app = [
-  path.resolve('./src/js/_before.js'),
-  path.resolve('./src/js/bootstrap.js'),
-  path.resolve('./src/js/_after.js')
-]
 webpackBase.output.globalObject = 'this'
 
 webpackBase.devtool = 'cheap-module-eval-source-map'
