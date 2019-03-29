@@ -97,7 +97,7 @@ class Config:
 
         p: Path
 
-        if self.build().get(self.BUILD_OUTPUT_KEY).startwith('/'):
+        if self.build().get(self.BUILD_OUTPUT_KEY).startswith('/'):
             p = Path(self.build().get(self.BUILD_OUTPUT_KEY))
         else:
             p = Path(self.__cwd / self.build().get(self.BUILD_OUTPUT_KEY))
