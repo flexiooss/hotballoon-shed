@@ -26,7 +26,7 @@
     "chokidar": "^2.0.4",
     "circular-dependency-plugin": "^5.0.2",
     "clean-webpack-plugin": "^0.1.17",
-    "code-altimeter-js": "https://github.com/flexiooss/code-altimeter-js.git",
+    "code-altimeter-js": "https://github.com/flexiooss/code-altimeter-js.git#master",
     "css-loader": "^1.0.1",
     "css-media-queries-loader": "https://github.com/flexiooss/css-media-queries-loader.git",
     "eslint": "^5.7.0",
