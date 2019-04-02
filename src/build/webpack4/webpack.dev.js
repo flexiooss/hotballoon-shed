@@ -11,7 +11,6 @@ const CircularDependencyPlugin = require('circular-dependency-plugin')
 webpackBase.output.globalObject = 'this'
 
 webpackBase.devtool = 'cheap-module-eval-source-map'
-webpackBase.output.publicPath = ((CONFIG.https) ? 'https' : 'http') + '://' + CONFIG.host + ':' + CONFIG.port + CONFIG.dist_url
 
 webpackBase.mode = 'development'
 

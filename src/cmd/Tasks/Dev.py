@@ -1,10 +1,9 @@
 import os
-import shutil
 from pathlib import Path
 
-from cmd.Directories import Directories
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
+import json
 
 
 class Dev(Task):
@@ -21,7 +20,7 @@ class Dev(Task):
         p.resolve()
 
         if not p.is_file():
-            raise FileNotFoundError('No server found for this builder : ' + self.package.config().get('builder'))
+            raise FileNotFoundError('No server found for this builder : ' + self.package.config().builder())
 
         verbose: str = '-v' if self.options.verbose is True else ''
         self.exec([
@@ -29,5 +28,7 @@ class Dev(Task):
             p.as_posix(),
             verbose,
             ','.join([v.as_posix() for v in self.package.config().build_entries()]),
-            self.package.config().build_html_template().as_posix()]
-        )
+            self.package.config().build_html_template().as_posix(),
+            self.package.config().build_output().as_posix(),
+            json.dumps(self.package.config().dev_server())
+        ])

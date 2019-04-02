@@ -17,6 +17,30 @@ package.json
       "html_template": "src/main/js/index.html",
       "ouput": "dist"
     },
+    "dev": {
+          "server": {
+            "index": "",
+            "hot": true,
+            "host": "localhost",
+            "port": 8080,
+            "historyApiFallback": true,
+            "https": true,
+            "clientLogLevel": "info",
+            "stats": {
+              "colors": true
+            },
+            "proxy": {
+              "/api": {
+                "target": "https://api.myhost.io",
+                "pathRewrite": {
+                  "^/api": ""
+                },
+                "secure": true,
+                "changeOrigin": true
+              }
+            }
+          }
+        },
     "test": {
       "tester": "code-altimeter-js",
       "path": "src/test"

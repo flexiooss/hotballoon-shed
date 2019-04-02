@@ -9,11 +9,19 @@ class Config:
     BUILD_ENTRIES_KEY: str = 'entries'
     BUILD_HTML_TEMPLATE_KEY: str = 'html_template'
     BUILD_OUTPUT_KEY: str = 'output'
+
+    DEV_KEY: str = 'dev'
+    DEV_SERVER_KEY: str = 'server'
+    DEV_PROXY_KEY: str = 'proxy'
+
     MODULES_KEY: str = 'modules'
+
     TEST_KEY: str = 'test'
     TESTER_KEY: str = 'tester'
     TEST_PATH_KEY: str = 'path'
+
     GENERATE_SOURCES_KEY: str = 'generate-sources'
+
     VALUE_OBJECT_KEY: str = 'value-objects'
     VALUE_OBJECT_EXTENSION_KEY: str = 'extension'
     VALUE_OBJECT_VERSION_KEY: str = 'version'
@@ -63,6 +71,33 @@ class Config:
         if not p.is_dir():
             raise FileNotFoundError('Not found directory for value-object-generator')
         return p
+
+    def has_dev(self) -> bool:
+        return self.__data.get(self.DEV_KEY) is not None
+
+    def dev(self) -> dict:
+        if not self.has_dev():
+            raise ValueError('No dev entries defined')
+        return self.__data.get(self.DEV_KEY)
+
+    def has_dev_server(self) -> bool:
+        return self.has_dev() and self.dev().get(self.DEV_SERVER_KEY) is not None
+
+    def dev_server(self) -> dict:
+        if not self.has_dev_server():
+            raise ValueError('No dev server entries defined')
+
+        return self.dev().get(self.DEV_SERVER_KEY)
+
+    def has_dev_proxy(self) -> bool:
+        return self.has_dev_server() and self.dev_server().get(self.DEV_PROXY_KEY) is not None
+
+    def dev_proxy(self) -> dict:
+        if not self.has_dev_proxy():
+            raise ValueError('No dev proxy entries defined')
+        return self.dev_server().get(self.DEV_PROXY_KEY)
+
+
 
     def has_build(self) -> bool:
         return self.__data.get(self.BUILD_KEY) is not None

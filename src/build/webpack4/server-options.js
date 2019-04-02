@@ -1,7 +1,6 @@
 'use strict'
 
 const CONFIG = require('./config')
-const webpackDev = require('./webpack.dev')
 
 module.exports = {
   index: '',
@@ -12,7 +11,6 @@ module.exports = {
   historyApiFallback: true,
   https: CONFIG.https,
   clientLogLevel: 'info',
-  open: webpackDev.output.publicPath,
   stats: {
     colors: true
   }
