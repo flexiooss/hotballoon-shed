@@ -17,9 +17,14 @@ class SetFlexioRegistry(Task):
         scopes: List[str] = ['@flexio-oss', '@flexio-services', '@flexio-components', '@flexio-vues', '@flexio-styles']
 
         for scope in scopes:
-            self.exec(['npm', 'config', 'set', scope + ':registry https://verdaccio.ci.flexio.io'])
+            self.exec(['npm', 'config', 'set', scope + ':registry', 'https://verdaccio.ci.flexio.io'])
 
     def process(self):
         print('SET FLEXIO REGISTRY')
 
         self.__set_flexio_registry()
+
+        print('####################################################')
+        print('And now connect you with :')
+        print('npm login --registry=https://verdaccio.ci.flexio.io')
+        print('####################################################')
