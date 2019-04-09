@@ -28,16 +28,20 @@ webpackDev.plugins.push(
 )
 
 Object.assign(options, parsedOptions)
+options.contentBase = dist
+
+webpackDev.output.publicPath = ((options.https) ? 'https' : 'http') + '://' + options.host + ':' + options.port + options.index
+options.open = webpackDev.output.publicPath
+
 if (isVerbose) {
   console.log('_________________ CUSTOM OPTIONS SERVER _________________')
   console.log(parsedOptions)
   console.log('_________________')
+   console.log('_________________ FULL OPTIONS SERVER _________________')
+  console.log(options)
+  console.log('_________________')
 }
 
-options.contentBase = dist
-
-webpackDev.output.publicPath = ((options.https) ? 'https' : 'http') + '://' + options.host + ':' + options.port
-options.open = webpackDev.output.publicPath
 
 WebpackDevServer.addDevServerEntrypoints(webpackDev, options)
 

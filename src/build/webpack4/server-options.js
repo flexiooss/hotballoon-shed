@@ -3,7 +3,7 @@
 const CONFIG = require('./config')
 
 module.exports = {
-  index: '',
+  index: '/',
   contentBase: CONFIG.dist_path,
   hot: true,
   host: CONFIG.host,
