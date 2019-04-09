@@ -9,7 +9,8 @@ class Tasks(Enum):
     INSTALL: str = 'install'
     GENERATE_SOURCES: str = 'generate-sources'
     TEST: str = 'test'
-    SELF_INSTALL:str = 'self-install'
+    SELF_INSTALL: str = 'self-install'
+    SET_FLEXIO_REGISTRY: str = 'set-flexio-registry'
 
     @classmethod
     def has_value(cls, value) -> bool:

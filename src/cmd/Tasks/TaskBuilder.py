@@ -8,6 +8,7 @@ from cmd.Tasks.Dev import Dev
 from cmd.Tasks.GenerateSources import GenerateSources
 from cmd.Tasks.Install import Install
 from cmd.Tasks.SelfInstall import SelfInstall
+from cmd.Tasks.SetFlexioRegistry import SetFlexioRegistry
 from cmd.Tasks.Tasks import Tasks
 from cmd.Tasks.Test import Test
 from cmd.package.PackageHandler import PackageHandler
@@ -56,6 +57,10 @@ class TaskBuilder:
             elif task == Tasks.GENERATE_SOURCES:
                 self.__ensure_load_package()
                 GenerateSources(self.__options, self.__package, self.__cwd).process()
+
+            elif task == Tasks.SET_FLEXIO_REGISTRY:
+                self.__ensure_load_package()
+                SetFlexioRegistry(self.__options, self.__package, self.__cwd).process()
 
             else:
                 raise ValueError('no tasks for this command')

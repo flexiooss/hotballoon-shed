@@ -69,15 +69,17 @@ hbshed
 
 
               <tasks>
-              self-install      Install dependencies & generator
-              self-update       Not implemented yet !!!
+              self-install          Install dependencies & generator
+              self-update           Not implemented yet !!!
+              
+              set-flexio-registry   Set all flexio private registry
 
-              clean             Remove dependencies & generate sources 
-              install           Install dependencies
-              generate-sources  Generate value objects...
+              clean                 Remove dependencies & generate sources 
+              install               Install dependencies
+              generate-sources      Generate value objects...
 
-              dev               Build a dev server       
-              build             Build code
+              dev                   Build a dev server       
+              build                 Build code
 
-              test              Test
+              test                  Test
 ```
