@@ -14,7 +14,7 @@ class SetFlexioRegistry(Task):
     NAME = Tasks.SET_FLEXIO_REGISTRY
 
     def __set_flexio_registry(self):
-        scopes: List[str] = ['@flexio-oss', '@flexio-services', '@flexio-components', '@flexio-vues', '@flexio-styles']
+        scopes: List[str] = ['@flexio-oss', '@flexio-corp']
 
         for scope in scopes:
             self.exec(['npm', 'config', 'set', scope + ':registry', 'https://verdaccio.ci.flexio.io'])
