@@ -2,7 +2,7 @@
 /* global require */
 
 const path = require('path')
-const {exec} = require('child_process')
+const { spawn } = require('child_process')
 const argTestPath = process.argv[2]
 const verbose = process.argv[3] === '-v'
 const testTransformer = require('./transformer')
@@ -24,19 +24,20 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
       'process.env.TEST_VERBOSE': JSON.stringify((verbose) ? 1 : 0)
     },
     (filePath) => {
-      exec(
-        'node ' + filePath,
+      const p = spawn('node',
+        [filePath],
         {
           cwd: path.resolve(),
-          env: process.env
-        },
-        (error, stdout, stderr) => {
-          console.log(stdout)
-          console.log(stderr)
-          if (error) {
-            process.exit(error.code)
-          }
+          env: process.env,
+          stdio: [process.stdin, process.stdout, process.stderr]
         }
       )
+
+      p.on('close', (code) => {
+        console.log(`Test child process exited with code ${code}`)
+      })
+      p.on('error', (err) => {
+        process.exit(err.code)
+      })
     })
 })
