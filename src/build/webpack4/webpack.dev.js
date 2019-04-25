@@ -38,7 +38,9 @@ webpackBase.module.rules.push(
         options: {
           modules: true,
           importLoaders: 1,
-          localIdentName: '[local]'
+          localIdentName: '[local]',
+            sourceMap:true,
+            camelCase:true
         }
       },
       {
