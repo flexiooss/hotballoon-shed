@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 from subprocess import Popen, PIPE
 
@@ -54,5 +55,5 @@ class ValueObjectGenerator:
             print(generator.as_posix())
 
             self.__exec([generator.as_posix(), p.as_posix(), Path(self.cwd / Directories.GENERATED).as_posix(),
-                         'io.flexio.' + self.package.name().replace('-', '_'),
+                         'io.flexio.' + re.sub('^@flexio[-\w]+\/', 'a', self.package.name().replace('-', '_')),
                          self.package.config().value_object_extension()])
