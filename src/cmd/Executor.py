@@ -55,4 +55,10 @@ class Executor:
         self.tasks = tasks
 
     def exec(self):
+        if self.options.source is not None:
+            cwd: Path = Path(self.options.source)
+            if not cwd.is_dir():
+                raise FileNotFoundError('Bad source path given : ' + cwd.as_posix())
+            self.__cwd = cwd
+
         taskbuilder: TaskBuilder = TaskBuilder(self.tasks, self.options, self.__cwd).process()

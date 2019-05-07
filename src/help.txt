@@ -20,6 +20,7 @@ hbshed
               <options>
               --help, -H
               --verbose, -V
+              --source, -S  path of sources
 
 
               <tasks>
