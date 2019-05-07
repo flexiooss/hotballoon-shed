@@ -12,9 +12,10 @@ class Tasks(Enum):
     EXTRACT_PACKAGE: str = 'extract-package'
     INSTALL: str = 'install'
     GENERATE_SOURCES: str = 'generate-sources'
-    TEST: str = 'test'
+    PUBLISH: str = 'publish'
     SELF_INSTALL: str = 'self-install'
     SET_FLEXIO_REGISTRY: str = 'set-flexio-registry'
+    TEST: str = 'test'
 
     @classmethod
     def has_value(cls, value) -> bool:

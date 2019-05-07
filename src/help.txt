@@ -36,3 +36,14 @@ hbshed
               build             Build code
 
               test              Test
+
+              extract-package
+                  <options>
+                  --target, -T    target directory to extract [required]
+
+              publish
+                  <options>
+                  --registry    js registry url [required]
+                  --email       [required]
+                  --password    [required]
+                  --username    [required]
