@@ -32,7 +32,6 @@ class Executor:
                 self.__options_resolver.short_name_options(),
                 self.__options_resolver.name_options()
             )
-
         except getopt.GetoptError:
             print('OUPS !!!')
             print('Oh buddy try `hbshed -H`')

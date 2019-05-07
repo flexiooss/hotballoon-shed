@@ -4,7 +4,11 @@ from typing import List, Optional
 from cmd.Options import Options
 from cmd.Tasks.Build import Build
 from cmd.Tasks.Clean import Clean
+from cmd.Tasks.CleanDependencies import CleanDependencies
+from cmd.Tasks.CleanSources import CleanSources
+from cmd.Tasks.CleanBuild import CleanBuild
 from cmd.Tasks.Dev import Dev
+from cmd.Tasks.ExtractPackage import ExtractPackage
 from cmd.Tasks.GenerateSources import GenerateSources
 from cmd.Tasks.Install import Install
 from cmd.Tasks.SelfInstall import SelfInstall
@@ -46,9 +50,25 @@ class TaskBuilder:
                 self.__ensure_load_package()
                 Clean(self.__options, self.__package, self.__cwd).process()
 
+            elif task == Tasks.CLEAN_DEPENDENCIES:
+                self.__ensure_load_package()
+                CleanDependencies(self.__options, self.__package, self.__cwd).process()
+
+            elif task == Tasks.CLEAN_SOURCES:
+                self.__ensure_load_package()
+                CleanSources(self.__options, self.__package, self.__cwd).process()
+
+            elif task == Tasks.CLEAN_BUILD:
+                self.__ensure_load_package()
+                CleanBuild(self.__options, self.__package, self.__cwd).process()
+
             elif task == Tasks.DEV:
                 self.__ensure_load_package()
                 Dev(self.__options, self.__package, self.__cwd).process()
+
+            elif task == Tasks.EXTRACT_PACKAGE:
+                self.__ensure_load_package()
+                ExtractPackage(self.__options, self.__package, self.__cwd).process()
 
             elif task == Tasks.BUILD:
                 self.__ensure_load_package()
@@ -61,6 +81,7 @@ class TaskBuilder:
             elif task == Tasks.SET_FLEXIO_REGISTRY:
                 self.__ensure_load_package()
                 SetFlexioRegistry(self.__options, self.__package, self.__cwd).process()
+
 
             else:
                 raise ValueError('no tasks for this command')
