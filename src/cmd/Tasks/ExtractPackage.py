@@ -22,7 +22,8 @@ class ExtractPackage(Task):
         else:
             self.target_path = Path(self.options.target_path)
             if self.target_path.is_dir():
-                raise FileExistsError('Target path option already exists')
+                shutil.rmtree(self.target_path.as_posix())
+                print('****     target path already exists : remove ' + self.target_path.as_posix())
 
     def __copy_to_target(self):
         shutil.copytree(self.cwd.as_posix(), self.target_path.as_posix())

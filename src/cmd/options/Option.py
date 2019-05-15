@@ -1,6 +1,8 @@
 from __future__ import annotations
 import abc
 
+from typing import List
+
 from cmd.Options import Options
 
 
@@ -17,7 +19,12 @@ class Option(abc.ABC):
         self.options: Options = options
 
     def test(self) -> bool:
-        return self.opt in ('-' + self.SHORT_NAME, '--' + self.NAME)
+        options_name: List[str] = []
+        if self.SHORT_NAME is not None:
+            options_name.append('-' + self.SHORT_NAME)
+        if self.NAME is not None:
+            options_name.append('--' + self.NAME)
+        return self.opt in options_name
 
     @abc.abstractmethod
     def exec(self) -> Options:
