@@ -1,8 +1,6 @@
 import os
 import shutil
-import sys
 from pathlib import Path
-from subprocess import Popen
 
 from cmd.Tasks.CleanBuild import CleanBuild
 from cmd.Tasks.CleanDependencies import CleanDependencies
@@ -18,15 +16,37 @@ class ExtractPackage(Task):
 
     def __ensure_target_path(self):
         if self.options.target_path is None:
-            raise FileNotFoundError('No target path for extract this package')
+            raise ValueError('No target path for extract this package')
         else:
             self.target_path = Path(self.options.target_path)
-            if self.target_path.is_dir():
-                shutil.rmtree(self.target_path.as_posix())
-                print('****     target path already exists : remove ' + self.target_path.as_posix())
+            if not self.target_path.is_dir():
+                raise FileNotFoundError('Target directory for extract this package not found')
+
+            self.__clean_target_path(self.target_path)
+
+    def __clean_target_path(self, target: Path):
+        for file in os.listdir(target.as_posix()):
+            file_path: Path = Path(target / file)
+            if file_path.is_file():
+                os.unlink(file_path.as_posix())
+                print('****  ****  remove : ' + file_path.as_posix())
+            elif file_path.is_dir():
+                shutil.rmtree(file_path.as_posix())
+                print('****  ****  remove : ' + file_path.as_posix())
 
     def __copy_to_target(self):
-        shutil.copytree(self.cwd.as_posix(), self.target_path.as_posix())
+        self.__copy_dir(self.cwd, self.target_path)
+
+    def __copy_dir(self, src: Path, dest: Path):
+        src_files = os.listdir(src.as_posix())
+        for file in src_files:
+            file_path: Path = Path(src / file)
+            if file_path.is_file():
+                shutil.copy(file_path.as_posix(), dest.as_posix())
+            elif file_path.is_dir():
+                dest_dir: Path = Path(dest / file)
+                dest_dir.mkdir()
+                self.__copy_dir(file_path, dest_dir)
 
     def __set_package(self):
         self.target_package = PackageHandler(self.target_path)
