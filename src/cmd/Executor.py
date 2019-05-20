@@ -8,6 +8,7 @@ from typing import List, Optional
 from cmd.Tasks.TaskBuilder import TaskBuilder
 from cmd.Options import Options
 from cmd.Tasks.Tasks import Tasks
+from cmd.Tasks.TasksShortCut import TasksShortCut
 from cmd.options.Resolver import Resolver
 
 
@@ -49,6 +50,13 @@ class Executor:
             arg = re.sub('[\s+]', '', arg).lower()
             if Tasks.has_value(arg):
                 tasks.append(Tasks[arg.replace('-', '_').upper()])
+            else:
+                try:
+                    if TasksShortCut[arg.replace('-', '_').upper()] is not None:
+                        for task in TasksShortCut[arg.replace('-', '_').upper()].value.split():
+                            tasks.append(Tasks[task.replace('-', '_').upper()])
+                except KeyError:
+                    pass
 
         if len(tasks) == 0:
             raise ValueError('No tasks for this command')
