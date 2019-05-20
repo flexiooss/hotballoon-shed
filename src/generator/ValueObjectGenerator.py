@@ -35,25 +35,29 @@ class ValueObjectGenerator:
             if not self.package.config().has_value_object_extension():
                 raise KeyError('No extension for value-object generator found into `hotballoon-shed` configuration')
 
-            p: Path = self.cwd if not self.package.config().has_value_object_path() else self.package.config().value_object_path()
-            p.resolve()
+            sources_path: Path = self.cwd if not self.package.config().has_value_object_path() else self.package.config().value_object_path()
+            sources_path.resolve()
 
-            if not p.is_dir():
+            if not sources_path.is_dir():
                 raise FileNotFoundError('No spec directory found')
 
-            generator: Path = Path(os.path.dirname(os.path.realpath(
+            generator_path: Path = Path(os.path.dirname(os.path.realpath(
                 __file__)) + '/../../' + Directories.LIB + '/' + Directories.VALUE_OBJECT_GENERATOR + '/' + 'run.sh')
-            generator.resolve()
+            generator_path.resolve()
 
-            print(generator.as_posix())
+            print(generator_path.as_posix())
 
-            if not generator.is_file():
+            if not generator_path.is_file():
                 raise FileNotFoundError('No value-object generator found')
+
+            generator: str = generator_path.as_posix()
+            sources: str = sources_path.as_posix()
+            target: str = Path(self.cwd / Directories.GENERATED).as_posix()
+            root_package: str = 'io.flexio.' + re.sub('^@flexio[-\w]+\/', '', self.package.name().replace('-', '_'))
+            extension: str = self.package.config().value_object_extension()
 
             verbose: str = '-v' if self.options.verbose is True else ''
 
-            print(generator.as_posix())
+            print(' '.join([generator, sources, target, root_package, extension]))
 
-            self.__exec([generator.as_posix(), p.as_posix(), Path(self.cwd / Directories.GENERATED).as_posix(),
-                         'io.flexio.' + re.sub('^@flexio[-\w]+\/', '', self.package.name().replace('-', '_')),
-                         self.package.config().value_object_extension()])
+            self.__exec([generator, sources, target, root_package, extension])
