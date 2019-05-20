@@ -1,12 +1,8 @@
-import os
 import sys
-from pathlib import Path
 from subprocess import Popen, PIPE
 
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
-from cmd.package.modules.Module import Module
-from cmd.package.modules.ModulesHandler import ModulesHandler
 
 
 class Publish(Task):
@@ -18,7 +14,13 @@ class Publish(Task):
         if self.options.registry is None or self.options.email is None or self.options.password is None or self.options.username is None:
             raise ValueError('Publish need registry, username, password, email')
 
+        print('****     registry : ' + self.options.registry)
+        print('****     username : ' + self.options.username)
+        print('****     email : ' + self.options.email)
+        print('****     sources : ' + self.cwd.as_posix())
+
         print("deploying JS package in " + self.cwd.as_posix())
+
         bash = Popen(["bash"], stdin=PIPE, stdout=PIPE, stderr=PIPE,
                      shell=True, cwd=self.cwd.as_posix())
         commands = """\

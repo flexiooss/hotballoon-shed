@@ -27,16 +27,18 @@ class Executor:
     def __extract_options(self, argv: List[str]):
         options: Options = Options()
 
-        try:
-            opts, args = getopt.gnu_getopt(
-                argv,
-                self.__options_resolver.short_name_options(),
-                self.__options_resolver.name_options()
-            )
-        except getopt.GetoptError:
-            print('OUPS !!!')
-            print('Oh buddy try `hbshed -H`')
-            sys.exit(2)
+        # TODO strict mode for CI
+        # try:
+        opts, args = getopt.gnu_getopt(
+            argv,
+            self.__options_resolver.short_name_options(),
+            self.__options_resolver.name_options()
+        )
+
+        # except getopt.GetoptError:
+        #     print('OUPS !!!')
+        #     print('Oh buddy try `hbshed -H`')
+        #     sys.exit(2)
 
         for opt, arg in opts:
             arg = re.sub('[\s+]', '', arg)

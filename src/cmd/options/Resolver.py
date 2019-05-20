@@ -35,5 +35,5 @@ class Resolver:
             v: str = o.NAME
             if (o.HAS_VALUE == True):
                 v += '='
-        ret.append(v)
+            ret.append(v)
         return ret
