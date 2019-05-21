@@ -36,7 +36,7 @@ class Publish(Task):
         )
 
         p1.stdout.close()
-        result = p2.communicate()[0]
+        stdout, stderr = p2.communicate()
         p1.wait()
         p2.stdout.close()
         p2.wait()
@@ -60,10 +60,8 @@ class Publish(Task):
         if code != 0:
             sys.stderr.write("Command terminated with wrong status code: " + str(code))
             sys.stderr.write("Can't upload JS package: " + self.cwd.as_posix())
-            result = p2.stdout.read()
-            print("OUT: " + result)
-            result = p2.stderr.read()
-            print("ERR: " + result)
+            print("OUT: " + stdout.strip().decode('utf-8'))
+            print("ERR: " + stderr.strip().decode('utf-8'))
             sys.exit(code)
 
         print("Js package uploaded: " + self.cwd.as_posix())
