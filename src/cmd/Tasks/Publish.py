@@ -21,22 +21,48 @@ class Publish(Task):
 
         print("deploying JS package in " + self.cwd.as_posix())
 
-        bash = Popen(["bash"], stdin=PIPE, stdout=PIPE, stderr=PIPE,
-                     shell=True, cwd=self.cwd.as_posix())
-        commands = """npm-cli-login -u """ + self.options.username + """ -p """ + self.options.password + """ -e  """ + self.options.email + """ -r """ + self.options.registry + """
-           npm publish --registry """ + self.options.registry + """ -f
-           exit 0
-           """
-        bash.stdin.write(commands)
-        bash.stdin.flush()
-        bash.wait()
-        code = bash.returncode
+        p1 = Popen(
+            ['npm-cli-login', '-u', self.options.username, '-p', self.options.password, '-e', self.options.email, '-r',
+             self.options.registry],
+            stdout=PIPE,
+            cwd=self.cwd.as_posix()
+        )
+
+        p2 = Popen(
+            ['npm publish', '--registry', self.options.registry, '-f'],
+            stdin=p1.stdout,
+            stdout=PIPE,
+            cwd=self.cwd.as_posix()
+        )
+
+        p1.stdout.close()
+        # result = p2.communicate()[0]
+        p1.wait()
+        p2.stdin.flush()
+        p2.wait()
+
+        code = p2.returncode
+
+        #         bash = Popen(["bash"], stdin=PIPE, stdout=PIPE, stderr=PIPE,
+        #                      shell=True, cwd=self.cwd.as_posix())
+        #
+        #         commands = """\
+        # npm-cli-login -u """ + self.options.username + """ -p """ + self.options.password + """ -e  """ + self.options.email + """ -r """ + self.options.registry + """ \
+        # npm publish --registry """ + self.options.registry + """ -f \
+        # exit 0
+        # """
+        #
+        #         bash.stdin.write(commands)
+        #         bash.stdin.flush()
+        #         bash.wait()
+        #         code = bash.returncode
+
         if code != 0:
             sys.stderr.write("Command terminated with wrong status code: " + code)
             sys.stderr.write("Can't upload JS package: " + self.cwd.as_posix())
-            result = bash.stdout.read()
+            result = p2.stdout.read()
             print("OUT: " + result)
-            result = bash.stderr.read()
+            result = p2.stderr.read()
             print("ERR: " + result)
             sys.exit(code)
 
