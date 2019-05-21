@@ -27,7 +27,6 @@ class Executor:
     def __extract_options(self, argv: List[str]):
         options: Options = Options()
 
-        # TODO strict mode for CI
         try:
             opts, args = getopt.gnu_getopt(
                 argv,
