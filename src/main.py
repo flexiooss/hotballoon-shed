@@ -8,11 +8,10 @@ from cmd.Executor import Executor
 def main(argv) -> None:
     executor: Executor = Executor(cwd=Path.cwd())
     executor.extract_argv(argv)
-
-    executor.exec()
-
-
-
+    try:
+        executor.exec()
+    except:
+        sys.exit(1)
     sys.exit()
 
 

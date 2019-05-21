@@ -23,8 +23,7 @@ class Publish(Task):
 
         bash = Popen(["bash"], stdin=PIPE, stdout=PIPE, stderr=PIPE,
                      shell=True, cwd=self.cwd.as_posix())
-        commands = """\
-           npm-cli-login -u """ + self.options.username + """ -p """ + self.options.password + """ -e  """ + self.options.email + """" -r """ + self.options.registry + """
+        commands = """npm-cli-login -u """ + self.options.username + """ -p """ + self.options.password + """ -e  """ + self.options.email + """ -r """ + self.options.registry + """
            npm publish --registry """ + self.options.registry + """ -f
            exit 0
            """

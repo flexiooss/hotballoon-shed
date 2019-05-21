@@ -28,17 +28,17 @@ class Executor:
         options: Options = Options()
 
         # TODO strict mode for CI
-        # try:
-        opts, args = getopt.gnu_getopt(
-            argv,
-            self.__options_resolver.short_name_options(),
-            self.__options_resolver.name_options()
-        )
+        try:
+            opts, args = getopt.gnu_getopt(
+                argv,
+                self.__options_resolver.short_name_options(),
+                self.__options_resolver.name_options()
+            )
 
-        # except getopt.GetoptError:
-        #     print('OUPS !!!')
-        #     print('Oh buddy try `hbshed -H`')
-        #     sys.exit(2)
+        except getopt.GetoptError:
+            print('OUPS !!!')
+            print('Oh buddy try `hbshed -H`')
+            sys.exit(2)
 
         for opt, arg in opts:
             arg = re.sub('[\s+]', '', arg)
