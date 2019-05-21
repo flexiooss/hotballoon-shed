@@ -36,9 +36,9 @@ class Publish(Task):
         )
 
         p1.stdout.close()
-        # result = p2.communicate()[0]
+        result = p2.communicate()[0]
         p1.wait()
-        p2.stdin.flush()
+        p2.stdout.close()
         p2.wait()
 
         code = p2.returncode
