@@ -58,7 +58,7 @@ class Publish(Task):
         #         code = bash.returncode
 
         if code != 0:
-            sys.stderr.write("Command terminated with wrong status code: " + code)
+            sys.stderr.write("Command terminated with wrong status code: " + str(code))
             sys.stderr.write("Can't upload JS package: " + self.cwd.as_posix())
             result = p2.stdout.read()
             print("OUT: " + result)
