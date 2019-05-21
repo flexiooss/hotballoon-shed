@@ -29,14 +29,14 @@ class Publish(Task):
         )
 
         p2 = Popen(
-            ['npm' ,'publish', '--registry', self.options.registry, '-f'],
+            ['npm', 'publish', '--registry', self.options.registry, '-f'],
             stdin=p1.stdout,
             stdout=PIPE,
             cwd=self.cwd.as_posix()
         )
 
         p1.stdout.close()
-        stdout, stderr = p2.communicate()
+        stdout, stderr = p2.communicate()[0]
         p1.wait()
         p2.stdout.close()
         p2.wait()
@@ -58,8 +58,8 @@ class Publish(Task):
         #         code = bash.returncode
 
         if code != 0:
-            sys.stderr.write("Command terminated with wrong status code: " + str(code))
-            sys.stderr.write("Can't upload JS package: " + self.cwd.as_posix())
+            sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
+            sys.stderr.write("Can't upload JS package: " + self.cwd.as_posix()+ "\n")
             print("OUT: " + stdout.strip().decode('utf-8'))
             print("ERR: " + stderr.strip().decode('utf-8'))
             sys.exit(code)
