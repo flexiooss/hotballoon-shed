@@ -29,7 +29,7 @@ class Publish(Task):
         )
 
         p2 = Popen(
-            ['npm publish', '--registry', self.options.registry, '-f'],
+            ['npm' ,'publish', '--registry', self.options.registry, '-f'],
             stdin=p1.stdout,
             stdout=PIPE,
             cwd=self.cwd.as_posix()
