@@ -28,6 +28,7 @@ class Publish(Task):
             cwd=self.cwd.as_posix()
         )
 
+        p1.wait()
         p2 = Popen(
             ['npm', 'publish', '--registry', self.options.registry, '-f'],
             stdin=p1.stdout,
@@ -36,7 +37,6 @@ class Publish(Task):
         )
 
         p1.stdout.close()
-        p1.wait()
         p2.stdout.close()
         p2.wait()
 
