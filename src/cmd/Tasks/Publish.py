@@ -36,30 +36,15 @@ class Publish(Task):
         )
 
         p1.stdout.close()
-        # stdout, stderr = p2.communicate()
         p1.wait()
         p2.stdout.close()
         p2.wait()
 
         code = p2.returncode
 
-        #         bash = Popen(["bash"], stdin=PIPE, stdout=PIPE, stderr=PIPE,
-        #                      shell=True, cwd=self.cwd.as_posix())
-        #
-        #         commands = """\
-        # npm-cli-login -u """ + self.options.username + """ -p """ + self.options.password + """ -e  """ + self.options.email + """ -r """ + self.options.registry + """ \
-        # npm publish --registry """ + self.options.registry + """ -f \
-        # exit 0
-        # """
-        #
-        #         bash.stdin.write(commands)
-        #         bash.stdin.flush()
-        #         bash.wait()
-        #         code = bash.returncode
-
         if code != 0:
+            sys.stderr.write("PUBLISH ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
             sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
-            sys.stderr.write("Can't upload JS package: " + self.cwd.as_posix()+ "\n")
             sys.exit(code)
 
-        print("Js package uploaded: " + self.cwd.as_posix())
+        print("PUBLISH ****     Js package uploaded: " + self.cwd.as_posix())
