@@ -36,7 +36,11 @@ class Publish(Task):
         )
 
         p1.stdout.close()
-        stdout, stderr = p2.communicate()[0]
+        stdout, stderr = p2.communicate()
+        print('stdout')
+        print(stdout)
+        print('stderr')
+        print(stderr)
         p1.wait()
         p2.stdout.close()
         p2.wait()
