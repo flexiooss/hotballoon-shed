@@ -37,6 +37,8 @@ hbshed
               build             Build code
 
               test              Test
+                  <options>
+                  --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
 
               extract-package
                   <options>

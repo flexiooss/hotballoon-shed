@@ -6,3 +6,4 @@ class Options:
     email: str = None
     registry: str = None
     source: str = None
+    restrict: str = None

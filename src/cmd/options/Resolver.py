@@ -4,6 +4,7 @@ from cmd.Options import Options
 from cmd.options.Email import Email
 from cmd.options.Password import Password
 from cmd.options.Registry import Registry
+from cmd.options.Restrict import Restrict
 from cmd.options.Source import Source
 from cmd.options.Username import Username
 from cmd.options.HelpOption import HelpOption
@@ -13,7 +14,7 @@ from cmd.options.TargetPath import TargetPath
 
 
 class Resolver:
-    options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry]
+    options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry, Restrict]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option

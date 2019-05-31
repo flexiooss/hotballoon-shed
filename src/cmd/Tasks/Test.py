@@ -26,15 +26,17 @@ class Test(Task):
             if not self.package.config().has_tester():
                 raise KeyError('No tester found into `hotballoon-shed` configuration')
 
-            p: Path = Path(os.path.dirname(
+            tester: Path = Path(os.path.dirname(
                 os.path.realpath(__file__)) + '/../../build/' + self.package.config().tester() + '/test.js')
-            p.resolve()
+            tester.resolve()
 
-            if not p.is_file():
+            if not tester.is_file():
                 raise FileNotFoundError('No tester file found for this tester : ' + self.package.config().tester())
 
             verbose: str = '-v' if self.options.verbose is True else ''
-            child: Popen = self.exec(['node', p.as_posix(), self.package.config().test_dir().as_posix(), verbose])
+            restrict: str = self.options.restrict if self.options.restrict is not None else ''
+            child: Popen = self.exec(
+                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict])
             if child.returncode > 0:
                 sys.exit(child.returncode)
 
