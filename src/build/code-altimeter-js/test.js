@@ -45,9 +45,7 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
 
       p.on('close', (code) => {
         console.log(`Test child process exited with code ${code}`)
+        process.exit(code)
       })
-      p.on('error', (err) => {
-        process.exit(err.code)
-      })
-    })
+         })
 })

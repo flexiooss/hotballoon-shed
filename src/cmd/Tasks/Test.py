@@ -37,6 +37,7 @@ class Test(Task):
             restrict: str = self.options.restrict if self.options.restrict is not None else ''
             child: Popen = self.exec(
                 ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict])
+
             if child.returncode > 0:
                 sys.exit(child.returncode)
 
