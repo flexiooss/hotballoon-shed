@@ -12,11 +12,13 @@ class GenerateSources(Task):
         if self.package.config().has_modules():
             modules: ModulesHandler = ModulesHandler(self.package)
             module: Module
+
+            print('#### #### ' + str(len(modules.modules)) + ' Modules found ')
             for module in modules.modules:
                 GenerateSources(self.options, module.package, module.package.cwd).process()
 
     def process(self):
-        print('GENERATE SOURCES : ' + self.package.name())
+        print('#### GENERATE SOURCES : ' + self.package.name())
 
         ValueObjectGenerator(self.options, self.package, self.cwd).generate()
 
