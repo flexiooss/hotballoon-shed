@@ -30,7 +30,7 @@ webpackDev.plugins.push(
 Object.assign(options, parsedOptions)
 options.contentBase = dist
 
-webpackDev.output.publicPath = ((options.https) ? 'https' : 'http') + '://' + options.host + ':' + options.port + options.index
+webpackDev.output.publicPath = ''
 
 if (isVerbose) {
   console.log('_________________ CUSTOM OPTIONS SERVER _________________')
