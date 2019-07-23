@@ -15,7 +15,7 @@ class Install(Task):
     def __init__(self, options: Options, package: Optional[PackageHandler], cwd: Path,
                  node_modules: Optional[Path] = None) -> None:
         super().__init__(options, package, cwd)
-        self.__node_modules: Optional[Path] = node_modules
+        self.__node_modules: Optional[Path] = node_modules if node_modules is not None else cwd
         self.__ensure_node_modules()
 
     def __ensure_node_modules(self):
@@ -30,7 +30,8 @@ class Install(Task):
                 Install(self.options, module.package, module.package.cwd, self.__node_modules).process()
 
     def process(self):
-        print('INSTALL : ' + self.package.name())
-        self.exec(['npm', 'install', self.__node_modules.as_posix(), '--no-package-lock', '--force'])
+        print('#### INSTALL : ' + self.package.name())
+        print('## INSTALL node_modules at : ' + self.__node_modules.as_posix())
+        self.exec(['npm', 'install', '--prefix', self.__node_modules.as_posix(), '--no-package-lock', '--force'])
 
         self.__modules_install()
