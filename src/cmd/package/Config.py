@@ -13,6 +13,7 @@ class Config:
     DEV_KEY: str = 'dev'
     DEV_SERVER_KEY: str = 'server'
     DEV_PROXY_KEY: str = 'proxy'
+    DEV_ENTRIES_KEY: str = 'entries'
 
     MODULES_KEY: str = 'modules'
 
@@ -96,6 +97,24 @@ class Config:
         if not self.has_dev_proxy():
             raise ValueError('No dev proxy entries defined')
         return self.dev_server().get(self.DEV_PROXY_KEY)
+
+    def has_dev_entries(self) -> bool:
+        return self.has_dev() and self.dev().get(self.DEV_ENTRIES_KEY) is not None
+
+    def dev_entries(self) -> List[Path]:
+        if not self.has_dev_entries():
+            raise ValueError('No build entries defined')
+        entries: List[Path] = []
+        v: str
+        for v in self.build().get(self.DEV_ENTRIES_KEY):
+
+            p: Path = Path(self.__cwd / v)
+            p.resolve()
+            if not p.is_file():
+                raise FileNotFoundError('Not found entry path : ' + p.as_posix())
+            entries.append(p)
+
+        return entries
 
 
 

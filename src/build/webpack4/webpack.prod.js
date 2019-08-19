@@ -19,7 +19,6 @@ const entries = process.argv[3].split(',')
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
 
-entries.unshift(path.resolve(__dirname, '../../../node_modules/babel-polyfill'))
 webpackBase.entry.app = entries
 
 webpackBase.devtool = false
@@ -69,8 +68,7 @@ new HtmlWebpackPlugin(
     watch: true
   }),
   new webpack.DefinePlugin({
-    'window.__DEVELOPMENT__': JSON.stringify(false),
-    '__APP_ENV__': __HOTBALLOON_APP_ENV__
+    'window.__DEVELOPMENT__': JSON.stringify(false)
   }),
   new MiniCssExtractPlugin({
     filename: '[name].[hash].css',

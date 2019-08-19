@@ -19,8 +19,7 @@ webpackBase.plugins.push(
     'window.__DEVELOPMENT__': JSON.stringify(true),
     'window.__ASSERT__': JSON.stringify(true),
     'window.__DEBUG__': JSON.stringify(true),
-    'process.env.NODE_ENV': JSON.stringify('development'),
-    '__APP_ENV__': __HOTBALLOON_APP_ENV__
+    'process.env.NODE_ENV': JSON.stringify('development')
   }),
   new webpack.NamedModulesPlugin(),
   new webpack.HotModuleReplacementPlugin(),
