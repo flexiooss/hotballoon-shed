@@ -69,7 +69,8 @@ new HtmlWebpackPlugin(
     watch: true
   }),
   new webpack.DefinePlugin({
-    'window.__DEVELOPMENT__': JSON.stringify(false)
+    'window.__DEVELOPMENT__': JSON.stringify(false),
+    '__APP_ENV__': __HOTBALLOON_APP_ENV__
   }),
   new MiniCssExtractPlugin({
     filename: '[name].[hash].css',

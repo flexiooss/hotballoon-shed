@@ -83,3 +83,6 @@ hbshed
 
               test                  Test
 ```
+
+### Global variable for Hotballoon Application
+ `__HOTBALLOON_APP_ENV__` is the one global variable to use into your bootstarp application
