@@ -106,7 +106,7 @@ class Config:
             raise ValueError('No build entries defined')
         entries: List[Path] = []
         v: str
-        for v in self.build().get(self.DEV_ENTRIES_KEY):
+        for v in self.dev().get(self.DEV_ENTRIES_KEY):
 
             p: Path = Path(self.__cwd / v)
             p.resolve()
