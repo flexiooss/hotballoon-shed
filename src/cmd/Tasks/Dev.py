@@ -27,7 +27,7 @@ class Dev(Task):
             'node',
             p.as_posix(),
             verbose,
-            ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            ','.join([v.as_posix() for v in self.package.config().dev_entries()]),
             self.package.config().build_html_template().as_posix(),
             self.package.config().build_output().as_posix(),
             json.dumps(self.package.config().dev_server())

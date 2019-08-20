@@ -19,7 +19,6 @@ const entries = process.argv[3].split(',')
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
 
-entries.unshift(path.resolve(__dirname, '../../../node_modules/babel-polyfill'))
 webpackBase.entry.app = entries
 
 webpackBase.devtool = false

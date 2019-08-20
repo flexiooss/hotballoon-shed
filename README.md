@@ -12,35 +12,24 @@ package.json
     "build": {
       "builder": "webpack4",
       "entries": [
+        "polyfill/for/crazy-browser.js",
         "src/main/js/bootstrap.js"
       ],
       "html_template": "src/main/js/index.html",
       "ouput": "dist"
     },
     "dev": {
-          "server": {
-            "index": "",
-            "hot": true,
-            "host": "localhost",
-            "port": 8080,
-            "historyApiFallback": true,
-            "https": true,
-            "clientLogLevel": "info",
-            "stats": {
-              "colors": true
-            },
-            "proxy": {
-              "/api": {
-                "target": "https://api.myhost.io",
-                "pathRewrite": {
-                  "^/api": ""
-                },
-                "secure": true,
-                "changeOrigin": true
-              }
-            }
-          }
-        },
+        "entries": [
+            "src/main/js/devBootstrap.js"
+          ],
+        "server": {
+            "host": "172.17.0.1",
+            "disableHostCheck": true,
+            "publicPath": "/",
+            "public": "https://dev.flexio.io/devui",
+            "sockPath": "/socketjs"
+        }
+    },
     "test": {
       "tester": "code-altimeter-js",
       "path": "src/test"
@@ -77,6 +66,7 @@ hbshed
               clean                 Remove dependencies & generate sources 
               install               Install dependencies
               generate-sources      Generate value objects...
+              cig                   alias for clean install generate-sources
 
               dev                   Build a dev server       
               build                 Build code
