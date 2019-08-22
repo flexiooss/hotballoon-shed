@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 from cmd.Options import Options
+from cmd.Tasks.PrintNpmLogs import PrintNpmLogs
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
 from cmd.package.PackageHandler import PackageHandler
@@ -59,18 +60,18 @@ class Install(Task):
 
             if code != 0:
                 sys.stderr.write("LOGIN ****      Can't login to " + self.options.registry + "\n")
-                self.print_last_npm_logs(50)
+
+                PrintNpmLogs.print_last_lines(50)
+
                 sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
                 sys.exit(code)
-
 
             print('****     ****    LOGGED')
 
             print('## INSTALL node_modules at : ' + self.__node_modules.as_posix())
 
             p2 = Popen(
-                ['npm', 'unpublish', self.package.name() + '@' + self.package.version(), '--registry',
-                 self.options.registry],
+                ['npm', 'install', '--prefix', self.__node_modules.as_posix(), '--no-package-lock', '--force'],
                 stdin=p1.stdout,
                 stdout=PIPE,
                 cwd=self.cwd.as_posix()
@@ -83,11 +84,12 @@ class Install(Task):
             code = p2.returncode
 
             if code != 0:
-                sys.stderr.write("UNPUBLISH ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
-                self.print_last_npm_logs(50)
+                sys.stderr.write("INSTALL ****      Can't install at" +self.__node_modules.as_posix() + "\n")
+
                 sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
                 sys.exit(code)
 
-            print('****     ****    UNPUBLISHED')
+            print('****     ****    INSTALL COMPLETE')
+            PrintNpmLogs.print_last_lines(50)
 
         self.__modules_install()
