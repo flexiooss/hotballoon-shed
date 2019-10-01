@@ -21,7 +21,11 @@ class SelfInstall(Task):
         if not self.package.config().has_value_object_version():
             raise ValueError('No version found into package config')
 
+        if not self.package.config().has_value_object_repository():
+            raise ValueError('No repository found into package config')
+
         version: str = self.package.config().value_object_version()
+        repository: str = self.package.config().value_object_repository()
 
         lib: Path = Path(self.cwd / Directories.LIB)
         lib.resolve()
@@ -34,7 +38,7 @@ class SelfInstall(Task):
             'mvn',
             '-Dartifact=org.codingmatters.value.objects:cdm-value-objects-js:' + version + ':zip:embedded',
             'dependency:get',
-            '-DremoteRepositories=https://oss.sonatype.org/content/repositories/snapshots'
+            '-DremoteRepositories=' + repository
         ])
 
         self.exec(

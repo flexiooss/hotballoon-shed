@@ -4,6 +4,9 @@ Test, Develop, Manage, Generate sources, Build Hotballoon applications
 ### Installation
 https://github.com/flexiooss/hotballoon-shed-playbook
 
+| before usage : ensure you have your settings with de right access for `codingmatters-realeases` repository
+
+
 ### Configuration
 package.json
 ```json
