@@ -1,8 +1,9 @@
 import os
 import re
 import shutil
+import sys
 from pathlib import Path
-from subprocess import Popen
+from subprocess import Popen, PIPE
 from typing import Optional
 
 from cmd.Directories import Directories
@@ -39,14 +40,24 @@ class SelfInstall(Task):
 
         print('****     install generator')
 
-        self.exec([
-            'mvn',
-            'dependency:unpack-dependencies',
-            '-DoutputDirectory=' + generator.as_posix(),
-            '-DexcludeTransitive',
-            '-DgeneratorVersion=' + version,
-            '-DmarkersDirectory=' + lib.as_posix()
-        ])
+        p1 = Popen(
+            [
+                'mvn',
+                'dependency:unpack-dependencies',
+                '-DoutputDirectory=' + generator.as_posix(),
+                '-DexcludeTransitive',
+                '-DgeneratorVersion=' + version,
+                '-DmarkersDirectory=' + lib.as_posix()
+            ]
+        )
+
+        p1.wait()
+
+        code = p1.returncode
+        if code != 0:
+            sys.stderr.write("GENERATOR ****      Can't build generator" + "\n")
+            sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
+            sys.exit(code)
 
     def process(self):
         print('SELF_INSTALL')
