@@ -1,4 +1,4 @@
 level: dev
-schemes: [package]
+schemes: [package, maven]
 topics: [69]
 version: 1.5.0
