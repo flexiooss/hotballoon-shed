@@ -9,8 +9,7 @@
   "hotballoon-shed": {
     "generate-sources": {
       "value-objects": {
-        "version": "1.11.0",
-        "repository": "http://maven.ci.flexio.io:8080/repository/codingmatters-releases"
+        "version": "1.11.0"
       }
     }
   },

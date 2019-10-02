@@ -26,7 +26,6 @@ class Config:
     VALUE_OBJECT_KEY: str = 'value-objects'
     VALUE_OBJECT_EXTENSION_KEY: str = 'extension'
     VALUE_OBJECT_VERSION_KEY: str = 'version'
-    VALUE_OBJECT_REPOSITORY: str = 'repository'
     VALUE_OBJECT_PATH_KEY: str = 'path'
 
     def __init__(self, data: dict, cwd: Path) -> None:
@@ -51,13 +50,6 @@ class Config:
 
     def value_object_version(self) -> str:
         return self.value_object().get(self.VALUE_OBJECT_VERSION_KEY)
-
-    def has_value_object_repository(self) -> bool:
-        return self.has_generate_sources() and self.has_value_object() and self.value_object().get(
-            self.VALUE_OBJECT_REPOSITORY) is not None
-
-    def value_object_repository(self) -> str:
-        return self.value_object().get(self.VALUE_OBJECT_REPOSITORY)
 
     def has_value_object_extension(self) -> bool:
         return self.has_generate_sources() and self.has_value_object() and self.value_object().get(
@@ -123,8 +115,6 @@ class Config:
             entries.append(p)
 
         return entries
-
-
 
     def has_build(self) -> bool:
         return self.__data.get(self.BUILD_KEY) is not None

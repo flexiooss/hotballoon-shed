@@ -21,11 +21,7 @@ class SelfInstall(Task):
         if not self.package.config().has_value_object_version():
             raise ValueError('No version found into package config')
 
-        if not self.package.config().has_value_object_repository():
-            raise ValueError('No repository found into package config')
-
         version: str = self.package.config().value_object_version()
-        repository: str = self.package.config().value_object_repository()
 
         lib: Path = Path(self.cwd / Directories.LIB)
         lib.resolve()
@@ -33,38 +29,24 @@ class SelfInstall(Task):
         if lib.is_dir():
             shutil.rmtree(lib.as_posix())
             print('****     rm ' + lib.as_posix())
-
-        self.exec([
-            'mvn',
-            '-Dartifact=org.codingmatters.value.objects:cdm-value-objects-js:' + version + ':zip:embedded',
-            'dependency:get',
-            '-DremoteRepositories=' + repository
-        ])
-
-        self.exec(
-            ['mvn', '-Dartifact=org.codingmatters.value.objects:cdm-value-objects-js:' + version + ':zip:embedded',
-             'dependency:copy', '-DoutputDirectory=' + lib.as_posix()])
+        else:
+            lib.mkdir()
+            print('****     create ' + lib.as_posix())
 
         generator: Path = Path(lib / Directories.VALUE_OBJECT_GENERATOR)
         generator.mkdir()
         print('****     create ' + generator.as_posix())
 
-        archive: Optional[Path] = None
+        print('****     install generator')
 
-        for file in os.listdir(lib.as_posix()):
-            if re.match(re.compile('^cdm-value-objects-js-.*-embedded\.zip$'), file) is not None:
-                archive = Path(lib / file)
-
-        if archive is None or not archive.is_file():
-            raise FileNotFoundError('No `cdm-value-objects-js-*-embedded.zip` archive found')
-
-        print('****     archive found : ' + archive.as_posix())
-
-        child: Popen = Popen(['unzip', archive.as_posix(), '-d', Directories.VALUE_OBJECT_GENERATOR],
-                             cwd=lib.as_posix())
-        print('****     unzip ' + archive.as_posix() + ' into ' + Directories.VALUE_OBJECT_GENERATOR)
-
-        child.communicate()
+        self.exec([
+            'mvn',
+            'dependency:unpack-dependencies',
+            '-DoutputDirectory=' + generator.as_posix(),
+            '-DexcludeTransitive',
+            '-DgeneratorVersion=' + version,
+            '-DmarkersDirectory=' + lib.as_posix()
+        ])
 
     def process(self):
         print('SELF_INSTALL')
