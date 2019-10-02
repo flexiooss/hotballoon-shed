@@ -116,8 +116,6 @@ class Config:
 
         return entries
 
-
-
     def has_build(self) -> bool:
         return self.__data.get(self.BUILD_KEY) is not None
 

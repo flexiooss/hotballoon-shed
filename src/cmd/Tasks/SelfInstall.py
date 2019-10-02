@@ -30,37 +30,23 @@ class SelfInstall(Task):
             shutil.rmtree(lib.as_posix())
             print('****     rm ' + lib.as_posix())
 
-        self.exec([
-            'mvn',
-            '-Dartifact=org.codingmatters.value.objects:cdm-value-objects-js:' + version + ':zip:embedded',
-            'dependency:get',
-            '-DremoteRepositories=https://oss.sonatype.org/content/repositories/snapshots'
-        ])
-
-        self.exec(
-            ['mvn', '-Dartifact=org.codingmatters.value.objects:cdm-value-objects-js:' + version + ':zip:embedded',
-             'dependency:copy', '-DoutputDirectory=' + lib.as_posix()])
+        lib.mkdir()
+        print('****     create ' + lib.as_posix())
 
         generator: Path = Path(lib / Directories.VALUE_OBJECT_GENERATOR)
         generator.mkdir()
         print('****     create ' + generator.as_posix())
 
-        archive: Optional[Path] = None
+        print('****     install generator')
 
-        for file in os.listdir(lib.as_posix()):
-            if re.match(re.compile('^cdm-value-objects-js-.*-embedded\.zip$'), file) is not None:
-                archive = Path(lib / file)
-
-        if archive is None or not archive.is_file():
-            raise FileNotFoundError('No `cdm-value-objects-js-*-embedded.zip` archive found')
-
-        print('****     archive found : ' + archive.as_posix())
-
-        child: Popen = Popen(['unzip', archive.as_posix(), '-d', Directories.VALUE_OBJECT_GENERATOR],
-                             cwd=lib.as_posix())
-        print('****     unzip ' + archive.as_posix() + ' into ' + Directories.VALUE_OBJECT_GENERATOR)
-
-        child.communicate()
+        self.exec([
+            'mvn',
+            'dependency:unpack-dependencies',
+            '-DoutputDirectory=' + generator.as_posix(),
+            '-DexcludeTransitive',
+            '-DgeneratorVersion=' + version,
+            '-DmarkersDirectory=' + lib.as_posix()
+        ])
 
     def process(self):
         print('SELF_INSTALL')
