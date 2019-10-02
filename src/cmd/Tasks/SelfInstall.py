@@ -48,7 +48,8 @@ class SelfInstall(Task):
                 '-DexcludeTransitive',
                 '-DgeneratorVersion=' + version,
                 '-DmarkersDirectory=' + lib.as_posix()
-            ]
+            ],
+            cwd=self.cwd.as_posix()
         )
 
         p1.wait()
