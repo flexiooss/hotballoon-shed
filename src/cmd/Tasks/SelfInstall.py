@@ -29,9 +29,9 @@ class SelfInstall(Task):
         if lib.is_dir():
             shutil.rmtree(lib.as_posix())
             print('****     rm ' + lib.as_posix())
-        else:
-            lib.mkdir()
-            print('****     create ' + lib.as_posix())
+
+        lib.mkdir()
+        print('****     create ' + lib.as_posix())
 
         generator: Path = Path(lib / Directories.VALUE_OBJECT_GENERATOR)
         generator.mkdir()
