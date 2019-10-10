@@ -37,6 +37,9 @@ package.json
       "tester": "code-altimeter-js",
       "path": "src/test"
     },
+     "browserTest": {
+      "path": "src/browserTest"
+    },
     "modules": {
       "component-name": "src/main/js/modules/component-name",
       "component-other": "src/main/js/modules/component-other"
@@ -54,25 +57,42 @@ package.json
 ```bash
 hbshed
               <...task> <...option>
-              
+
               <options>
               --help, -H
               --verbose, -V
+              --source, -S  path of sources
 
 
               <tasks>
               self-install          Install dependencies & generator
               self-update           Not implemented yet !!!
-              
+
               set-flexio-registry   Set all flexio private registry
 
-              clean                 Remove dependencies & generate sources 
+              clean                 Remove dependencies & generate sources
               install               Install dependencies
-              generate-sources      Generate value objects...
-              cig                   alias for clean install generate-sources
+              generate-sources  Generate value objects...
 
-              dev                   Build a dev server       
-              build                 Build code
+              dev               Build a dev server
+              build             Build code
 
-              test                  Test
+              test              Test
+                  <options>
+                  --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
+
+              browser-test              Test
+                  <options>
+                  --restrict, -R    fileName (file path relative to the browser test directory) [required]
+
+              extract-package
+                  <options>
+                  --target, -T    target directory to extract [required]
+
+              publish
+                  <options>
+                  --registry    js registry url [required]
+                  --email       [required]
+                  --password    [required]
+                  --username    [required]
 ```
