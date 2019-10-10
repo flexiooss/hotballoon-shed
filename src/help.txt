@@ -40,6 +40,10 @@ hbshed
                   <options>
                   --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
 
+              browser-test              Test
+                  <options>
+                  --restrict, -R    fileName (file path relative to the browser test directory) [required]
+
               extract-package
                   <options>
                   --target, -T    target directory to extract [required]

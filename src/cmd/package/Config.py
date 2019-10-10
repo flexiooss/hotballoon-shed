@@ -21,6 +21,9 @@ class Config:
     TESTER_KEY: str = 'tester'
     TEST_PATH_KEY: str = 'path'
 
+    BROWSER_TEST_KEY: str = 'browserTest'
+    BROWSER_TEST_PATH_KEY: str = 'path'
+
     GENERATE_SOURCES_KEY: str = 'generate-sources'
 
     VALUE_OBJECT_KEY: str = 'value-objects'
@@ -201,6 +204,26 @@ class Config:
 
         if not p.is_dir():
             raise FileNotFoundError('Not found test path')
+        return p
+
+    def has_browser_test(self) -> bool:
+        return self.__data.get(self.BROWSER_TEST_KEY) is not None
+
+    def browser_test(self) -> dict:
+        return self.__data.get(self.BROWSER_TEST_KEY)
+
+    def browser_has_test_dir(self) -> bool:
+        return self.test().get(self.BROWSER_TEST_PATH_KEY) is not None
+
+    def browser_test_dir(self) -> Path:
+        if not self.browser_has_test_dir():
+            raise ValueError('No test dir defined')
+
+        p: Path = Path(self.__cwd / self.browser_test().get(self.BROWSER_TEST_PATH_KEY))
+        p.resolve()
+
+        if not p.is_dir():
+            raise FileNotFoundError('Not found browserTest path')
         return p
 
     def has_modules(self) -> bool:

@@ -16,6 +16,7 @@ class Tasks(Enum):
     SELF_INSTALL: str = 'self-install'
     SET_FLEXIO_REGISTRY: str = 'set-flexio-registry'
     TEST: str = 'test'
+    BROWSER_TEST: str = 'browser-test'
 
     @classmethod
     def has_value(cls, value) -> bool:

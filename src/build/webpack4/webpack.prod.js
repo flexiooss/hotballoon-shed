@@ -21,11 +21,11 @@ const dist_path = process.argv[5]
 
 webpackBase.entry.app = entries
 
-webpackBase.devtool = false
 webpackBase.mode = 'production'
 webpackBase.devtool = false
 webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path
+//webpackBase.output.publicPath = '/'
 
 webpackBase.optimization = {
   splitChunks: {
