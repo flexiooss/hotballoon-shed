@@ -16,6 +16,7 @@ from cmd.Tasks.SelfInstall import SelfInstall
 from cmd.Tasks.SetFlexioRegistry import SetFlexioRegistry
 from cmd.Tasks.Tasks import Tasks
 from cmd.Tasks.Test import Test
+from cmd.Tasks.BrowserTest import BrowserTest
 from cmd.package.PackageHandler import PackageHandler
 
 
@@ -66,6 +67,10 @@ class TaskBuilder:
             elif task == Tasks.DEV:
                 self.__ensure_load_package()
                 Dev(self.__options, self.__package, self.__cwd).process()
+
+            elif task == Tasks.BROWSER_TEST:
+                self.__ensure_load_package()
+                BrowserTest(self.__options, self.__package, self.__cwd).process()
 
             elif task == Tasks.EXTRACT_PACKAGE:
                 self.__ensure_load_package()
