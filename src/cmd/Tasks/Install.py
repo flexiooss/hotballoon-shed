@@ -5,7 +5,7 @@ from cmd.Options import Options
 from cmd.Tasks.PrintNpmLogs import PrintNpmLogs
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
-from cmd.package.PackageHandler import PackageHandler
+from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 from cmd.package.modules.Module import Module
 from cmd.package.modules.ModulesHandler import ModulesHandler
 from subprocess import Popen, PIPE
@@ -15,7 +15,7 @@ import sys
 class Install(Task):
     NAME = Tasks.INSTALL
 
-    def __init__(self, options: Options, package: Optional[PackageHandler], cwd: Path,
+    def __init__(self, options: Options, package: Optional[HBShedPackageHandler], cwd: Path,
                  node_modules: Optional[Path] = None) -> None:
         super().__init__(options, package, cwd)
         self.__node_modules: Optional[Path] = node_modules if node_modules is not None else cwd

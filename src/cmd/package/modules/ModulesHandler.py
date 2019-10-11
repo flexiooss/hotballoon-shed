@@ -1,15 +1,15 @@
 from pathlib import Path
 from typing import List
 
-from cmd.package.PackageHandler import PackageHandler
+from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 from cmd.package.modules.Module import Module
 
 
 class ModulesHandler:
     modules: List[Module]
 
-    def __init__(self, package: PackageHandler) -> None:
-        self.__package: PackageHandler = package
+    def __init__(self, package: HBShedPackageHandler) -> None:
+        self.__package: HBShedPackageHandler = package
         self.modules: List[Module] = []
         self.__load_modules()
 
