@@ -7,14 +7,14 @@ from typing import List, Optional
 
 from cmd.Directories import Directories
 from cmd.Options import Options
-from cmd.package.PackageHandler import PackageHandler
+from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 
 
 class ValueObjectGenerator:
 
-    def __init__(self, options: Options, package: Optional[PackageHandler], cwd: Path) -> None:
+    def __init__(self, options: Options, package: Optional[HBShedPackageHandler], cwd: Path) -> None:
         self.options: Options = options
-        self.package: Optional[PackageHandler] = package
+        self.package: Optional[HBShedPackageHandler] = package
         self.cwd: Path = cwd
 
     def __exec(self, args: List[str]) -> Popen:

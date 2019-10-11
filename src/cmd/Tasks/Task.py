@@ -7,15 +7,15 @@ from typing import List, Optional
 
 from cmd.Options import Options
 from cmd.Tasks import Tasks
-from cmd.package.PackageHandler import PackageHandler
+from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 
 
 class Task(abc.ABC):
     NAME: Tasks
 
-    def __init__(self, options: Options, package: Optional[PackageHandler], cwd: Path) -> None:
+    def __init__(self, options: Options, package: Optional[HBShedPackageHandler], cwd: Path) -> None:
         self.options: Options = options
-        self.package: Optional[PackageHandler] = package
+        self.package: Optional[HBShedPackageHandler] = package
         self.cwd: Path = cwd
 
     @abc.abstractmethod

@@ -6,13 +6,13 @@ from cmd.Tasks.CleanBuild import CleanBuild
 from cmd.Tasks.CleanDependencies import CleanDependencies
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
-from cmd.package.PackageHandler import PackageHandler
+from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 
 
 class ExtractPackage(Task):
     NAME = Tasks.EXTRACT_PACKAGE
     target_path: Path = None
-    target_package: PackageHandler = None
+    target_package: HBShedPackageHandler = None
 
     def __ensure_target_path(self):
         if self.options.target_path is None:
@@ -49,7 +49,7 @@ class ExtractPackage(Task):
                 self.__copy_dir(file_path, dest_dir)
 
     def __set_package(self):
-        self.target_package = PackageHandler(self.target_path)
+        self.target_package = HBShedPackageHandler(self.target_path)
 
     def __rm_tests(self):
         if self.target_package.config().has_test():

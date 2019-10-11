@@ -8,7 +8,6 @@ from cmd.package.Config import Config
 
 class PackageHandler:
     FILE_NAME: str = 'package.json'
-    HOTBALLOON_SHED_KEY: str = 'hotballoon-shed'
     NAME_KEY: str = 'name'
     VERSION_KEY: str = 'version'
 
@@ -33,8 +32,3 @@ class PackageHandler:
 
     def version(self) -> str:
         return self.__data[self.VERSION_KEY]
-
-    def config(self) -> Config:
-        if self.__data[self.HOTBALLOON_SHED_KEY] is None:
-            raise ValueError('No `hotballoon-shed` configuration founded')
-        return Config(self.__data[self.HOTBALLOON_SHED_KEY], self.cwd)
