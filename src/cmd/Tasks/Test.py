@@ -2,6 +2,7 @@ import os
 import sys
 from pathlib import Path
 from subprocess import Popen
+import shutil
 
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
@@ -22,6 +23,12 @@ class Test(Task):
     def process(self):
         print('TEST : ' + self.package.name())
         if self.package.config().has_test():
+
+            if self.options.clean is not None:
+                cache: Path = Path('/tmp/hotballoon-shed/cache')
+                if cache.is_dir():
+                    shutil.rmtree(cache.as_posix())
+                    print('**** CLEAN TEST CACHE')
 
             if not self.package.config().has_tester():
                 raise KeyError('No tester found into `hotballoon-shed` configuration')
