@@ -7,3 +7,4 @@ class Options:
     registry: str = None
     source: str = None
     restrict: str = None
+    clean: str = None

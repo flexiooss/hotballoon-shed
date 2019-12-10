@@ -39,6 +39,7 @@ hbshed
               test              Test
                   <options>
                   --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
+                  --clean, -C       clean cache directory
 
               browser-test              Test
                   <options>
