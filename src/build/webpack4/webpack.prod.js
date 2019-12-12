@@ -9,7 +9,7 @@ const LinkStylesheetHtmlWebpackPlugin = require('link-stylesheet-html-webpack-pl
 
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
-// const SriPlugin = require('webpack-subresource-integrity')
+const SriPlugin = require('webpack-subresource-integrity')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const webpackBase = require('./webpack.base')
@@ -23,7 +23,7 @@ webpackBase.entry.app = entries
 
 webpackBase.mode = 'production'
 webpackBase.devtool = false
-// webpackBase.output.crossOriginLoading = 'anonymous'
+webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path
 //webpackBase.output.publicPath = '/'
 
@@ -55,13 +55,13 @@ webpackBase.optimization = {
 }
 
 webpackBase.plugins.push(
-new HtmlWebpackPlugin(
-      {
-        filename: 'index.html',
-        template: html_template,
-        inject: true
-      }
-    ),
+  new HtmlWebpackPlugin(
+    {
+      filename: 'index.html',
+      template: html_template,
+      inject: true
+    }
+  ),
   new CleanWebpackPlugin([dist_path + '/*'], {
     root: path.resolve(),
     verbose: true,
@@ -73,11 +73,11 @@ new HtmlWebpackPlugin(
   new MiniCssExtractPlugin({
     filename: '[name].[hash].css',
     chunkFilename: '[id].[hash].css'
+  }),
+  new SriPlugin({
+    hashFuncNames: ['sha256', 'sha384']
   })
-  // new SriPlugin({
-  //   hashFuncNames: ['sha256', 'sha384']
-  // })
-  // new LinkStylesheetHtmlWebpackPlugin()
+// new LinkStylesheetHtmlWebpackPlugin()
 )
 
 webpackBase.module.rules.push(
@@ -91,7 +91,7 @@ webpackBase.module.rules.push(
           modules: true,
           importLoaders: 1,
           localIdentName: '[sha1:hash:hex:4]',
-                        camelCase:true
+          camelCase: true
 
         }
       },
