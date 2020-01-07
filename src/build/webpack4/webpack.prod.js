@@ -55,13 +55,13 @@ webpackBase.optimization = {
 }
 
 webpackBase.plugins.push(
-new HtmlWebpackPlugin(
-      {
-        filename: 'index.html',
-        template: html_template,
-        inject: true
-      }
-    ),
+  new HtmlWebpackPlugin(
+    {
+      filename: 'index.html',
+      template: html_template,
+      inject: true
+    }
+  ),
   new CleanWebpackPlugin([dist_path + '/*'], {
     root: path.resolve(),
     verbose: true,
@@ -77,7 +77,7 @@ new HtmlWebpackPlugin(
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
   })
-  // new LinkStylesheetHtmlWebpackPlugin()
+// new LinkStylesheetHtmlWebpackPlugin()
 )
 
 webpackBase.module.rules.push(
@@ -91,7 +91,7 @@ webpackBase.module.rules.push(
           modules: true,
           importLoaders: 1,
           localIdentName: '[sha1:hash:hex:4]',
-                        camelCase:true
+          camelCase: true
 
         }
       },
