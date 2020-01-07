@@ -1,8 +1,8 @@
-const webpackProd = require('./webpack.prod')
+const webpackLib = require('./webpack.lib')
 const webpack = require('webpack')
 const ProgressPlugin = require('webpack/lib/ProgressPlugin')
 
-const compiler = webpack(webpackProd)
+const compiler = webpack(webpackLib)
 
 
 compiler.apply(
@@ -12,5 +12,5 @@ compiler.apply(
 )
 
 compiler.run((err, stats) => {
-  console.log('***** [webpack:prod:build]', stats.toString())
+  console.log('***** [webpack:lib:build]', stats.toString())
 })

@@ -10,6 +10,7 @@ class PackageHandler:
     FILE_NAME: str = 'package.json'
     NAME_KEY: str = 'name'
     VERSION_KEY: str = 'version'
+    MODULES_PATH: str = 'node_modules'
 
     def __init__(self, cwd: Path):
         self.cwd: Path = cwd
@@ -32,3 +33,11 @@ class PackageHandler:
 
     def version(self) -> str:
         return self.package_data[self.VERSION_KEY]
+
+    def modules_path(self) -> Path:
+        modules_path: Path = self.cwd / self.MODULES_PATH
+
+        if not modules_path.is_dir():
+            raise FileNotFoundError('No ' + self.MODULES_PATH + ' found at : ' + modules_path.as_posix())
+
+        return modules_path
