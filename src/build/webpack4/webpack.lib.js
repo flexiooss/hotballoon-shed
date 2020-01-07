@@ -50,13 +50,6 @@ webpackBase.optimization = {
 webpackBase.plugins.push(
   new webpack.DefinePlugin({
     'window.__DEVELOPMENT__': JSON.stringify(false)
-  }),
-  new MiniCssExtractPlugin({
-    filename: '[name].[hash].css',
-    chunkFilename: '[id].[hash].css'
-  }),
-  new SriPlugin({
-    hashFuncNames: ['sha256', 'sha384']
   })
 )
 
