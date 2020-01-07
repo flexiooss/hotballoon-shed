@@ -2,15 +2,10 @@
 
 const path = require('path')
 const webpack = require('webpack')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const LinkStylesheetHtmlWebpackPlugin = require('link-stylesheet-html-webpack-plugin')
 
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
-const SriPlugin = require('webpack-subresource-integrity')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
