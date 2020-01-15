@@ -9,7 +9,7 @@
   "hotballoon-shed": {
     "generate-sources": {
       "value-objects": {
-        "version": "1.16.0"
+        "version": "1.17.0"
       }
     }
   },
