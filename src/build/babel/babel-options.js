@@ -17,5 +17,5 @@ module.exports = {
     ]
   ],
   plugins:
-    [path.resolve(__dirname, '../../../node_modules/babel-plugin-transform-modern-regexp')]
+    [path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-named-capturing-groups-regex')]
 }
