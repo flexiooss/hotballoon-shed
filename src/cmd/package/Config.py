@@ -62,7 +62,7 @@ class Config:
         return self.__data.get(self.GENERATE_SOURCES_KEY)
 
     def has_core_value_object(self) -> bool:
-        return self.has_generate_sources() and self.generate_sources().get(self.VALUE_OBJECT_KEY) is not None
+        return self.has_core_generate_sources() and self.core_generate_sources().get(self.VALUE_OBJECT_KEY) is not None
 
     def has_value_object(self) -> bool:
         return self.has_generate_sources() and self.generate_sources().get(self.VALUE_OBJECT_KEY) is not None
@@ -74,7 +74,7 @@ class Config:
         return self.generate_sources().get(self.VALUE_OBJECT_KEY)
 
     def has_value_object_version(self) -> bool:
-        return self.has_core_generate_sources() and self.has_core_value_object() and self.core_value_object().get(
+        return self.has_core_value_object() and self.core_value_object().get(
             self.VALUE_OBJECT_VERSION_KEY) is not None
 
     def value_object_version(self) -> str:
