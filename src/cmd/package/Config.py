@@ -78,7 +78,7 @@ class Config:
             self.VALUE_OBJECT_VERSION_KEY) is not None
 
     def value_object_version(self) -> str:
-        return self.value_object().get(self.VALUE_OBJECT_VERSION_KEY)
+        return self.core_value_object().get(self.VALUE_OBJECT_VERSION_KEY)
 
     def has_value_object_extension(self) -> bool:
         return self.has_generate_sources() and self.has_value_object() and self.value_object().get(
