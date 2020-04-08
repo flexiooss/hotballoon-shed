@@ -4,45 +4,71 @@ Test, Develop, Manage, Generate sources, Build Hotballoon applications
 ### Installation
 https://github.com/flexiooss/hotballoon-shed-playbook
 
-| before usage : ensure you have your settings with de right access for `codingmatters-realeases` repository
+> before usage : ensure you have your settings with de right access for `codingmatters-realeases` repository
 
 
 ### Configuration
 package.json
+> For an application
 ```json
 {
-"hotballoon-shed": {
+  "hotballoon-shed": {
     "build": {
       "builder": "webpack4",
       "entries": [
-        "polyfill/for/crazy-browser.js",
-        "src/main/js/bootstrap.js"
+        "src/js/bootstrap.js"
       ],
-      "html_template": "src/main/js/index.html",
-      "ouput": "dist"
+      "html_template": "src/js/index.html",
+      "output": "./dist"
+    },
+    "generate-sources": {
+      "value-objects": {
+        "extension": ".spec"
+      }
     },
     "dev": {
-        "entries": [
-            "src/main/js/devBootstrap.js"
-          ],
-        "server": {
-            "host": "172.17.0.1",
-            "disableHostCheck": true,
-            "publicPath": "/",
-            "public": "https://dev.flexio.io/devui",
-            "sockPath": "/socketjs"
-        }
+      "entries": [
+        "src/js/devBootstrap.js"
+      ],
+      "publicPath": "/devui",
+      "server": {
+        "host": "172.17.0.1",
+        "disableHostCheck": true,
+        "publicPath": "/",
+        "public": "https://dev.flexio.io/devui",
+        "sockPath": "/socketjs",
+        "proxy": [
+          {
+            "context": [
+              "//[a-z]+/*"
+            ],
+            "logLevel": "debug",
+            "target": "https://dev.flexio.io/devui",
+            "secure": false,
+            "pathRewrite": {
+              "^//[a-z]+/*": "/"
+            }
+          }
+        ]
+      }
     },
     "test": {
       "tester": "code-altimeter-js",
       "path": "src/test"
+    }
+  }
+}
+```
+> For a package
+```json
+{
+  "hotballoon-shed": {
+    "build": {
+      "builder": "webpack4"
     },
-     "browserTest": {
-      "path": "src/browserTest"
-    },
-    "modules": {
-      "component-name": "src/main/js/modules/component-name",
-      "component-other": "src/main/js/modules/component-other"
+    "test": {
+      "tester": "code-altimeter-js",
+      "path": "src/test"
     },
     "generate-sources": {
       "value-objects": {
@@ -52,47 +78,49 @@ package.json
   }
 }
 ```
-
+### Modules
+Configuration example for this following folder structure
+```
+pakage-a
+|- package-b
+|- package-c
+   |-package-d
+``` 
+> package-a
+```json
+{
+    "name": "package-a",
+    "devDependencies": {
+      "dependency-a": "latest"
+    },
+    "dependencies": {
+      "dependency-b": "latest"
+    },
+    "hotballoon-shed": {
+        "modules": [
+        "package-b",
+        "package-c"
+        ]
+      }
+}
+```
+> package-c
+```json
+{
+    "name": "package-c",
+    "hotballoon-shed": {
+        "module" : {
+            "parent": {
+              "name" : "package-a"        
+            },
+            "devDependencies": ["dependency-a"],
+            "dependencies": ["dependency-b"]
+        },
+        "modules": ["package-d"]
+      }
+}
+```
 ### Usage
 ```bash
-hbshed
-              <...task> <...option>
-
-              <options>
-              --help, -H
-              --verbose, -V
-              --source, -S  path of sources
-
-
-              <tasks>
-              self-install          Install dependencies & generator
-              self-update           Not implemented yet !!!
-
-              set-flexio-registry   Set all flexio private registry
-
-              clean                 Remove dependencies & generate sources
-              install               Install dependencies
-              generate-sources  Generate value objects...
-
-              dev               Build a dev server
-              build             Build code
-
-              test              Test
-                  <options>
-                  --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
-
-              browser-test              Test
-                  <options>
-                  --restrict, -R    fileName (file path relative to the browser test directory) [required]
-
-              extract-package
-                  <options>
-                  --target, -T    target directory to extract [required]
-
-              publish
-                  <options>
-                  --registry    js registry url [required]
-                  --email       [required]
-                  --password    [required]
-                  --username    [required]
+hbshed --help
 ```

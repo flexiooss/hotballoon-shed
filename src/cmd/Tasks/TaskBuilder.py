@@ -7,7 +7,7 @@ from cmd.Tasks.Clean.Clean import Clean
 from cmd.Tasks.Clean.CleanDependencies import CleanDependencies
 from cmd.Tasks.Clean.CleanSources import CleanSources
 from cmd.Tasks.Clean.CleanBuild import CleanBuild
-from cmd.Tasks.Dev import Dev
+from cmd.Tasks.Dev.Dev import Dev
 from cmd.Tasks.ExtractPackage.ExtractPackage import ExtractPackage
 from cmd.Tasks.GenerateSources import GenerateSources
 from cmd.Tasks.Install.Install import Install
