@@ -28,29 +28,8 @@ package.json
     },
     "dev": {
       "entries": [
-        "src/js/devBootstrap.js"
-      ],
-      "publicPath": "/devui",
-      "server": {
-        "host": "172.17.0.1",
-        "disableHostCheck": true,
-        "publicPath": "/",
-        "public": "https://dev.flexio.io/devui",
-        "sockPath": "/socketjs",
-        "proxy": [
-          {
-            "context": [
-              "//[a-z]+/*"
-            ],
-            "logLevel": "debug",
-            "target": "https://dev.flexio.io/devui",
-            "secure": false,
-            "pathRewrite": {
-              "^//[a-z]+/*": "/"
-            }
-          }
-        ]
-      }
+        "src/js/bootstrap.js"
+      ]
     },
     "test": {
       "tester": "code-altimeter-js",
@@ -118,6 +97,46 @@ pakage-a
         },
         "modules": ["package-d"]
       }
+}
+```
+
+### dev server config
+Choose your server config option with
+```bash
+hbshed dev server-config stack
+hbshed dev server-config local
+```
+or set a configuration used with 
+```bash
+hbshed dev 
+```
+
+```json
+{
+  "hotballoon-shed": {
+    "dev": {
+      "server": {
+        "host": "172.17.0.1",
+        "disableHostCheck": true,
+        "publicPath": "/",
+        "public": "https://dev.flexio.io/devui",
+        "sockPath": "/socketjs",
+        "proxy": [
+          {
+            "context": [
+              "//[a-z]+/*"
+            ],
+            "logLevel": "debug",
+            "target": "https://dev.flexio.io/devui",
+            "secure": false,
+            "pathRewrite": {
+              "^//[a-z]+/*": "/"
+            }
+          }
+        ]
+      }
+    }
+  }
 }
 ```
 ### Usage
