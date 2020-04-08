@@ -2,8 +2,9 @@ import os
 import shutil
 from pathlib import Path
 
-from cmd.Tasks.CleanBuild import CleanBuild
-from cmd.Tasks.CleanDependencies import CleanDependencies
+from cmd.Tasks.Clean.CleanBuild import CleanBuild
+from cmd.Tasks.Clean.CleanDependencies import CleanDependencies
+from cmd.Tasks.Clean.CleanTests import CleanTests
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
 from cmd.package.HBShedPackageHandler import HBShedPackageHandler
@@ -20,7 +21,8 @@ class ExtractPackage(Task):
         else:
             self.target_path = Path(self.options.target_path)
             if not self.target_path.is_dir():
-                raise FileNotFoundError('Target directory for extract this package not found')
+                raise FileNotFoundError(
+                    'Target directory for extract this package not found at : ' + self.target_path.as_posix())
 
             self.__clean_target_path(self.target_path)
 
@@ -52,10 +54,11 @@ class ExtractPackage(Task):
         self.target_package = HBShedPackageHandler(self.target_path)
 
     def __rm_tests(self):
-        if self.target_package.config().has_test():
-            if self.target_package.config().test_dir().is_dir():
-                shutil.rmtree(self.target_package.config().test_dir().as_posix())
-                print('****     CLEAN : tests')
+        CleanTests(
+            options=self.options,
+            package=self.target_package,
+            cwd=self.target_package.cwd
+        ).process()
 
     def __rm_git(self):
         if Path(self.target_path.as_posix() + '/.git').is_dir():

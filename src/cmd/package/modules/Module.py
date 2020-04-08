@@ -8,8 +8,7 @@ class Module:
     path: Path
     package: HBShedPackageHandler
 
-    def __init__(self, name: str, path: Path) -> None:
-        self.name = name
+    def __init__(self, path: Path) -> None:
         self.path = path
         self.__load_package()
         self.__ensure_name()
@@ -19,5 +18,4 @@ class Module:
         self.package.config()
 
     def __ensure_name(self):
-        if not self.name == self.package.data.get(HBShedPackageHandler.NAME_KEY):
-            raise ValueError('Name module does not match with package.json : ' + self.name)
+        self.name = self.package.name()

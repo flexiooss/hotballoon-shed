@@ -18,7 +18,7 @@ class GenerateSources(Task):
                 GenerateSources(self.options, module.package, module.package.cwd).process()
 
     def process(self):
-        print('#### GENERATE SOURCES : ' + self.package.name())
+
 
         ValueObjectGenerator(self.options, self.package, self.cwd).generate()
 

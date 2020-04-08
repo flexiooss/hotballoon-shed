@@ -22,36 +22,37 @@ hbshed
               --verbose, -V
               --source, -S  path of sources
 
-
               <tasks>
-              self-install          Install dependencies & generator
-              self-update           Not implemented yet !!!
-
-              set-flexio-registry   Set all flexio private registry
-
+              build                 Build code
               clean                 Remove dependencies & generate sources
-              install               Install dependencies
-              generate-sources  Generate value objects...
-
-              dev               Build a dev server
-              build             Build code
-
-              test              Test
+              dev                   Build a dev server
                   <options>
-                  --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
-                  --clean, -C       clean cache directory
-
-              browser-test              Test
-                  <options>
-                  --restrict, -R    fileName (file path relative to the browser test directory) [required]
-
+                  --restrict, -R    fileName (file path relative to the package)
+                  --server-config   local|stack [Not implemented yet !!!]
               extract-package
                   <options>
-                  --target, -T    target directory to extract [required]
-
+                  --target, -T      target directory to extract [required]
+              generate-sources      Generate value objects...
+              install               Install dependencies
               publish
                   <options>
-                  --registry    js registry url [required]
-                  --email       [required]
-                  --password    [required]
-                  --username    [required]
+                  --registry        js registry url [required]
+                  --email           [required]
+                  --password        [required]
+                  --username        [required]
+              self-install          Install dependencies & generator
+              self-update           [Not implemented yet !!!]
+              set-flexio-registry   Set all flexio private registry
+              test                  Test
+                  <options>
+                  --clean, -C       clean cache directory
+                  --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
+                  --module-only     test on single module level
+
+
+
+
+
+
+
+

@@ -8,6 +8,7 @@ class Tasks(Enum):
     CLEAN_DEPENDENCIES: str = 'clean-dependencies'
     CLEAN_BUILD: str = 'clean-build'
     CLEAN_SOURCES: str = 'clean-sources'
+    CLEAN_TESTS: str = 'clean-tests'
     DEV: str = 'dev'
     EXTRACT_PACKAGE: str = 'extract-package'
     INSTALL: str = 'install'

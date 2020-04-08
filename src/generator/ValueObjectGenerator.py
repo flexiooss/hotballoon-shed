@@ -31,6 +31,7 @@ class ValueObjectGenerator:
 
     def generate(self):
         if self.package.config().has_value_object():
+            print('#### GENERATE SOURCES : ' + self.package.name())
 
             if not self.package.config().has_value_object_extension():
                 raise KeyError('No extension for value-object generator found into `hotballoon-shed` configuration')
