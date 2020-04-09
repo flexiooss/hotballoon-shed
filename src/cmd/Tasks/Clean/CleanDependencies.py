@@ -24,4 +24,5 @@ class CleanDependencies(Task):
             shutil.rmtree(Path(self.cwd.as_posix() + ('/' + Directories.NODE_MODULES)).as_posix())
             print('****     CLEAN : node_modules')
 
-        self.__modules_clean()
+        if self.options.module_only is not True:
+            self.__modules_clean()

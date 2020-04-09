@@ -19,7 +19,7 @@ class GenerateSources(Task):
 
     def process(self):
 
-
         ValueObjectGenerator(self.options, self.package, self.cwd).generate()
 
-        self.__modules_generate_sources()
+        if self.options.module_only is not True:
+            self.__modules_generate_sources()

@@ -24,4 +24,5 @@ class CleanTests(Task):
                 shutil.rmtree(self.package.config().test_dir().as_posix())
                 print('CLEAN TESTS : ' + self.package.name())
 
-        self.__modules_clean()
+        if self.options.module_only is not True:
+            self.__modules_clean()

@@ -22,4 +22,7 @@ class Clean(Task):
         CleanBuild(self.options, self.package, self.cwd).process()
         CleanDependencies(self.options, self.package, self.cwd).process()
         CleanSources(self.options, self.package, self.cwd).process()
-        # self.__modules_clean()
+
+        # if self.options.module_only is not True:
+        #   self.__modules_clean()
+

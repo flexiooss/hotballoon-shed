@@ -25,4 +25,5 @@ class CleanBuild(Task):
             shutil.rmtree(self.package.config().build_output().as_posix())
             print('****     CLEAN : build output')
 
-        self.__modules_clean()
+        if self.options.module_only is not True:
+            self.__modules_clean()

@@ -9,6 +9,7 @@ class Tasks(Enum):
     CLEAN_BUILD: str = 'clean-build'
     CLEAN_SOURCES: str = 'clean-sources'
     CLEAN_TESTS: str = 'clean-tests'
+    CLEAN_PEER_DEPENDENCIES: str = 'clean-peerDependencies'
     DEV: str = 'dev'
     EXTRACT_PACKAGE: str = 'extract-package'
     INSTALL: str = 'install'
