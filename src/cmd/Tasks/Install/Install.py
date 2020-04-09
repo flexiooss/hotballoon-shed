@@ -60,6 +60,9 @@ class Install(Task):
         )
         provisioner.prepare()
         print('#### peerDependencies found : ' + str(provisioner.count()))
+        print('#### peerDependencies set to package')
+
+        provisioner.apply(self.package)
 
         if self.package.config().has_modules():
             modules: ModulesHandler = ModulesHandler(self.package)
