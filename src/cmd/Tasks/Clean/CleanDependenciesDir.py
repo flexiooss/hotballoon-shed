@@ -9,7 +9,7 @@ from cmd.package.modules.ModulesHandler import ModulesHandler
 
 
 class CleanDependenciesDir(Task):
-    NAME = Tasks.CLEAN_DEPENDENCIES
+    NAME = Tasks.CLEAN_DEPENDENCIES_DIR
 
     def __modules_clean(self):
         if self.package.config().has_modules():
