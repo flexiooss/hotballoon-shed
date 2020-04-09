@@ -22,6 +22,7 @@ class CleanPeerDependencies(Task):
         if self.package.has_peer_dependencies():
             self.package.set_peer_dependencies({})
             self.package.write()
+            print('CLEAN PEER_DEPENDENCIES : ' + self.package.name())
 
         if self.options.module_only is not True:
             self.__modules_clean()

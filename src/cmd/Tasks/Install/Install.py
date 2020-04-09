@@ -11,7 +11,7 @@ from cmd.package.modules.ModulesHandler import ModulesHandler
 from cmd.package.modules.RootParentPackage import RootParentPackage
 from subprocess import Popen, PIPE
 from cmd.Tasks.Install.CheckModuleDependencies import CheckModuleDependencies
-from cmd.Tasks.Clean.CleanDependencies import CleanDependencies
+from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
 from cmd.Tasks.Install.ModulePeerDependenciesProvisioner import ModulePeerDependenciesProvisioner
 from cmd.Tasks.Install.ApplyModulePeerDependencies import ApplyModulePeerDependencies
 import sys
@@ -144,7 +144,7 @@ class Install(Task):
         root_parent_package: HBShedPackageHandler = RootParentPackage.from_module_package(self.package)
         print('#### root package parent found : ' + root_parent_package.name())
 
-        CleanDependencies(self.options, root_parent_package, root_parent_package.cwd).process()
+        CleanDependenciesDir(self.options, root_parent_package, root_parent_package.cwd).process()
 
         return Install(
             options=self.options,

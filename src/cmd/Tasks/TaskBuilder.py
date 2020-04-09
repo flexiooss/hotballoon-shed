@@ -4,7 +4,7 @@ from typing import List, Optional
 from cmd.Options import Options
 from cmd.Tasks.Build import Build
 from cmd.Tasks.Clean.Clean import Clean
-from cmd.Tasks.Clean.CleanDependencies import CleanDependencies
+from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
 from cmd.Tasks.Clean.CleanSources import CleanSources
 from cmd.Tasks.Clean.CleanBuild import CleanBuild
 from cmd.Tasks.Dev.Dev import Dev
@@ -56,9 +56,9 @@ class TaskBuilder:
                 self.__ensure_load_hb_package()
                 Clean(self.__options, self.__package, self.__cwd).process()
 
-            elif task == Tasks.CLEAN_DEPENDENCIES:
+            elif task == Tasks.CLEAN_DEPENDENCIES_DIR:
                 self.__ensure_load_hb_package()
-                CleanDependencies(self.__options, self.__package, self.__cwd).process()
+                CleanDependenciesDir(self.__options, self.__package, self.__cwd).process()
 
             elif task == Tasks.CLEAN_SOURCES:
                 self.__ensure_load_hb_package()

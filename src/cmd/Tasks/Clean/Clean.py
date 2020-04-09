@@ -1,5 +1,5 @@
 from cmd.Tasks.Clean.CleanBuild import CleanBuild
-from cmd.Tasks.Clean.CleanDependencies import CleanDependencies
+from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
 from cmd.Tasks.Clean.CleanSources import CleanSources
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
@@ -20,7 +20,7 @@ class Clean(Task):
     def process(self):
         print('CLEAN : ' + self.package.name())
         CleanBuild(self.options, self.package, self.cwd).process()
-        CleanDependencies(self.options, self.package, self.cwd).process()
+        CleanDependenciesDir(self.options, self.package, self.cwd).process()
         CleanSources(self.options, self.package, self.cwd).process()
 
         # if self.options.module_only is not True:

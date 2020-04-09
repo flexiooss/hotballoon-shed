@@ -3,7 +3,8 @@ import shutil
 from pathlib import Path
 
 from cmd.Tasks.Clean.CleanBuild import CleanBuild
-from cmd.Tasks.Clean.CleanDependencies import CleanDependencies
+from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
+from cmd.Tasks.Clean.CleanPeerDependencies import CleanPeerDependencies
 from cmd.Tasks.Clean.CleanTests import CleanTests
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
@@ -53,6 +54,13 @@ class ExtractPackage(Task):
     def __set_package(self):
         self.target_package = HBShedPackageHandler(self.target_path)
 
+    def __rm_peer_dependencies(self):
+        CleanPeerDependencies(
+            options=self.options,
+            package=self.target_package,
+            cwd=self.target_package.cwd
+        ).process()
+
     def __rm_tests(self):
         CleanTests(
             options=self.options,
@@ -69,7 +77,7 @@ class ExtractPackage(Task):
             print('****     CLEAN : .gitignore')
 
     def __rm_dependencies(self):
-        CleanDependencies(self.options, self.target_package, self.target_path).process()
+        CleanDependenciesDir(self.options, self.target_package, self.target_path).process()
 
     def __rm_build(self):
         CleanBuild(self.options, self.target_package, self.target_path).process()
@@ -90,6 +98,7 @@ class ExtractPackage(Task):
         self.__ensure_target_path()
         self.__copy_to_target()
         self.__set_package()
+        self.__rm_peer_dependencies()
         self.__rm_tests()
         self.__rm_dependencies()
         self.__rm_build()

@@ -8,7 +8,7 @@ from cmd.package.modules.Module import Module
 from cmd.package.modules.ModulesHandler import ModulesHandler
 
 
-class CleanDependencies(Task):
+class CleanDependenciesDir(Task):
     NAME = Tasks.CLEAN_DEPENDENCIES
 
     def __modules_clean(self):
@@ -16,10 +16,10 @@ class CleanDependencies(Task):
             modules: ModulesHandler = ModulesHandler(self.package)
             module: Module
             for module in modules.modules:
-                CleanDependencies(self.options, module.package, module.package.cwd).process()
+                CleanDependenciesDir(self.options, module.package, module.package.cwd).process()
 
     def process(self):
-        print('CLEAN DEPENDENCIES : ' + self.package.name())
+        print('CLEAN DEPENDENCIES DIR : ' + self.package.name())
         if Path(self.cwd.as_posix() + ('/' + Directories.NODE_MODULES)).is_dir():
             shutil.rmtree(Path(self.cwd.as_posix() + ('/' + Directories.NODE_MODULES)).as_posix())
             print('****     CLEAN : node_modules')
