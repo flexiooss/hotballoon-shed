@@ -25,4 +25,5 @@ class CleanSources(Task):
             shutil.rmtree(Path(self.cwd.as_posix() + ('/' + Directories.GENERATED)).as_posix())
             print('****     CLEAN : generated')
 
-        self.__modules_clean()
+        if self.options.module_only is not True:
+            self.__modules_clean()

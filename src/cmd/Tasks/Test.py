@@ -15,20 +15,23 @@ class Test(Task):
 
     def __modules_test(self):
         if self.package.config().has_modules():
+            print('TEST for modules')
             modules: ModulesHandler = ModulesHandler(self.package)
             module: Module
             for module in modules.modules:
                 Test(self.options, module.package, module.package.cwd).process()
 
-    def process(self):
-        print('TEST : ' + self.package.name())
-        if self.package.config().has_test():
+    def __ensure_clean(self):
+        if self.options.clean is not None:
+            cache: Path = Path('/tmp/hotballoon-shed/cache')
+            if cache.is_dir():
+                shutil.rmtree(cache.as_posix())
+                print('**** CLEAN TEST CACHE')
 
-            if self.options.clean is not None:
-                cache: Path = Path('/tmp/hotballoon-shed/cache')
-                if cache.is_dir():
-                    shutil.rmtree(cache.as_posix())
-                    print('**** CLEAN TEST CACHE')
+    def process(self):
+        if self.package.config().has_test():
+            self.__ensure_clean()
+            print('TEST : ' + self.package.name())
 
             if not self.package.config().has_tester():
                 raise KeyError('No tester found into `hotballoon-shed` configuration')
@@ -47,5 +50,8 @@ class Test(Task):
 
             if child.returncode > 0:
                 sys.exit(child.returncode)
+        else:
+            print('NO TEST : ' + self.package.name())
 
-        self.__modules_test()
+        if self.options.module_only is not True:
+            self.__modules_test()

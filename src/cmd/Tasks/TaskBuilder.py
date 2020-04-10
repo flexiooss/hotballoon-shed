@@ -3,14 +3,14 @@ from pathlib import Path
 from typing import List, Optional
 from cmd.Options import Options
 from cmd.Tasks.Build import Build
-from cmd.Tasks.Clean import Clean
-from cmd.Tasks.CleanDependencies import CleanDependencies
-from cmd.Tasks.CleanSources import CleanSources
-from cmd.Tasks.CleanBuild import CleanBuild
-from cmd.Tasks.Dev import Dev
-from cmd.Tasks.ExtractPackage import ExtractPackage
+from cmd.Tasks.Clean.Clean import Clean
+from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
+from cmd.Tasks.Clean.CleanSources import CleanSources
+from cmd.Tasks.Clean.CleanBuild import CleanBuild
+from cmd.Tasks.Dev.Dev import Dev
+from cmd.Tasks.ExtractPackage.ExtractPackage import ExtractPackage
 from cmd.Tasks.GenerateSources import GenerateSources
-from cmd.Tasks.Install import Install
+from cmd.Tasks.Install.Install import Install
 from cmd.Tasks.Publish import Publish
 from cmd.Tasks.SelfInstall import SelfInstall
 from cmd.Tasks.SetFlexioRegistry import SetFlexioRegistry
@@ -56,9 +56,9 @@ class TaskBuilder:
                 self.__ensure_load_hb_package()
                 Clean(self.__options, self.__package, self.__cwd).process()
 
-            elif task == Tasks.CLEAN_DEPENDENCIES:
+            elif task == Tasks.CLEAN_DEPENDENCIES_DIR:
                 self.__ensure_load_hb_package()
-                CleanDependencies(self.__options, self.__package, self.__cwd).process()
+                CleanDependenciesDir(self.__options, self.__package, self.__cwd).process()
 
             elif task == Tasks.CLEAN_SOURCES:
                 self.__ensure_load_hb_package()

@@ -8,21 +8,21 @@ from cmd.package.modules.Module import Module
 from cmd.package.modules.ModulesHandler import ModulesHandler
 
 
-class CleanBuild(Task):
-    NAME = Tasks.CLEAN_BUILD
+class CleanTests(Task):
+    NAME = Tasks.CLEAN_TESTS
 
     def __modules_clean(self):
         if self.package.config().has_modules():
             modules: ModulesHandler = ModulesHandler(self.package)
             module: Module
             for module in modules.modules:
-                CleanBuild(self.options, module.package, module.package.cwd).process()
+                CleanTests(self.options, module.package, module.package.cwd).process()
 
     def process(self):
-        print('CLEAN BUILD: ' + self.package.name())
+        if self.package.config().has_test():
+            if self.package.config().test_dir().is_dir():
+                shutil.rmtree(self.package.config().test_dir().as_posix())
+                print('CLEAN TESTS : ' + self.package.name())
 
-        if self.package.config().has_build_output() and self.package.config().build_output().is_dir():
-            shutil.rmtree(self.package.config().build_output().as_posix())
-            print('****     CLEAN : build output')
-
-        self.__modules_clean()
+        if self.options.module_only is not True:
+            self.__modules_clean()

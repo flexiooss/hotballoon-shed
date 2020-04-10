@@ -8,3 +8,6 @@ class Options:
     source: str = None
     restrict: str = None
     clean: str = None
+    module_only:str = None
+    entry:str = None
+    server_config:str = None

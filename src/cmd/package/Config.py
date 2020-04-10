@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from typing import List
+from typing import List, Dict
 
 
 class Config:
@@ -17,6 +17,13 @@ class Config:
 
     MODULES_KEY: str = 'modules'
 
+    MODULE_KEY: str = 'module'
+    PARENT: str = 'parent'
+    PARENT_NAME: str = 'name'
+    PARENT_VERSION: str = 'version'
+    DEPENDENCIES: str = 'dependencies'
+    DEV_DEPENDENCIES: str = 'devDependencies'
+
     TEST_KEY: str = 'test'
     TESTER_KEY: str = 'tester'
     TEST_PATH_KEY: str = 'path'
@@ -24,6 +31,7 @@ class Config:
     BROWSER_TEST_KEY: str = 'browserTest'
     BROWSER_TEST_PATH_KEY: str = 'path'
 
+    CORE: str = 'core'
     GENERATE_SOURCES_KEY: str = 'generate-sources'
 
     VALUE_OBJECT_KEY: str = 'value-objects'
@@ -35,24 +43,42 @@ class Config:
         self.__data: dict = data
         self.__cwd: Path = cwd
 
+    def has_core(self) -> bool:
+        return self.__data.get(self.CORE) is not None
+
+    def core(self) -> dict:
+        return self.__data.get(self.CORE)
+
     def has_generate_sources(self) -> bool:
         return self.__data.get(self.GENERATE_SOURCES_KEY) is not None
+
+    def has_core_generate_sources(self) -> bool:
+        return self.has_core() and self.core().get(self.GENERATE_SOURCES_KEY) is not None
+
+    def core_generate_sources(self) -> dict:
+        return self.core().get(self.GENERATE_SOURCES_KEY)
 
     def generate_sources(self) -> dict:
         return self.__data.get(self.GENERATE_SOURCES_KEY)
 
+    def has_core_value_object(self) -> bool:
+        return self.has_core_generate_sources() and self.core_generate_sources().get(self.VALUE_OBJECT_KEY) is not None
+
     def has_value_object(self) -> bool:
         return self.has_generate_sources() and self.generate_sources().get(self.VALUE_OBJECT_KEY) is not None
+
+    def core_value_object(self) -> dict:
+        return self.core_generate_sources().get(self.VALUE_OBJECT_KEY)
 
     def value_object(self) -> dict:
         return self.generate_sources().get(self.VALUE_OBJECT_KEY)
 
     def has_value_object_version(self) -> bool:
-        return self.has_generate_sources() and self.has_value_object() and self.value_object().get(
+        return self.has_core_value_object() and self.core_value_object().get(
             self.VALUE_OBJECT_VERSION_KEY) is not None
 
     def value_object_version(self) -> str:
-        return self.value_object().get(self.VALUE_OBJECT_VERSION_KEY)
+        return self.core_value_object().get(self.VALUE_OBJECT_VERSION_KEY)
 
     def has_value_object_extension(self) -> bool:
         return self.has_generate_sources() and self.has_value_object() and self.value_object().get(
@@ -227,7 +253,44 @@ class Config:
         return p
 
     def has_modules(self) -> bool:
-        return self.__data.get(self.MODULES_KEY) is not None
+        return self.__data.get(self.MODULES_KEY) is not None and len(self.modules())
 
-    def modules(self) -> dict:
+    def modules(self) -> List[str]:
         return self.__data.get(self.MODULES_KEY)
+
+    def has_module(self) -> bool:
+        return self.__data.get(self.MODULE_KEY) is not None
+
+    def module(self) -> dict:
+        return self.__data.get(self.MODULE_KEY)
+
+    def has_parent(self) -> bool:
+        return self.has_module() and self.module().get(self.PARENT) is not None
+
+    def parent(self) -> Dict:
+        return self.module().get(self.PARENT)
+
+    def has_parent_name(self) -> bool:
+        return self.has_parent() and self.parent().get(self.PARENT_NAME) is not None
+
+    def parent_name(self) -> str:
+        return self.parent().get(self.PARENT_NAME)
+
+    def has_parent_version(self) -> bool:
+        return self.has_parent() and self.parent().get(self.PARENT_VERSION) is not None
+
+    def parent_version(self) -> str:
+        return self.parent().get(self.PARENT_VERSION)
+
+    def has_dependencies(self) -> bool:
+        return self.has_module() and self.module().get(self.DEPENDENCIES) is not None and len(self.dependencies())
+
+    def dependencies(self) -> List[str]:
+        return self.module().get(self.DEPENDENCIES)
+
+    def has_dev_dependencies(self) -> bool:
+        return self.has_module() and self.module().get(self.DEV_DEPENDENCIES) is not None and len(
+            self.dev_dependencies())
+
+    def dev_dependencies(self) -> List[str]:
+        return self.module().get(self.DEV_DEPENDENCIES)

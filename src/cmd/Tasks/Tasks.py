@@ -5,9 +5,11 @@ from enum import Enum, unique
 class Tasks(Enum):
     BUILD: str = 'build'
     CLEAN: str = 'clean'
-    CLEAN_DEPENDENCIES: str = 'clean-dependencies'
+    CLEAN_DEPENDENCIES_DIR: str = 'clean-dependencies-dir'
     CLEAN_BUILD: str = 'clean-build'
     CLEAN_SOURCES: str = 'clean-sources'
+    CLEAN_TESTS: str = 'clean-tests'
+    CLEAN_PEER_DEPENDENCIES: str = 'clean-peerDependencies'
     DEV: str = 'dev'
     EXTRACT_PACKAGE: str = 'extract-package'
     INSTALL: str = 'install'

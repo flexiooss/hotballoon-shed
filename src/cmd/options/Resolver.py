@@ -12,10 +12,14 @@ from cmd.options.Option import Option
 from cmd.options.VerboseOption import VerboseOption
 from cmd.options.TargetPath import TargetPath
 from cmd.options.Clean import Clean
+from cmd.options.Entry import Entry
+from cmd.options.ServerConfig import ServerConfig
+from cmd.options.ModuleOnly import ModuleOnly
 
 
 class Resolver:
-    options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry, Restrict, Clean]
+    options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry,
+                             Restrict, Clean, ModuleOnly, Entry, ServerConfig]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option

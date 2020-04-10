@@ -2,8 +2,10 @@ import os
 import shutil
 from pathlib import Path
 
-from cmd.Tasks.CleanBuild import CleanBuild
-from cmd.Tasks.CleanDependencies import CleanDependencies
+from cmd.Tasks.Clean.CleanBuild import CleanBuild
+from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
+from cmd.Tasks.Clean.CleanPeerDependencies import CleanPeerDependencies
+from cmd.Tasks.Clean.CleanTests import CleanTests
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
 from cmd.package.HBShedPackageHandler import HBShedPackageHandler
@@ -20,7 +22,8 @@ class ExtractPackage(Task):
         else:
             self.target_path = Path(self.options.target_path)
             if not self.target_path.is_dir():
-                raise FileNotFoundError('Target directory for extract this package not found')
+                raise FileNotFoundError(
+                    'Target directory for extract this package not found at : ' + self.target_path.as_posix())
 
             self.__clean_target_path(self.target_path)
 
@@ -51,11 +54,19 @@ class ExtractPackage(Task):
     def __set_package(self):
         self.target_package = HBShedPackageHandler(self.target_path)
 
+    def __rm_peer_dependencies(self):
+        CleanPeerDependencies(
+            options=self.options,
+            package=self.target_package,
+            cwd=self.target_package.cwd
+        ).process()
+
     def __rm_tests(self):
-        if self.target_package.config().has_test():
-            if self.target_package.config().test_dir().is_dir():
-                shutil.rmtree(self.target_package.config().test_dir().as_posix())
-                print('****     CLEAN : tests')
+        CleanTests(
+            options=self.options,
+            package=self.target_package,
+            cwd=self.target_package.cwd
+        ).process()
 
     def __rm_git(self):
         if Path(self.target_path.as_posix() + '/.git').is_dir():
@@ -66,7 +77,7 @@ class ExtractPackage(Task):
             print('****     CLEAN : .gitignore')
 
     def __rm_dependencies(self):
-        CleanDependencies(self.options, self.target_package, self.target_path).process()
+        CleanDependenciesDir(self.options, self.target_package, self.target_path).process()
 
     def __rm_build(self):
         CleanBuild(self.options, self.target_package, self.target_path).process()
@@ -87,6 +98,7 @@ class ExtractPackage(Task):
         self.__ensure_target_path()
         self.__copy_to_target()
         self.__set_package()
+        self.__rm_peer_dependencies()
         self.__rm_tests()
         self.__rm_dependencies()
         self.__rm_build()

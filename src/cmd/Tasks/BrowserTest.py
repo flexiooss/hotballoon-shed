@@ -10,6 +10,8 @@ class BrowserTest(Task):
     NAME = Tasks.DEV
 
     def process(self):
+        raise AttributeError('BrowserTest not supported')
+
         print('BROWSER TEST : ' + self.package.name())
         if self.package.config().has_browser_test():
 
