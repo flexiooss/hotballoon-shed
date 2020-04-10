@@ -55,6 +55,8 @@ class Install(Task):
                     'Root package parent have a parent not found or on bad version : ' + self.package.config().parent_name() + ':' + self.package.config().parent_version())
 
     def __provision_modules_peer_dependencies(self):
+        print('#### prepare peerDependencies')
+
         provisioner: ModulePeerDependenciesProvisioner = ModulePeerDependenciesProvisioner(
             package=self.package
         )

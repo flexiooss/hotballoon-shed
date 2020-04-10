@@ -37,16 +37,6 @@ class ModulePeerDependenciesProvisioner:
 
                 ).process()
 
-    def __final_dependencies(self) -> Dict[str, str]:
-        if self.peer_dependencies is None:
-            self.peer_dependencies = {}
-
-            name: str
-            for name in self.__processor.dependencies:
-                self.peer_dependencies[name] = "latest"
-
-        return self.peer_dependencies
-
     def apply(self, package: PackageHandler):
-        package.set_peer_dependencies(self.__final_dependencies())
+        package.set_peer_dependencies(self.__processor.dependencies)
         package.write()
