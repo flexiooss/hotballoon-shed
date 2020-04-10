@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 from cmd.package.modules.Module import Module
 from cmd.package.modules.ModulesHandler import ModulesHandler
@@ -45,7 +45,8 @@ class CheckModuleDependencies:
                     'No devDependencies found at : ' + self.__root_package.modules_path().as_posix())
 
             for name in self.__module.package.config().dev_dependencies():
-                if self.__root_package.dev_dependencies().get(name) is None:
+                if self.__root_package.dev_dependencies().get(name) is None and self.__root_package.dependencies().get(
+                        name) is None:
                     raise FileNotFoundError('parent should have devDependency : ' + name)
 
     def __check_dependencies_local(self):
