@@ -1,7 +1,14 @@
+import time
 from pathlib import Path
 from typing import Optional
 
 from cmd.Options import Options
+from cmd.Tasks.Install.CheckParentDependencies import CheckParentDependencies
+from cmd.Tasks.Install.CheckParents import CheckParents
+from cmd.Tasks.Install.DependenciesProvisioner import DependenciesProvisioner
+from cmd.Tasks.Install.ParentDependenciesWalkerProcessor import ParentDependenciesWalkerProcessor
+from cmd.Tasks.Install.ParentWalkerProcessor import ParentWalkerProcessor
+from cmd.Tasks.Install.PeerDependenciesWalkerProcessor import PeerDependenciesWalkerProcessor
 from cmd.Tasks.PrintNpmLogs import PrintNpmLogs
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
@@ -12,13 +19,15 @@ from cmd.package.modules.RootParentPackage import RootParentPackage
 from subprocess import Popen, PIPE
 from cmd.Tasks.Install.CheckModuleDependencies import CheckModuleDependencies
 from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
-from cmd.Tasks.Install.ModulePeerDependenciesProvisioner import ModulePeerDependenciesProvisioner
 from cmd.Tasks.Install.ApplyModulePeerDependencies import ApplyModulePeerDependencies
 import sys
 
 
 class Install(Task):
     NAME = Tasks.INSTALL
+    __peer_processor: PeerDependenciesWalkerProcessor
+    __parent_processor: ParentWalkerProcessor
+    __parent_dependencies_processor: ParentDependenciesWalkerProcessor
 
     def __init__(self, options: Options, package: Optional[HBShedPackageHandler], cwd: Path,
                  node_modules: Optional[Path] = None) -> None:
@@ -30,13 +39,6 @@ class Install(Task):
         if self.__node_modules is None:
             self.__node_modules = self.cwd
 
-    def __modules_install(self):
-        if self.package.config().has_modules():
-            modules: ModulesHandler = ModulesHandler(self.package)
-            module: Module
-            for module in modules.modules:
-                Install(self.options, module.package, module.package.cwd, self.__node_modules).process()
-
     def __check_modules_dependencies(self):
         if self.package.config().has_modules():
             modules: ModulesHandler = ModulesHandler(self.package)
@@ -44,45 +46,66 @@ class Install(Task):
             for module in modules.modules:
                 CheckModuleDependencies(
                     root_package=self.package,
+                    parent_package=self.package,
                     module=module
                 ).process()
 
-    def __check_root_parent(self):
-        if self.package.config().has_parent():
-            if self.package.dependencies().get(
-                    self.package.config().parent_name()) != self.package.config().parent_version():
-                raise FileNotFoundError(
-                    'Root package parent have a parent not found or on bad version : ' + self.package.config().parent_name() + ':' + self.package.config().parent_version())
+    def __ensure_processors(self):
+        sys.stdout.write('#### prepare dependencies check  ')
+        sys.stdout.flush()
+        self.__peer_processor = PeerDependenciesWalkerProcessor()
+        self.__parent_processor = ParentWalkerProcessor()
+        self.__parent_dependencies_processor = ParentDependenciesWalkerProcessor()
+
+        DependenciesProvisioner(
+            package=self.package,
+            peer_processor=self.__peer_processor,
+            parent_processor=self.__parent_processor,
+            parent_dependencies_processor=self.__parent_dependencies_processor
+        ).process()
+        sys.stdout.write("\n")
+
+    def __check_external_parent(self):
+
+        print('#### parents to check found : ' + str(self.__parent_processor.count()))
+
+        if self.__parent_processor.count():
+            sys.stdout.write('#### check parents ')
+            sys.stdout.flush()
+
+            CheckParents(
+                root_package=self.package,
+                parents=self.__parent_processor.parents
+            ).process()
+
+            sys.stdout.write("\n")
 
     def __provision_modules_peer_dependencies(self):
-        print('#### prepare peerDependencies')
 
-        provisioner: ModulePeerDependenciesProvisioner = ModulePeerDependenciesProvisioner(
-            package=self.package
-        )
-        provisioner.prepare()
-        print('#### peerDependencies found : ' + str(provisioner.count()))
-        print('#### peerDependencies set to package')
+        print('#### peerDependencies found : ' + str(self.__peer_processor.count()))
 
-        provisioner.apply(self.package)
+        ApplyModulePeerDependencies(
+            package=self.package,
+            dependencies=self.__peer_processor.dependencies
+        ).process()
 
-        if self.package.config().has_modules():
-            modules: ModulesHandler = ModulesHandler(self.package)
-            module: Module
-            for module in modules.modules:
-                ApplyModulePeerDependencies(
-                    root_package=self.package,
-                    module=module,
-                    provisioner=provisioner
-                ).process()
+        print('#### peerDependencies set to parent & modules')
 
-            print('#### peerDependencies set to Modules')
+    def __check_external_parent_dependencies(self):
+        print('#### parents dependencies to check found : ' + str(self.__parent_dependencies_processor.count()))
+
+        if self.__parent_dependencies_processor.count():
+            sys.stdout.write('#### check parents dependencies ')
+            sys.stdout.flush()
+
+            CheckParentDependencies(
+                root_package=self.package,
+                dependencies=self.__parent_dependencies_processor.dependencies
+            ).process()
+            sys.stdout.write("\n")
 
     def __install(self):
-
         print('#### INSTALL : ' + self.package.name())
-
-        self.__check_root_parent()
 
         if self.options.registry is None or self.options.email is None or self.options.password is None or self.options.username is None:
 
@@ -156,10 +179,17 @@ class Install(Task):
         ).process()
 
     def process(self):
-        if self.package.config().has_parent() and not self.package.config().has_parent_version():
+        start_time: time = time.time()
+        if self.package.config().has_parent() and not self.package.config().is_parent_external():
             print('#### INSTALL from module : ' + self.package.name())
             self.__install_from_root_parent()
         else:
             self.__install()
+            self.__ensure_processors()
             self.__check_modules_dependencies()
+            self.__check_external_parent()
+            self.__check_external_parent_dependencies()
             self.__provision_modules_peer_dependencies()
+
+        print("--- installation, modules check and peerDependencies generation in %s seconds ---" % round(
+            (time.time() - start_time), 3))

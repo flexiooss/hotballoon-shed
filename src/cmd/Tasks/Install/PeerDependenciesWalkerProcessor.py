@@ -11,6 +11,9 @@ class PeerDependenciesWalkerProcessor(WalkerProcessor):
     def __init__(self) -> None:
         self.dependencies = {}
 
+    def count(self) -> int:
+        return len(self.dependencies)
+
     def process(self, package: PackageHandler):
         if self.dependencies.get(package.name()) is not None:
             if self.dependencies.get(package.name()) != package.version():
