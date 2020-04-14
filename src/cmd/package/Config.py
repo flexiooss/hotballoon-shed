@@ -20,6 +20,7 @@ class Config:
     MODULE_KEY: str = 'module'
     PARENT: str = 'parent'
     PARENT_NAME: str = 'name'
+    PARENT_EXTERNAL: str = 'external'
     PARENT_VERSION: str = 'version'
     DEPENDENCIES: str = 'dependencies'
     DEV_DEPENDENCIES: str = 'devDependencies'
@@ -281,6 +282,12 @@ class Config:
 
     def parent_version(self) -> str:
         return self.parent().get(self.PARENT_VERSION)
+
+    def has_parent_external(self) -> bool:
+        return self.has_parent() and self.parent().get(self.PARENT_EXTERNAL) is not None
+
+    def is_parent_external(self) -> bool:
+        return self.has_parent_external() and self.parent().get(self.PARENT_EXTERNAL)
 
     def has_dependencies(self) -> bool:
         return self.has_module() and self.module().get(self.DEPENDENCIES) is not None and len(self.dependencies())

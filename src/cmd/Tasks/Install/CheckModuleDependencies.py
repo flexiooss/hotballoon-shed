@@ -7,8 +7,10 @@ from cmd.package.modules.ModulesHandler import ModulesHandler
 
 class CheckModuleDependencies:
 
-    def __init__(self, root_package: Optional[HBShedPackageHandler], module: Module) -> None:
+    def __init__(self, root_package: Optional[HBShedPackageHandler], parent_package: Optional[HBShedPackageHandler],
+                 module: Module) -> None:
         self.__root_package: Optional[HBShedPackageHandler] = root_package
+        self.__parent_package: Optional[HBShedPackageHandler] = parent_package
         self.__module: Module = module
 
     def __check_modules_dependencies(self):
@@ -18,6 +20,7 @@ class CheckModuleDependencies:
             for module in modules.modules:
                 CheckModuleDependencies(
                     root_package=self.__root_package,
+                    parent_package=self.__module.package,
                     module=module
                 ).process()
 

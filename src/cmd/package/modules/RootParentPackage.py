@@ -13,7 +13,7 @@ class RootParentPackage:
             current_path: Path = package.cwd
             parent_package: HBShedPackageHandler = package
 
-            while parent_package.config().has_parent() and not parent_package.config().has_parent_version():
+            while parent_package.config().has_parent() and not parent_package.config().is_parent_external():
                 current_path = parent_package.cwd.parent
                 parent_package = HBShedPackageHandler(current_path)
 

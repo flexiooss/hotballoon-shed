@@ -58,6 +58,9 @@ package.json
 }
 ```
 ### Modules
+
+> The main purpose of this module manager is only to ensure the consistency of the versions of the project packages without breaking the npm philosophy. 
+
 Configuration example for this following folder structure
 ```
 pakage-a
@@ -69,6 +72,7 @@ pakage-a
 ```json
 {
     "name": "package-a",
+    "version": "1.0.0",
     "devDependencies": {
       "dependency-a": "latest"
     },
@@ -76,6 +80,56 @@ pakage-a
       "dependency-b": "latest"
     },
     "hotballoon-shed": {
+        "modules": [
+        "package-b",
+        "package-c"
+        ]
+      }
+}
+```
+
+It is possible to declare an external parent with an optional version
+```json
+{
+    "name": "package-a",
+    "version": "1.0.0",
+    "devDependencies": {
+      "dependency-a": "latest"
+    },
+    "dependencies": {
+      "dependency-b": "latest"
+    },
+    "hotballoon-shed": {
+        "module": {
+            "name": "my-external-parent",
+            "version": "0.0.0",
+            "external": true
+        },
+        "modules": [
+        "package-b",
+        "package-c"
+        ]
+      }
+}
+```
+It is possible to declare an external parent with dependencies
+```json
+{
+    "name": "package-a",
+    "version": "1.0.0",
+    "devDependencies": {
+      "dependency-a": "latest"
+    },
+    "dependencies": {
+      "dependency-b": "latest"
+    },
+    "hotballoon-shed": {
+        "module": {
+            "name": "my-external-parent",
+            "version": "0.0.0",
+            "external": true,
+            "dependencies": ["my-external-dep"]
+        },
         "modules": [
         "package-b",
         "package-c"
@@ -91,6 +145,24 @@ pakage-a
         "module" : {
             "parent": {
               "name" : "package-a"        
+            },
+            "devDependencies": ["dependency-a"],
+            "dependencies": ["dependency-b"]
+        },
+        "modules": ["package-d"]
+      }
+}
+```
+
+It is possible to declare parent version with :
+```json
+{
+    "name": "package-c",
+    "hotballoon-shed": {
+        "module" : {
+            "parent": {
+              "name" : "package-a",
+              "version": "1.0.0"        
             },
             "devDependencies": ["dependency-a"],
             "dependencies": ["dependency-b"]
