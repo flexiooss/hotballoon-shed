@@ -1,5 +1,7 @@
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, List, Set, Dict
+
+from cmd.Tasks.Install.ExternalModulesDependenciesProcessor import ExternalModulesDependenciesProcessor
 from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 from cmd.package.modules.Module import Module
 from cmd.package.modules.ModulesHandler import ModulesHandler
@@ -8,10 +10,11 @@ from cmd.package.modules.ModulesHandler import ModulesHandler
 class CheckModuleDependencies:
 
     def __init__(self, root_package: Optional[HBShedPackageHandler], parent_package: Optional[HBShedPackageHandler],
-                 module: Module) -> None:
+                 module: Module, processor: ExternalModulesDependenciesProcessor) -> None:
         self.__root_package: Optional[HBShedPackageHandler] = root_package
         self.__parent_package: Optional[HBShedPackageHandler] = parent_package
         self.__module: Module = module
+        self.__processor: ExternalModulesDependenciesProcessor = processor
 
     def __check_modules_dependencies(self):
         if self.__module.package.config().has_modules():
@@ -21,36 +24,52 @@ class CheckModuleDependencies:
                 CheckModuleDependencies(
                     root_package=self.__root_package,
                     parent_package=self.__module.package,
-                    module=module
+                    module=module,
+                    processor=self.__processor
                 ).process()
+
+    def __not_in_parent(self, dependencies: List[str], root_dep: Optional[Dict[str, str]]) -> Set[str]:
+        ret: Set[str] = set([])
+
+        name: str
+        for name in dependencies:
+            if root_dep is not None and root_dep.get(name) is None:
+                if (self.__root_package.config().has_modules() and name not in self.__root_package.config().modules()) or not self.__root_package.config().has_modules():
+                    ret.add(name)
+        return ret
 
     def __check_dependencies_in_parent(self):
         if self.__module.package.config().has_dependencies():
 
-            print('#### CHECK MODULES DEPENDENCIES : ' + self.__module.package.name())
-
-            name: str
             if not self.__root_package.has_dependencies():
-                raise FileNotFoundError('No dependencies found at : ' + self.__root_package.modules_path().as_posix())
+                self.__processor.add_all(self.__module.package)
+            else:
+                external_dependencies: Set[str] = self.__not_in_parent(
+                    self.__module.package.config().dependencies(),
+                    self.__root_package.dependencies()
+                )
 
-            for name in self.__module.package.config().dependencies():
-                if self.__root_package.dependencies().get(name) is None:
-                    raise FileNotFoundError('parent should have dependency : ' + name)
+                name: str
+                for name in external_dependencies:
+                    self.__processor.add(name)
 
     def __check_dev_dependencies_in_parent(self):
         if self.__module.package.config().has_dev_dependencies():
+            external_dependencies: Set[str] = self.__not_in_parent(
+                    self.__module.package.config().dev_dependencies(),
+                    self.__root_package.dependencies()
+                )
 
-            print('#### CHECK MODULES DEV_DEPENDENCIES : ' + self.__module.package.name())
+            external_dev_dependencies: Set[str] = self.__not_in_parent(
+                    self.__module.package.config().dev_dependencies(),
+                    self.__root_package.dev_dependencies()
+                )
 
             name: str
-            if not self.__root_package.has_dev_dependencies():
-                raise FileNotFoundError(
-                    'No devDependencies found at : ' + self.__root_package.modules_path().as_posix())
+            for name in external_dependencies:
+                if name in external_dev_dependencies:
+                    self.__processor.add(name)
 
-            for name in self.__module.package.config().dev_dependencies():
-                if self.__root_package.dev_dependencies().get(name) is None and self.__root_package.dependencies().get(
-                        name) is None:
-                    raise FileNotFoundError('parent should have devDependency : ' + name)
 
     def __check_dependencies_local(self):
         if self.__module.package.has_dependencies():

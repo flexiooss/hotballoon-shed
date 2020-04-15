@@ -14,6 +14,8 @@ class DevDependenciesWalker(AbstractDependenciesWalker):
             for name, version in package.dev_dependencies().items():
                 DevDependenciesWalker(
                     target_package_name=name,
+                    target_package_version=version,
                     node_modules=self.node_modules,
-                    processors=self.processors
+                    processors=self.processors,
+                    prev_package=package
                 ).process_all()

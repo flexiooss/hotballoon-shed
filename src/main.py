@@ -8,10 +8,20 @@ from cmd.Executor import Executor
 def main(argv) -> None:
     executor: Executor = Executor(cwd=Path.cwd())
     executor.extract_argv(argv)
+    try:
+        executor.exec()
+    except (FileNotFoundError, FileExistsError, ImportError, AttributeError, ValueError, KeyError) as err:
+        sys.stderr.write("""
 
-    executor.exec()
+\033[31m#######################################
+# OUPS !!!
+# {error}
+#######################################\x1b[0m
 
-    sys.exit()
+""".format(error=err))
+        sys.exit(1)
+
+    sys.exit(0)
 
 
 if __name__ == "__main__":

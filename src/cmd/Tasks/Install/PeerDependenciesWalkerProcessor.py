@@ -15,7 +15,9 @@ class PeerDependenciesWalkerProcessor(WalkerProcessor):
         return len(self.dependencies)
 
     def process(self, package: PackageHandler):
+
         if self.dependencies.get(package.name()) is not None:
+
             if self.dependencies.get(package.name()) != package.version():
                 raise ImportError(
                     'Version conflict with package : ' + package.name() + ':' + package.version() + ' version : ' + self.dependencies.get(

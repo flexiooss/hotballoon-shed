@@ -1,11 +1,13 @@
 import time
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Set, Dict
 
 from cmd.Options import Options
 from cmd.Tasks.Install.CheckParentDependencies import CheckParentDependencies
 from cmd.Tasks.Install.CheckParents import CheckParents
 from cmd.Tasks.Install.DependenciesProvisioner import DependenciesProvisioner
+from cmd.Tasks.Install.ExternalModulesDependenciesProcessor import ExternalModulesDependenciesProcessor
+from cmd.Tasks.Install.AncestorDependenciesCheck import AncestorDependenciesCheck
 from cmd.Tasks.Install.ParentDependenciesWalkerProcessor import ParentDependenciesWalkerProcessor
 from cmd.Tasks.Install.ParentWalkerProcessor import ParentWalkerProcessor
 from cmd.Tasks.Install.PeerDependenciesWalkerProcessor import PeerDependenciesWalkerProcessor
@@ -28,6 +30,7 @@ class Install(Task):
     __peer_processor: PeerDependenciesWalkerProcessor
     __parent_processor: ParentWalkerProcessor
     __parent_dependencies_processor: ParentDependenciesWalkerProcessor
+    __external_modules_dependencies_processor: ExternalModulesDependenciesProcessor
 
     def __init__(self, options: Options, package: Optional[HBShedPackageHandler], cwd: Path,
                  node_modules: Optional[Path] = None) -> None:
@@ -39,23 +42,13 @@ class Install(Task):
         if self.__node_modules is None:
             self.__node_modules = self.cwd
 
-    def __check_modules_dependencies(self):
-        if self.package.config().has_modules():
-            modules: ModulesHandler = ModulesHandler(self.package)
-            module: Module
-            for module in modules.modules:
-                CheckModuleDependencies(
-                    root_package=self.package,
-                    parent_package=self.package,
-                    module=module
-                ).process()
-
     def __ensure_processors(self):
         sys.stdout.write('#### prepare dependencies check  ')
         sys.stdout.flush()
         self.__peer_processor = PeerDependenciesWalkerProcessor()
         self.__parent_processor = ParentWalkerProcessor()
         self.__parent_dependencies_processor = ParentDependenciesWalkerProcessor()
+        self.__external_modules_dependencies_processor = ExternalModulesDependenciesProcessor()
 
         DependenciesProvisioner(
             package=self.package,
@@ -65,12 +58,51 @@ class Install(Task):
         ).process()
         sys.stdout.write("\n")
 
+    def __check_modules_dependencies(self):
+        print('#### CHECK MODULES DEPENDENCIES & DEV_DEPENDENCIES')
+
+        if self.package.config().has_modules():
+            modules: ModulesHandler = ModulesHandler(self.package)
+            module: Module
+            for module in modules.modules:
+                CheckModuleDependencies(
+                    root_package=self.package,
+                    parent_package=self.package,
+                    module=module,
+                    processor=self.__external_modules_dependencies_processor
+                ).process()
+
+    def __check_root_package_parent_dependencies(self):
+        external_root_dependencies: Set[str] = self.__external_modules_dependencies_processor.dependencies
+
+        if self.package.config().has_dependencies():
+            external_root_dependencies = external_root_dependencies.union(self.package.config().dependencies())
+
+        if len(external_root_dependencies):
+            print('#### external dependencies into ancestors to check found : ' + str(len(external_root_dependencies)))
+
+            sys.stdout.write('#### #### check ancestors dependencies ')
+            sys.stdout.flush()
+
+            AncestorDependenciesCheck(
+                root_package=self.package,
+                package=self.package,
+                dependencies=external_root_dependencies
+            ).process()
+
+            sys.stdout.write("\n")
+
+            if len(external_root_dependencies):
+                raise FileNotFoundError(
+                    'These dependencies are not declared by any parents : ' + "\n" + "\n   -  ".join(
+                        external_root_dependencies))
+
     def __check_external_parent(self):
 
         print('#### parents to check found : ' + str(self.__parent_processor.count()))
 
         if self.__parent_processor.count():
-            sys.stdout.write('#### check parents ')
+            sys.stdout.write('#### #### check parents ')
             sys.stdout.flush()
 
             CheckParents(
@@ -83,19 +115,23 @@ class Install(Task):
     def __provision_modules_peer_dependencies(self):
 
         print('#### peerDependencies found : ' + str(self.__peer_processor.count()))
+        dependencies: Dict[str, str] = {}
+        for key in sorted(self.__peer_processor.dependencies.keys()):
+            dependencies[key] = self.__peer_processor.dependencies[key]
 
         ApplyModulePeerDependencies(
             package=self.package,
-            dependencies=self.__peer_processor.dependencies
+            dependencies=dependencies
         ).process()
 
-        print('#### peerDependencies set to parent & modules')
+        print('#### #### peerDependencies set to parent & modules')
 
     def __check_external_parent_dependencies(self):
-        print('#### parents dependencies to check found : ' + str(self.__parent_dependencies_processor.count()))
+        print('#### all parents dependencies to presence check found : ' + str(
+            self.__parent_dependencies_processor.count()))
 
         if self.__parent_dependencies_processor.count():
-            sys.stdout.write('#### check parents dependencies ')
+            sys.stdout.write('#### #### check parents dependencies ')
             sys.stdout.flush()
 
             CheckParentDependencies(
@@ -178,18 +214,37 @@ class Install(Task):
             node_modules=None
         ).process()
 
+    def __message(self):
+        print("""##############################################################################
+ _           _   _           _ _                             _              _
+| |         | | | |         | | |                           | |            | |
+| |__   ___ | |_| |__   __ _| | | ___   ___  _ __ ______ ___| |__   ___  __| |
+| '_ \ / _ \| __| '_ \ / _` | | |/ _ \ / _ \| '_ \______/ __| '_ \ / _ \/ _` |
+| | | | (_) | |_| |_) | (_| | | | (_) | (_) | | | |     \__ \ | | |  __/ (_| |
+|_| |_|\___/ \__|_.__/ \__,_|_|_|\___/ \___/|_| |_|     |___/_| |_|\___|\__,_|
+
+https://github.com/flexiooss/hotballoon-shed
+###############################################################################
+              """)
+
     def process(self):
         start_time: time = time.time()
         if self.package.config().has_parent() and not self.package.config().is_parent_external():
             print('#### INSTALL from module : ' + self.package.name())
             self.__install_from_root_parent()
         else:
-            self.__install()
+            self.__message()
             self.__ensure_processors()
             self.__check_modules_dependencies()
+            self.__check_root_package_parent_dependencies()
             self.__check_external_parent()
             self.__check_external_parent_dependencies()
             self.__provision_modules_peer_dependencies()
 
-        print("--- installation, modules check and peerDependencies generation in %s seconds ---" % round(
-            (time.time() - start_time), 3))
+        print("""
+
+\033[32m#################################################################################
+# installation, modules check and peerDependencies generation in %s seconds #
+#################################################################################\x1b[0m
+
+""" % round((time.time() - start_time), 3))
