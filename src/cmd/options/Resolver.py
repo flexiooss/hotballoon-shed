@@ -1,8 +1,10 @@
 from typing import List
 
 from cmd.Options import Options
+from cmd.options.Debug import Debug
 from cmd.options.Email import Email
 from cmd.options.Password import Password
+from cmd.options.Quiet import Quiet
 from cmd.options.Registry import Registry
 from cmd.options.Restrict import Restrict
 from cmd.options.Source import Source
@@ -19,7 +21,7 @@ from cmd.options.ModuleOnly import ModuleOnly
 
 class Resolver:
     options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry,
-                             Restrict, Clean, ModuleOnly, Entry, ServerConfig]
+                             Restrict, Clean, ModuleOnly, Entry, ServerConfig, Debug, Quiet]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option

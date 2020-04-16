@@ -1,5 +1,6 @@
 from __future__ import annotations
 import abc
+import re
 from pathlib import Path
 from typing import List
 
@@ -9,10 +10,13 @@ from cmd.package.WalkerProcessor import WalkerProcessor
 
 class AbstractDependenciesWalker(abc.ABC):
 
-    def __init__(self, target_package_name: str, node_modules: Path, processors: List[WalkerProcessor]) -> None:
+    def __init__(self, target_package_name: str, target_package_version: str, node_modules: Path,
+                 processors: List[WalkerProcessor], prev_package: PackageHandler) -> None:
         self.target_package_name: str = target_package_name
+        self.target_package_version: str = target_package_version
         self.node_modules: Path = node_modules
         self.processors: List[WalkerProcessor] = processors
+        self.prev_package: PackageHandler = prev_package
 
     @abc.abstractmethod
     def process_all(self):
@@ -23,7 +27,12 @@ class AbstractDependenciesWalker(abc.ABC):
         if not target_path.is_dir():
             raise FileNotFoundError(
                 'Package : ' + self.target_package_name + ' not found at : ' + self.node_modules.as_posix())
-        return PackageHandler(target_path)
+        package: PackageHandler = PackageHandler(target_path)
+        if re.match(re.compile('.*\.git$'), self.target_package_version) is None:
+            if package.version() != self.target_package_version:
+                raise ImportError(
+                    'Package : ' + self.prev_package.name() + ' version conflict with package : ' + self.target_package_name + ':' + self.target_package_version + ' version : ' + package.version() + ' already registered')
+        return package
 
     def process(self) -> PackageHandler:
         package: PackageHandler = self.ensure_current_package()

@@ -23,6 +23,7 @@ class DependenciesProvisioner:
     def __process_for_root_package(self):
         sys.stdout.write('*')
         sys.stdout.flush()
+        self.__peer_processor.process(self.__package)
         self.__parent_processor.process(self.__package)
         self.__parent_dependencies_processor.process(self.__package)
 
@@ -31,29 +32,29 @@ class DependenciesProvisioner:
 
         if self.__package.has_dependencies():
             name: str
-            for name in self.__package.dependencies():
+            version: str
+            for name, version in self.__package.dependencies().items():
                 sys.stdout.write('*')
                 sys.stdout.flush()
 
                 DependenciesWalker(
                     target_package_name=name,
+                    target_package_version=version,
                     node_modules=self.__package.modules_path(),
-                    processors=[self.__peer_processor, self.__parent_processor, self.__parent_dependencies_processor]
-
+                    processors=[self.__peer_processor, self.__parent_processor, self.__parent_dependencies_processor],
+                    prev_package=self.__package
                 ).process_all()
 
         if self.__package.has_dev_dependencies():
             name: str
-            for name in self.__package.dev_dependencies():
+            version: str
+            for name, version in self.__package.dev_dependencies().items():
                 sys.stdout.write('*')
                 sys.stdout.flush()
                 DevDependenciesWalker(
                     target_package_name=name,
+                    target_package_version=version,
                     node_modules=self.__package.modules_path(),
-                    processors=[self.__peer_processor]
-
+                    processors=[self.__peer_processor],
+                    prev_package=self.__package
                 ).process()
-
-    # def apply(self, package: PackageHandler):
-    #     package.set_peer_dependencies(self.__processor.dependencies)
-    #     package.write()

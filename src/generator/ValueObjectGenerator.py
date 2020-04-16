@@ -45,8 +45,8 @@ class ValueObjectGenerator:
             generator_path: Path = Path(os.path.dirname(os.path.realpath(
                 __file__)) + '/../../' + Directories.LIB + '/' + Directories.VALUE_OBJECT_GENERATOR + '/' + 'run.sh')
             generator_path.resolve()
-
-            print(generator_path.as_posix())
+            if self.options.debug:
+                print(generator_path.as_posix())
 
             if not generator_path.is_file():
                 raise FileNotFoundError('No value-object generator found')
@@ -59,6 +59,7 @@ class ValueObjectGenerator:
 
             verbose: str = '-v' if self.options.verbose is True else ''
 
-            print(' '.join([generator, sources, target, root_package, extension]))
+            if self.options.debug:
+                print(' '.join([generator, sources, target, root_package, extension]))
 
             self.__exec([generator, sources, target, root_package, extension])
