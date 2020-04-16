@@ -30,9 +30,9 @@ def main(argv) -> None:
     if not executor.options.quiet:
         print("""
     
-\033[32m####################################################
+\033[32m#####################################################
 # command terminated with success in %s seconds #
-####################################################\x1b[0m
+#####################################################\x1b[0m
 """ % round((time.time() - start_time), 3))
 
     if executor.options.debug:
