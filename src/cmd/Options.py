@@ -1,13 +1,15 @@
 class Options:
-    verbose: bool = False
+    clean: str = None
+    debug: bool = False
+    email: str = None
+    entry:str = None
+    module_only:str = None
+    password: str = None
+    quiet: bool = False
+    registry: str = None
+    restrict: str = None
+    server_config:str = None
+    source: str = None
     target_path: str = None
     username: str = None
-    password: str = None
-    email: str = None
-    registry: str = None
-    source: str = None
-    restrict: str = None
-    clean: str = None
-    module_only:str = None
-    entry:str = None
-    server_config:str = None
+    verbose: bool = False

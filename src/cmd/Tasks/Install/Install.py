@@ -215,7 +215,8 @@ class Install(Task):
         ).process()
 
     def __message(self):
-        print("""##############################################################################
+        if not self.options.quiet:
+            print("""##############################################################################
  _           _   _           _ _                             _              _
 | |         | | | |         | | |                           | |            | |
 | |__   ___ | |_| |__   __ _| | | ___   ___  _ __ ______ ___| |__   ___  __| |
@@ -228,7 +229,6 @@ https://github.com/flexiooss/hotballoon-shed
               """)
 
     def process(self):
-        start_time: time = time.time()
         if self.package.config().has_parent() and not self.package.config().is_parent_external():
             print('#### INSTALL from module : ' + self.package.name())
             self.__install_from_root_parent()
@@ -241,11 +241,3 @@ https://github.com/flexiooss/hotballoon-shed
             self.__check_external_parent()
             self.__check_external_parent_dependencies()
             self.__provision_modules_peer_dependencies()
-
-        print("""
-
-\033[32m#################################################################################
-# installation, modules check and peerDependencies generation in %s seconds #
-#################################################################################\x1b[0m
-
-""" % round((time.time() - start_time), 3))
