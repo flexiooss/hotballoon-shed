@@ -94,7 +94,7 @@ class Install(Task):
 
             if len(external_root_dependencies):
                 raise FileNotFoundError(
-                    'These dependencies are not declared by any parents : ' + "\n" + "\n   -  ".join(
+                    'These dependencies are not declared by any parents : ' + "\n   -  " + "\n   -  ".join(
                         external_root_dependencies))
 
     def __check_external_parent(self):

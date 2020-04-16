@@ -33,43 +33,40 @@ class CheckModuleDependencies:
 
         name: str
         for name in dependencies:
-            if root_dep is not None and root_dep.get(name) is None:
-                if (self.__root_package.config().has_modules() and name not in self.__root_package.config().modules()) or not self.__root_package.config().has_modules():
+            if (root_dep is not None and root_dep.get(name) is None) or (root_dep is None):
+                if (
+                        self.__root_package.config().has_modules() and name not in self.__root_package.config().modules()) or not self.__root_package.config().has_modules():
                     ret.add(name)
         return ret
 
     def __check_dependencies_in_parent(self):
         if self.__module.package.config().has_dependencies():
 
-            if not self.__root_package.has_dependencies():
-                self.__processor.add_all(self.__module.package)
-            else:
-                external_dependencies: Set[str] = self.__not_in_parent(
-                    self.__module.package.config().dependencies(),
-                    self.__root_package.dependencies()
-                )
+            external_dependencies: Set[str] = self.__not_in_parent(
+                self.__module.package.config().dependencies(),
+                self.__root_package.dependencies()
+            )
 
-                name: str
-                for name in external_dependencies:
-                    self.__processor.add(name)
+            name: str
+            for name in external_dependencies:
+                self.__processor.add(name)
 
     def __check_dev_dependencies_in_parent(self):
         if self.__module.package.config().has_dev_dependencies():
             external_dependencies: Set[str] = self.__not_in_parent(
-                    self.__module.package.config().dev_dependencies(),
-                    self.__root_package.dependencies()
-                )
+                self.__module.package.config().dev_dependencies(),
+                self.__root_package.dependencies()
+            )
 
             external_dev_dependencies: Set[str] = self.__not_in_parent(
-                    self.__module.package.config().dev_dependencies(),
-                    self.__root_package.dev_dependencies()
-                )
+                self.__module.package.config().dev_dependencies(),
+                self.__root_package.dev_dependencies()
+            )
 
             name: str
             for name in external_dependencies:
                 if name in external_dev_dependencies:
                     self.__processor.add(name)
-
 
     def __check_dependencies_local(self):
         if self.__module.package.has_dependencies():
