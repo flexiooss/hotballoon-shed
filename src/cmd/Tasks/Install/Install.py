@@ -233,6 +233,7 @@ https://github.com/flexiooss/hotballoon-shed
             print('#### INSTALL from module : ' + self.package.name())
             self.__install_from_root_parent()
         else:
+            self.__install()
             self.__message()
             self.__ensure_processors()
             self.__check_modules_dependencies()
