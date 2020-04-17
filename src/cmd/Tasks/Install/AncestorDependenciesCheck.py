@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 from typing import Optional, List, Dict, Set
+
+from cmd.Options import Options
 from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 from cmd.package.PackageHandler import PackageHandler
 
@@ -8,11 +10,12 @@ from cmd.package.PackageHandler import PackageHandler
 class AncestorDependenciesCheck:
 
     def __init__(self, root_package: HBShedPackageHandler, package: HBShedPackageHandler,
-                 dependencies: Set[str]) -> None:
+                 dependencies: Set[str], options: Options) -> None:
         self.__root_package: HBShedPackageHandler = root_package
         self.__package: HBShedPackageHandler = package
         self.__node_modules: Path = root_package.modules_path()
         self.__dependencies: Set[str] = dependencies
+        self.__options: Options = options
 
     def __get_package(self, name: str) -> Optional[HBShedPackageHandler]:
         target_path: Path = self.__node_modules.joinpath(name)
@@ -26,8 +29,11 @@ class AncestorDependenciesCheck:
             name: str
             for name in self.__dependencies.copy():
                 if self.__package.dependencies().get(name) is not None:
-                    sys.stdout.write('*')
-                    sys.stdout.flush()
+                    if self.__options.debug:
+                        print(name + ' defined by parent : ' + self.__package.name())
+                    else:
+                        sys.stdout.write('*')
+                        sys.stdout.flush()
                     self.__dependencies.remove(name)
 
         if len(self.__dependencies) and self.__package.config().has_parent_external():
@@ -36,5 +42,6 @@ class AncestorDependenciesCheck:
                 AncestorDependenciesCheck(
                     root_package=self.__root_package,
                     package=parent,
-                    dependencies=self.__dependencies
+                    dependencies=self.__dependencies,
+                    options=self.__options
                 ).process()

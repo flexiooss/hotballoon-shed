@@ -81,13 +81,17 @@ class Install(Task):
         if len(external_root_dependencies):
             print('#### external dependencies into ancestors to check found : ' + str(len(external_root_dependencies)))
 
-            sys.stdout.write('#### #### check ancestors dependencies ')
-            sys.stdout.flush()
+            if self.options.debug:
+                print(external_root_dependencies)
+            else:
+                sys.stdout.write('#### #### check ancestors dependencies ')
+                sys.stdout.flush()
 
             AncestorDependenciesCheck(
                 root_package=self.package,
                 package=self.package,
-                dependencies=external_root_dependencies
+                dependencies=external_root_dependencies,
+                options=self.options
             ).process()
 
             sys.stdout.write("\n")
