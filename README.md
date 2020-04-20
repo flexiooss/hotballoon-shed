@@ -101,9 +101,11 @@ It is possible to declare an external parent with an optional version
     },
     "hotballoon-shed": {
         "module": {
-            "name": "my-external-parent",
-            "version": "0.0.0",
-            "external": true
+            "parent": {
+                "name": "my-external-parent",
+                "version": "0.0.0",
+                "external": true
+            }
         },
         "modules": [
         "package-b",
@@ -125,9 +127,11 @@ It is possible to declare an external parent with dependencies
     },
     "hotballoon-shed": {
         "module": {
-            "name": "my-external-parent",
-            "version": "0.0.0",
-            "external": true,
+            "parent": {
+                "name": "my-external-parent",
+                "version": "0.0.0",
+                "external": true
+            },
             "dependencies": ["my-external-dep"]
         },
         "modules": [
