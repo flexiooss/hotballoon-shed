@@ -37,7 +37,7 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
       const p = spawn('node',
         [
         '--stack-trace-limit=100000',
-//        '--enable-source-maps',
+        '--enable-source-maps',
         filePath],
         {
           cwd: path.resolve(),

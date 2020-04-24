@@ -12,7 +12,7 @@ module.exports = function (testId, testsPath, env, clb) {
 console.log('writing test file... ... ...')
   const filePath = '/tmp/hotballoon-shed/tests'
   const fileName = 'test_' + testId + '.js'
-  const sourceMapFileNameOut = 'test_' + testId + '.map'
+  const sourceMapFileNameOut = 'test_' + testId + '.js.map'
 
   webpackTest.entry.app = testsPath
   webpackTest.output = {
