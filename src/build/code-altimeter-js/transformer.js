@@ -26,7 +26,8 @@ console.log('writing test file... ... ...')
     }))
   )
 //  webpackTest.devtool = 'eval-source-map'
-  webpackTest.devtool = 'source-map'
+  webpackTest.devtool = 'cheap-module-eval-source-map'
+//  webpackTest.devtool = 'source-map'
 
 //webpackTest.optimization = {
 //  splitChunks: {
