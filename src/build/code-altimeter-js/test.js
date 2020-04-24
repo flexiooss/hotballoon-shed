@@ -35,13 +35,17 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
     },
     (filePath) => {
       const p = spawn('node',
-        [filePath],
+        [
+        '--stack-trace-limit=100000',
+//        '--enable-source-maps',
+        filePath],
         {
           cwd: path.resolve(),
           env: process.env,
           stdio: [process.stdin, process.stdout, process.stderr]
         }
       )
+
 
       p.on('close', (code) => {
         console.log(`Test child process exited with code ${code}`)

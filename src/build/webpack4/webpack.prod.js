@@ -34,6 +34,10 @@ webpackBase.optimization = {
   minimizer: [
     new UglifyJsPlugin({
       sourceMap: true,
+//      TODO: check this for tinymce
+      output: {
+        "ascii_only": true
+      },
       minify(file, sourceMap) {
         const uglifyJsOptions = {}
 

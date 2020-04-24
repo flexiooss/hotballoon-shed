@@ -15,7 +15,6 @@ hbshed
 
               <options>
               --help, -H
-              --verbose, -V
               --source, -S          path of sources
               --debug               show stack trace & more
               --quiet               no extra message
