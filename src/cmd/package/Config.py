@@ -230,7 +230,7 @@ class Config:
         p.resolve()
 
         if not p.is_dir():
-            raise FileNotFoundError('Not found test path')
+            raise FileNotFoundError('Not found test path at :' + p.as_posix())
         return p
 
     def has_browser_test(self) -> bool:
