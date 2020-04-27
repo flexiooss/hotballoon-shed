@@ -17,7 +17,7 @@ def main(argv) -> None:
         try:
             executor.exec()
         except KeyboardInterrupt:
-            print( + "\n\n"+'\033[95m' + '###  YOU KILL ME !  ###' +'\x1b[0m'+ "\n")
+            print(  "\n\n"+'\033[95m' + '###  YOU KILL ME !  ###' +'\x1b[0m'+ "\n")
         except (FileNotFoundError, FileExistsError, ImportError, AttributeError, ValueError, KeyError) as err:
             sys.stderr.write("""
     

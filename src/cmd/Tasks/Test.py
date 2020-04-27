@@ -45,8 +45,9 @@ class Test(Task):
 
             verbose: str = '-v' if self.options.debug else ''
             restrict: str = self.options.restrict if self.options.restrict is not None else ''
+            source_map:str = '1' if self.options.source_map else '0'
             child: Popen = self.exec(
-                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict])
+                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict,source_map])
 
             if child.returncode > 0:
                 sys.exit(child.returncode)

@@ -6,6 +6,7 @@ const { spawn } = require('child_process')
 const argTestPath = process.argv[2]
 const verbose = process.argv[3] === '-v'
 const restrict = process.argv[4]
+const source_map = process.argv[5] === '1'
 const testTransformer = require('./transformer')
 const TEST_ID = Date.now() + ''
 const CodeAltimeter = require('code-altimeter-js')
@@ -33,12 +34,14 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
     {
       'process.env.TEST_VERBOSE': JSON.stringify((verbose) ? 1 : 0)
     },
-    (filePath) => {
+    (filePath, sourceMap) => {
+    const args = ['--stack-trace-limit=100000']
+    if(sourceMap){
+    args.push('--enable-source-maps')
+    }
+    args.push(filePath)
       const p = spawn('node',
-        [
-        '--stack-trace-limit=100000',
-        '--enable-source-maps',
-        filePath],
+        args,
         {
           cwd: path.resolve(),
           env: process.env,
@@ -51,5 +54,7 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
         console.log(`Test child process exited with code ${code}`)
         process.exit(code)
       })
-         })
+         },
+         source_map
+         )
 })

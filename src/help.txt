@@ -49,6 +49,7 @@ hbshed
                   --clean, -C       clean cache directory
                   --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
                   --module-only     test on single module level
+                  --source-map      test on single module level
 
 
 
