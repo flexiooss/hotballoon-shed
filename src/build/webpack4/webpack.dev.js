@@ -43,10 +43,10 @@ webpackBase.module.rules.push(
             camelCase:true
         }
       },
-      {
-        loader: 'css-media-queries-loader',
-        options: CONFIG.mediaqueries
-      }
+//      {
+//        loader: 'css-media-queries-loader',
+//        options: CONFIG.mediaqueries
+//      }
     ]
   }
 )

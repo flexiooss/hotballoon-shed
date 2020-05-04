@@ -1,16 +1,42 @@
 const webpackProd = require('./webpack.prod')
 const webpack = require('webpack')
-const ProgressPlugin = require('webpack/lib/ProgressPlugin')
+const verbose = process.argv[2] === '-v'
 
 const compiler = webpack(webpackProd)
 
-
-compiler.apply(
-  // new ProgressPlugin(function (percentage, msg) {
-  //   console.log((percentage * 100) + '%', msg)
-  // })
-)
-
 compiler.run((err, stats) => {
-  console.log('***** [webpack:prod:build]', stats.toString())
+
+  if (err) {
+    console.error(err.stack || err);
+    if (err.details) {
+      console.error("*** Webpack ERRORS : ")
+      console.error(err.details);
+    }
+  }
+
+  const info = stats.toJson();
+
+  if (stats.hasErrors()) {
+    console.error("*** Webpack build ERRORS : ")
+    console.error(info.errors.toString());
+  }
+
+  if (err || stats.hasErrors()) {
+    process.exit(1)
+  }
+
+
+if(verbose){
+
+  if (stats.hasWarnings()) {
+    console.error("*** Webpack build WARNING : ")
+    console.warn(info.warnings.toString());
+  }
+  console.log(
+  '***** [webpack:app:build]',
+  stats.toString({
+    chunks: false,
+    colors: true
+  }))
+  }
 })

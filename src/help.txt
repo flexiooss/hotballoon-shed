@@ -21,6 +21,8 @@ hbshed
 
               <tasks>
               build                 Build code
+                  <options>
+                  --bundle          build additionally a full bundle.js file
               clean                 Remove dependencies & generate sources
                   <options>
                   --module-only     clean on single module level

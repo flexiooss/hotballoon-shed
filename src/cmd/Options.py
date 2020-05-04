@@ -1,4 +1,5 @@
 class Options:
+    bundle: bool = False
     clean: str = None
     debug: bool = False
     email: str = None
