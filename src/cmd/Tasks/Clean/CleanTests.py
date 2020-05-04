@@ -19,10 +19,15 @@ class CleanTests(Task):
                 CleanTests(self.options, module.package, module.package.cwd).process()
 
     def process(self):
+
         if self.package.config().has_test():
+            print('CLEAN TESTS : ' + self.package.name())
+            if self.options.debug:
+                print('try to clean at : ' + self.package.config().test_dir().as_posix())
             if self.package.config().test_dir().is_dir():
                 shutil.rmtree(self.package.config().test_dir().as_posix())
-                print('CLEAN TESTS : ' + self.package.name())
+        elif self.options.debug:
+            print('No Test in config for : ' + self.package.name())
 
         if self.options.module_only is not True:
             self.__modules_clean()

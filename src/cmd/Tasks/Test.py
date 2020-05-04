@@ -43,10 +43,11 @@ class Test(Task):
             if not tester.is_file():
                 raise FileNotFoundError('No tester file found for this tester : ' + self.package.config().tester())
 
-            verbose: str = '-v' if self.options.verbose is True else ''
+            verbose: str = '-v' if self.options.debug else ''
             restrict: str = self.options.restrict if self.options.restrict is not None else ''
+            source_map:str = '1' if self.options.source_map else '0'
             child: Popen = self.exec(
-                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict])
+                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict,source_map])
 
             if child.returncode > 0:
                 sys.exit(child.returncode)

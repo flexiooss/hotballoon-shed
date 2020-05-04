@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 from subprocess import Popen
 
-from cmd.Directories import Directories
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
 
@@ -12,8 +11,10 @@ from cmd.Tasks.Tasks import Tasks
 class Build(Task):
     NAME = Tasks.BUILD
 
-    def process(self):
-        print('**** BUILD : PROD : ' + self.package.name())
+    def __build_app(self):
+        print('****')
+        print('**** BUILD APP : ' + self.package.name())
+        print('****')
 
         if not self.package.config().has_builder():
             raise KeyError('No builder found into `hotballoon-shed` configuration')
@@ -28,7 +29,7 @@ class Build(Task):
         if not self.package.config().has_build_output():
             raise KeyError('No path for build found into `hotballoon-shed` configuration')
 
-        verbose: str = '-v' if self.options.verbose is True else ''
+        verbose: str = '-v' if self.options.debug else ''
 
         child: Popen = self.exec([
             'node',
@@ -41,23 +42,21 @@ class Build(Task):
         code = child.returncode
 
         if code != 0:
-            sys.stderr.write("BUILD FAIL" + "\n")
-            sys.exit(code)
+            sys.stderr.write("BUILD APP FAIL" + "\n")
+            raise ChildProcessError(code)
 
-        print('**** BUILD : LIB : ' + self.package.name())
-
+    def __build_bundle(self):
+        print('****')
+        print('**** BUILD LIB BUNDLE : ' + self.package.name())
+        print('****')
         lib_builder: Path = Path(os.path.dirname(
             os.path.realpath(__file__)) + '/../../build/' + self.package.config().builder() + '/lib.js')
         lib_builder.resolve()
-
         if not lib_builder.is_file():
             raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())
-
         if not self.package.config().has_build_output():
             raise KeyError('No path for build found into `hotballoon-shed` configuration')
-
-        verbose: str = '-v' if self.options.verbose is True else ''
-
+        verbose: str = '-v' if self.options.debug else ''
         child2: Popen = self.exec([
             'node',
             lib_builder.as_posix(),
@@ -66,5 +65,15 @@ class Build(Task):
             self.package.config().build_html_template().as_posix(),
             self.package.config().build_output()
         ])
+        code = child2.returncode
+        if code != 0:
+            sys.stderr.write("BUILD LIB BUNDLE FAIL" + "\n")
+            raise ChildProcessError(code)
 
-        sys.exit(child2.returncode)
+    def process(self):
+        self.__build_app()
+        if self.options.bundle:
+            self.__build_bundle()
+        else:
+            if self.options.debug:
+                print('No bundle build required')

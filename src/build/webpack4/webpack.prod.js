@@ -33,9 +33,22 @@ webpackBase.optimization = {
   },
   minimizer: [
     new UglifyJsPlugin({
+     uglifyOptions: {
+          output: {
+            comments: false,
+//      TODO: check this for tinymce
+          "ascii_only": true
+        }
+      },
       sourceMap: true,
       minify(file, sourceMap) {
-        const uglifyJsOptions = {}
+        const uglifyJsOptions = {
+          output: {
+              comments: false,
+  //      TODO: check this for tinymce
+            "ascii_only": true
+          }
+        }
 
         if (sourceMap) {
           uglifyJsOptions.sourceMap = {
@@ -91,14 +104,16 @@ webpackBase.module.rules.push(
           modules: true,
           importLoaders: 1,
           localIdentName: '[sha1:hash:hex:4]',
+          sourceMap:false,
           camelCase: true
+
 
         }
       },
-      {
-        loader: 'css-media-queries-loader',
-        options: CONFIG.mediaqueries
-      }
+//      {
+//        loader: 'css-media-queries-loader',
+//        options: CONFIG.mediaqueries
+//      }
     ]
   }
 )

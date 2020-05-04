@@ -15,13 +15,14 @@ hbshed
 
               <options>
               --help, -H
-              --verbose, -V
               --source, -S          path of sources
               --debug               show stack trace & more
               --quiet               no extra message
 
               <tasks>
               build                 Build code
+                  <options>
+                  --bundle          build additionally a full bundle.js file
               clean                 Remove dependencies & generate sources
                   <options>
                   --module-only     clean on single module level
@@ -50,6 +51,7 @@ hbshed
                   --clean, -C       clean cache directory
                   --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
                   --module-only     test on single module level
+                  --source-map      test on single module level
 
 
 

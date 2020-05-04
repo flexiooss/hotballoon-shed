@@ -6,6 +6,7 @@ const webpack = require('webpack')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
@@ -25,10 +26,23 @@ webpackBase.output.filename = 'bundle.js'
 webpackBase.optimization = {
 
   minimizer: [
-    new UglifyJsPlugin({
+   new UglifyJsPlugin({
+     uglifyOptions: {
+          output: {
+            comments: false,
+//      TODO: check this for tinymce
+          "ascii_only": true
+        }
+      },
       sourceMap: true,
       minify(file, sourceMap) {
-        const uglifyJsOptions = {}
+        const uglifyJsOptions = {
+          output: {
+              comments: false,
+  //      TODO: check this for tinymce
+            "ascii_only": true
+          }
+        }
 
         if (sourceMap) {
           uglifyJsOptions.sourceMap = {
@@ -38,6 +52,11 @@ webpackBase.optimization = {
 
         return Terser.minify(file, uglifyJsOptions)
       }
+    }),
+    new OptimizeCSSAssetsPlugin({
+      cssProcessorPluginOptions: {
+        preset: ['default', {discardComments: {removeAll: true}}]
+      }
     })
   ]
 }
@@ -45,7 +64,35 @@ webpackBase.optimization = {
 webpackBase.plugins.push(
   new webpack.DefinePlugin({
     'window.__DEVELOPMENT__': JSON.stringify(false)
+  }),
+  new MiniCssExtractPlugin({
+    filename: '[name].[hash].css',
+    chunkFilename: '[id].[hash].css'
   })
+)
+
+webpackBase.module.rules.push(
+  {
+    test: /\.css$/,
+    use: [
+      'style-loader',
+      MiniCssExtractPlugin.loader,
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 1,
+          localIdentName: '[local]',
+            sourceMap:false,
+            camelCase:true
+        }
+      },
+//      {
+//        loader: 'css-media-queries-loader',
+//        options: CONFIG.mediaqueries
+//      }
+    ]
+  }
 )
 
 

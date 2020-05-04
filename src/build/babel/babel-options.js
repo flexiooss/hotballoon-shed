@@ -12,7 +12,8 @@ module.exports = {
           'browsers': [
             'edge >= 13'
           ]
-        }
+        },
+//        compact:true
       }
     ]
   ],

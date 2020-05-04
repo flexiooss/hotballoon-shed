@@ -28,6 +28,8 @@ class ExtractPackage(Task):
             self.__clean_target_path(self.target_path)
 
     def __clean_target_path(self, target: Path):
+        if self.options.debug:
+            print('Ensure target dir is empty')
         for file in os.listdir(target.as_posix()):
             file_path: Path = Path(target / file)
             if file_path.is_file():
@@ -39,6 +41,8 @@ class ExtractPackage(Task):
 
     def __copy_to_target(self):
         self.__copy_dir(self.cwd, self.target_path)
+        if self.options.debug:
+            print('sources copied to : ' + self.target_path.as_posix())
 
     def __copy_dir(self, src: Path, dest: Path):
         src_files = os.listdir(src.as_posix())
