@@ -12,6 +12,7 @@ const Terser = require('terser')
 const SriPlugin = require('webpack-subresource-integrity')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const babelOptions = require('../babel/getBabelConfig')
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
@@ -94,6 +95,11 @@ webpackBase.plugins.push(
 )
 
 webpackBase.module.rules.push(
+{
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: babelOptions
+      },
   {
     test: /\.css$/,
     use: [
