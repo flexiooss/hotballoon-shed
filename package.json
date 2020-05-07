@@ -25,7 +25,6 @@
     "babel-plugin-transform-modern-regexp": "^0.0.6",
     "babel-polyfill": "^6.26.0",
     "cache-loader": "^2.0.1",
-    "chokidar": "^2.0.4",
     "circular-dependency-plugin": "^5.0.2",
     "clean-webpack-plugin": "^0.1.17",
     "code-altimeter-js": "https://github.com/flexiooss/code-altimeter-js.git#master",
