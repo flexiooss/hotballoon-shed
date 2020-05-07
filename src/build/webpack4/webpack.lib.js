@@ -67,8 +67,8 @@ webpackBase.plugins.push(
     'window.__DEVELOPMENT__': JSON.stringify(false)
   }),
   new MiniCssExtractPlugin({
-    filename: '[name].[hash].css',
-    chunkFilename: '[id].[hash].css'
+    filename: '[name].[contenthash].css',
+    chunkFilename: '[id].[contenthash].css'
   })
 )
 

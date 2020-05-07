@@ -1,6 +1,18 @@
 const webpackProd = require('./webpack.prod')
 const webpack = require('webpack')
 const verbose = process.argv[2] === '-v'
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+if(verbose){
+  webpackProd.plugins.push(
+    new BundleAnalyzerPlugin({
+      openAnalyzer: false,
+      defaultSizes: 'gzip',
+      analyzerMode: 'static'
+    })
+  )
+}
+
 
 const compiler = webpack(webpackProd)
 
@@ -40,3 +52,5 @@ if(verbose){
   }))
   }
 })
+
+compiler.close()

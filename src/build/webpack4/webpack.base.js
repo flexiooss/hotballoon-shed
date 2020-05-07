@@ -9,7 +9,7 @@ module.exports = {
   entry: CONFIG.entry,
   output: {
     path: CONFIG.dist_path,
-    filename: '[name].[hash].js'
+    filename: '[name].[contenthash].js'
   },
   plugins: [ ],
   module: {
@@ -20,21 +20,23 @@ module.exports = {
 //        options: babelOptions
 //      },
       {
-        test: /\.worker\.js$/,
-        loader: 'worker-loader',
-        options: {
-          name: '[name].[hash].js'
-        }
-      },
-      {
         test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
         use: [{
           loader: 'url-loader',
-          query: {
+          options: {
             limit: 10
           }
         }]
-      }
+      },
+//      {
+//        test: /\.worker\.js$/,
+//        use: {
+//        loader: 'worker-loader' ,
+//          options: {
+//            name: '[name].[contenthash].js'
+//          }
+//        }
+//      }
     ]
   },
   resolveLoader: {

@@ -10,7 +10,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 webpackBase.output.globalObject = 'this'
 
-webpackBase.devtool = 'cheap-module-eval-source-map'
+webpackBase.devtool = 'eval-cheap-module-source-map'
 
 webpackBase.mode = 'development'
 
@@ -21,12 +21,15 @@ webpackBase.plugins.push(
     'window.__DEBUG__': JSON.stringify(true),
     'process.env.NODE_ENV': JSON.stringify('development')
   }),
-  new webpack.NamedModulesPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
-  new CircularDependencyPlugin(),
-  new StyleLintPlugin()
+//  new CircularDependencyPlugin(),
+  new StyleLintPlugin(),
+//  new webpack.AutomaticPrefetchPlugin()
 )
+webpackBase.optimization = {
+  moduleIds: 'named'
+}
 
 webpackBase.module.rules.push(
   {
@@ -36,11 +39,12 @@ webpackBase.module.rules.push(
       {
         loader: 'css-loader',
         options: {
-          modules: true,
-          importLoaders: 1,
+          modules: {
           localIdentName: '[local]',
+          },
+          importLoaders: 1,
             sourceMap:true,
-            camelCase:true
+            localsConvention:'camelCase'
         }
       },
 //      {

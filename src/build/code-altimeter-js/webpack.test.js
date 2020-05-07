@@ -73,7 +73,7 @@ const webpackBase = {
         test: /\.worker\.js$/,
         loader: 'worker-loader',
         options: {
-          name: '[name].[hash].js'
+          name: '[name].[contenthash].js'
         }
       },
       {

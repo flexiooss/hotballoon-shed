@@ -39,3 +39,4 @@ if(verbose){
   }))
 }
 })
+compiler.close()
