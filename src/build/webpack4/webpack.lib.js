@@ -2,6 +2,7 @@
 
 const path = require('path')
 const webpack = require('webpack')
+const babelOptions = require('../babel/getBabelConfig')
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -72,6 +73,11 @@ webpackBase.plugins.push(
 )
 
 webpackBase.module.rules.push(
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: babelOptions
+      },
   {
     test: /\.css$/,
     use: [

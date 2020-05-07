@@ -2,7 +2,7 @@
 
 const CONFIG = require('./config')
 const path = require('path')
-const babelOptions = require('../babel/getBabelConfig')
+//const babelOptions = require('../babel/getBabelConfig')
 const fs = require('fs')
 
 module.exports = {
@@ -14,11 +14,11 @@ module.exports = {
   plugins: [ ],
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        options: babelOptions
-      },
+//      {
+//        test: /\.js$/,
+//        loader: 'babel-loader',
+//        options: babelOptions
+//      },
       {
         test: /\.worker\.js$/,
         loader: 'worker-loader',
