@@ -73,7 +73,9 @@ webpackBase.plugins.push(
     {
       filename: 'index.html',
       template: html_template,
-      inject: true
+      inject: true,
+      scriptLoading: 'defer',
+      meta:{viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'}
     }
   ),
   new CleanWebpackPlugin([dist_path + '/*'], {
@@ -112,8 +114,6 @@ webpackBase.module.rules.push(
           localIdentName: '[sha1:hash:hex:4]',
           sourceMap:false,
           camelCase: true
-
-
         }
       },
 //      {
