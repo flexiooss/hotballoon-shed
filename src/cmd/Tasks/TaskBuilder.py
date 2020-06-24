@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import List, Optional
 from cmd.Options import Options
-from cmd.Tasks.Build import Build
+from cmd.Tasks.Build.Build import Build
 from cmd.Tasks.Clean.Clean import Clean
 from cmd.Tasks.Clean.CleanDependenciesDir import CleanDependenciesDir
 from cmd.Tasks.Clean.CleanSources import CleanSources
