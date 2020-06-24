@@ -6,6 +6,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const LinkStylesheetHtmlWebpackPlugin = require('link-stylesheet-html-webpack-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
 
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
@@ -16,9 +17,13 @@ const babelOptions = require('../babel/getBabelConfig')
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
+const isVerbose = process.argv[2] === '-v'
 const entries = process.argv[3].split(',')
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
+
+const manifestConfig = process.argv[6]
+const parsedManifestConfig = JSON.parse(manifestConfig)
 
 webpackBase.entry.app = entries
 
@@ -27,6 +32,11 @@ webpackBase.devtool = false
 webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path
 //webpackBase.output.publicPath = '/'
+
+if (isVerbose) {
+  console.log('_________________ MANIFEST _________________')
+  console.log(parsedManifestConfig)
+}
 
 webpackBase.optimization = {
   splitChunks: {
@@ -69,13 +79,40 @@ webpackBase.optimization = {
 }
 
 webpackBase.plugins.push(
+new WebpackPwaManifest({
+   filename: "manifest.json",
+    inject: true,
+    fingerprints: true,
+    ios: false,
+    publicPath: null,
+    includeDirectory: true,
+    name: parsedManifestConfig.name,
+    short_name: parsedManifestConfig.short_name,
+    description: parsedManifestConfig.description,
+    crossorigin:parsedManifestConfig.crossorigin,
+    display: parsedManifestConfig.display ,
+    theme_color:parsedManifestConfig.theme_color ,
+    background_color: parsedManifestConfig.background_color,
+    orientation:parsedManifestConfig.orientation ,
+    start_url:parsedManifestConfig.start_url,
+    icons: [
+      {
+        src: path.resolve(__dirname,'./assets/icon.png'),
+        sizes: [96, 128, 192, 256, 384, 512, 1024]
+      }
+    ]
+  }),
   new HtmlWebpackPlugin(
     {
       filename: 'index.html',
       template: html_template,
       inject: true,
       scriptLoading: 'defer',
-      meta:{viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'}
+      meta:{
+        viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+        charset:"utf-8"
+      },
+      favicon: path.resolve(__dirname,'./assets/favicon.ico')
     }
   ),
   new CleanWebpackPlugin([dist_path + '/*'], {

@@ -6,6 +6,8 @@ from subprocess import Popen
 
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
+from cmd.Tasks.Build.manifest_config import manifest_config
+import json
 
 
 class Build(Task):
@@ -20,7 +22,7 @@ class Build(Task):
             raise KeyError('No builder found into `hotballoon-shed` configuration')
 
         production_builder: Path = Path(os.path.dirname(
-            os.path.realpath(__file__)) + '/../../build/' + self.package.config().builder() + '/production.js')
+            os.path.realpath(__file__)) + '/../../../build/' + self.package.config().builder() + '/production.js')
         production_builder.resolve()
 
         if not production_builder.is_file():
@@ -31,13 +33,17 @@ class Build(Task):
 
         verbose: str = '-v' if self.options.debug else ''
 
+        if self.package.config().has_application():
+            manifest_config.update(self.package.config().application())
+
         child: Popen = self.exec([
             'node',
             production_builder.as_posix(),
             verbose,
             ','.join([v.as_posix() for v in self.package.config().build_entries()]),
             self.package.config().build_html_template().as_posix(),
-            self.package.config().build_output()
+            self.package.config().build_output(),
+            json.dumps(manifest_config)
         ])
         code = child.returncode
 
@@ -50,7 +56,7 @@ class Build(Task):
         print('**** BUILD LIB BUNDLE : ' + self.package.name())
         print('****')
         lib_builder: Path = Path(os.path.dirname(
-            os.path.realpath(__file__)) + '/../../build/' + self.package.config().builder() + '/lib.js')
+            os.path.realpath(__file__)) + '/../../../build/' + self.package.config().builder() + '/lib.js')
         lib_builder.resolve()
         if not lib_builder.is_file():
             raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())

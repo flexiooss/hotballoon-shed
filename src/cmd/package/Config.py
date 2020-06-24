@@ -4,11 +4,13 @@ from typing import List, Dict
 
 
 class Config:
+
     BUILD_KEY: str = 'build'
     BUILDER_KEY: str = 'builder'
     BUILD_ENTRIES_KEY: str = 'entries'
     BUILD_HTML_TEMPLATE_KEY: str = 'html_template'
     BUILD_OUTPUT_KEY: str = 'output'
+    BUILD_APPLICATION: str = 'application'
 
     DEV_KEY: str = 'dev'
     DEV_SERVER_KEY: str = 'server'
@@ -43,6 +45,12 @@ class Config:
     def __init__(self, data: dict, cwd: Path) -> None:
         self.__data: dict = data
         self.__cwd: Path = cwd
+
+    def has_application(self) -> bool:
+        return self.has_build() and self.build().get(self.BUILD_APPLICATION) is not None
+
+    def application(self) -> dict:
+        return self.build().get(self.BUILD_APPLICATION)
 
     def has_core(self) -> bool:
         return self.__data.get(self.CORE) is not None
