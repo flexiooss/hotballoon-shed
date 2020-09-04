@@ -1,4 +1,6 @@
 level: stable
-schemes: [package]
-topics: [69]
-version: 1.28.0
+schemes:
+- package
+topics:
+- 69
+version: 1.29.0
