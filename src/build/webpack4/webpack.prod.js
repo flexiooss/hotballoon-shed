@@ -140,7 +140,7 @@ webpackBase.module.rules.push(
         options: babelOptions
       },
   {
-    test: /\.css$/,
+    test: /\.module\.css$/,
     use: [
       MiniCssExtractPlugin.loader,
       {
@@ -151,6 +151,22 @@ webpackBase.module.rules.push(
           localIdentName: '[sha1:hash:hex:4]',
           sourceMap:false,
           camelCase: true
+        }
+      },
+//      {
+//        loader: 'css-media-queries-loader',
+//        options: CONFIG.mediaqueries
+//      }
+    ]
+  },
+  {
+    test: /\/[\d\w_-]+\.css$/,
+    use: [
+      MiniCssExtractPlugin.loader,
+      {
+        loader: 'css-loader',
+        options: {
+          modules: false
         }
       },
 //      {
