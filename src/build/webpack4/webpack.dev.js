@@ -2,6 +2,7 @@
 
 const webpackBase = require('./webpack.base')
 const webpack = require('webpack')
+const babelOptions = require('../babel/getBabelConfig')
 
 const CONFIG = require('./config')
 const path = require('path')
@@ -30,6 +31,10 @@ webpackBase.plugins.push(
 
 webpackBase.module.rules.push(
   {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: babelOptions
+      },{
     test: /\.css$/,
     use: [
       'style-loader',
