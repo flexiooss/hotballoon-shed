@@ -63,7 +63,7 @@ class SelfInstall(Task):
 
         generator_run: Path = Path(generator / 'run.sh')
         if not generator_run.is_file():
-            raise ValueError('No generator runner found')
+            raise ValueError('No generator runner found at : ' + generator_run.as_posix)
 
         st: os.stat_result = os.stat(generator_run)
 
