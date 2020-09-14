@@ -92,5 +92,6 @@ const webpackBase = {
   }
 }
 webpackBase.mode = 'development'
+//webpackBase.target= 'node'
 
 module.exports = webpackBase
