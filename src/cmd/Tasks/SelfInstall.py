@@ -73,5 +73,5 @@ class SelfInstall(Task):
     def process(self):
         print('SELF_INSTALL')
 
-        # self.__install_package()
+        self.__install_package()
         self.__install_generator()
