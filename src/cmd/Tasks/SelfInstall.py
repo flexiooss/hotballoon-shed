@@ -1,4 +1,5 @@
 import os
+import stat
 import re
 import shutil
 import sys
@@ -60,8 +61,17 @@ class SelfInstall(Task):
             sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
             sys.exit(code)
 
+        generator_run: Path = Path(generator / 'run.sh')
+        if not generator_run.is_file():
+            raise ValueError('No generator runner found')
+
+        st: os.stat_result = os.stat(generator_run)
+
+        os.chmod(generator_run, st.st_mode | stat.S_IXGRP | stat.S_IXOTH)
+        print('****     chmod a+x for : ' + generator_run.as_posix())
+
     def process(self):
         print('SELF_INSTALL')
 
-        self.__install_package()
+        # self.__install_package()
         self.__install_generator()
