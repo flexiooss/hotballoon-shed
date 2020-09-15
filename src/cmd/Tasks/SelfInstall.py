@@ -18,6 +18,26 @@ class SelfInstall(Task):
     def __install_package(self):
         self.exec(['npm', 'install', '--no-package-lock', '--force'])
 
+        node_modules: Path = Path(self.cwd / Directories.NODE_MODULES)
+        node_modules.resolve()
+
+        if not node_modules.is_dir():
+            raise ValueError('No node_modules found at : ' + node_modules.as_posix())
+        st: os.stat_result = os.stat(node_modules)
+        os.chmod(node_modules, st.st_mode | stat.S_IRGRP | stat.S_IROTH)
+
+        for root, dirs, files in os.walk(node_modules):
+            for name in files:
+                file_name = os.path.join(root, name)
+                st: os.stat_result = os.stat(file_name)
+                os.chmod(file_name, st.st_mode | stat.S_IRGRP | stat.S_IROTH)
+            for name in dirs:
+                dir_name = os.path.join(root, name)
+                st: os.stat_result = os.stat(dir_name)
+                os.chmod(dir_name, st.st_mode | stat.S_IRGRP | stat.S_IROTH)
+
+        print('****     chmod a+r recursively for : ' + node_modules.as_posix())
+
     def __install_generator(self):
 
         if not self.package.config().has_value_object_version():
