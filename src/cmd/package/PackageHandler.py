@@ -35,6 +35,7 @@ class PackageHandler:
     def write(self):
         with self.file_path.open('w') as outfile:
             json.dump(self.data, outfile, indent=2)
+            outfile.write("\n")
 
     def name(self) -> str:
         return self.package_data[self.NAME_KEY]
