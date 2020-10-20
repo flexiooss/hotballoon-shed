@@ -89,7 +89,6 @@ class TaskBuilder:
                 GenerateSources(self.__options, self.__package, self.__cwd).process()
 
             elif task == Tasks.SET_FLEXIO_REGISTRY:
-                self.__ensure_load_hb_package()
                 SetFlexioRegistry(self.__options, self.__package, self.__cwd).process()
 
             elif task == Tasks.PUBLISH:
