@@ -4,8 +4,10 @@ class Options:
     debug: bool = False
     email: str = None
     entry: str = None
+    html_template: str = None
     module_only: str = None
     password: str = None
+    port: str = None
     quiet: bool = False
     registry: str = None
     restrict: str = None

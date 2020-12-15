@@ -12,6 +12,13 @@ class Dev(Task):
     NAME = Tasks.DEV
 
     def __template_html(self) -> Path:
+        if self.options.html_template is not None:
+            html_template: Path = Path(self.package.cwd / self.options.html_template)
+            html_template.resolve()
+            if not html_template.is_file():
+                raise FileNotFoundError('No HTML template found at : ' + html_template.as_posix())
+            return html_template
+
         if self.package.config().has_build_html_template():
             return self.package.config().build_html_template()
         else:
@@ -63,6 +70,8 @@ class Dev(Task):
                 return self.package.config().dev_server()
         else:
             if self.options.server_config == 'local':
+                if self.options.port is not None:
+                    local_server_config['port'] = self.options.port
                 return local_server_config
             if self.options.server_config == 'stack':
                 return stack_server_config
