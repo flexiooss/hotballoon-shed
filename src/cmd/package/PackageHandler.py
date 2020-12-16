@@ -52,6 +52,9 @@ class PackageHandler:
     def set_peer_dependencies(self, dependencies: Dict[str, str]):
         self.data[self.PEER_DEPENDENCIES] = dependencies
 
+    def remove_peer_dependencies(self):
+        self.data.pop(self.PEER_DEPENDENCIES, None)
+
     def has_dependencies(self) -> bool:
         return self.data.get(self.DEPENDENCIES) is not None and len(self.dependencies())
 

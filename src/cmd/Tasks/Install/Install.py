@@ -147,6 +147,10 @@ class Install(Task):
     def __install(self):
         print('#### INSTALL : ' + self.package.name())
 
+        self.package.remove_peer_dependencies()
+        self.package.write()
+        print('#### #### CLEAN peerDependencies : ' + self.package.name())
+
         if self.options.registry is None or self.options.email is None or self.options.password is None or self.options.username is None:
 
             self.exec(['npm', 'install', '--prefix', self.__node_modules.as_posix(), '--no-package-lock', '--force'])
