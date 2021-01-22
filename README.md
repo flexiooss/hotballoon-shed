@@ -49,7 +49,7 @@ NB : default config
         "name": "Flexio application",
         "short_name": "Flexio",
         "description": "Flexio application by flexio.fr",
-        "display": "standalone", // fullscreen | standalone | minimal - ui | browser
+        "display": "standalone", // fullscreen | standalone | minimal-ui | browser
         "crossorigin": "use-credentials",  // null | use-credentials | anonymous
         "theme_color": "#eea900",
         "background_color": "#3e4b53",
