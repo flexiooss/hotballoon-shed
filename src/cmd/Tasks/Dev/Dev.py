@@ -19,16 +19,21 @@ class Dev(Task):
                 raise FileNotFoundError('No HTML template found at : ' + html_template.as_posix())
             return html_template
 
-        if self.package.config().has_build_html_template():
+        if self.package.config().has_html_template_name():
+            return self.__tempate_path_for(self.package.config().html_template_name())
+        elif self.package.config().has_build_html_template():
             return self.package.config().build_html_template()
         else:
-            template_html: Path = Path(os.path.dirname(
-                os.path.realpath(__file__)) + '/../../../build/' + self.package.config().builder() + '/index.html')
-            template_html.resolve()
+            return self.__tempate_path_for('minimal')
 
-            if not template_html.is_file():
-                raise FileNotFoundError('No html template found for this builder : ' + self.package.config().builder())
-            return template_html
+    def __tempate_path_for(self, name: str) -> Path:
+        template_html: Path = Path(os.path.dirname(
+            os.path.realpath(__file__)) + '/../../../build/html/' + name + '/index.html')
+        template_html.resolve()
+
+        if not template_html.is_file():
+            raise FileNotFoundError('No html template found for : ' + name)
+        return template_html
 
     def __build_output(self) -> Path:
         if self.package.config().has_build_output():

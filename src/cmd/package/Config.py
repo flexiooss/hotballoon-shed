@@ -4,11 +4,11 @@ from typing import List, Dict
 
 
 class Config:
-
     BUILD_KEY: str = 'build'
     BUILDER_KEY: str = 'builder'
     BUILD_ENTRIES_KEY: str = 'entries'
     BUILD_HTML_TEMPLATE_KEY: str = 'html_template'
+    BUILD_HTML_TEMPLATE_NAME_KEY: str = 'html_template_name'
     BUILD_OUTPUT_KEY: str = 'output'
     BUILD_APPLICATION: str = 'application'
 
@@ -208,6 +208,14 @@ class Config:
         if not p.is_file():
             raise FileNotFoundError('Not found html template : ' + p.as_posix())
         return p
+
+    def has_html_template_name(self) -> bool:
+        return self.has_build() and self.build().get(self.BUILD_HTML_TEMPLATE_NAME_KEY) is not None
+
+    def html_template_name(self) -> str:
+        if not self.has_html_template_name():
+            raise ValueError('No html template name defined')
+        return self.build().get(self.BUILD_HTML_TEMPLATE_NAME_KEY)
 
     def has_builder(self) -> bool:
         return self.has_build() and self.build().get(self.BUILDER_KEY) is not None

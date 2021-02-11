@@ -36,12 +36,14 @@ class Build(Task):
         if self.package.config().has_application():
             manifest_config.update(self.package.config().application())
 
+        html_template: Path = self.__resolve_html_template()
+
         child: Popen = self.exec([
             'node',
             production_builder.as_posix(),
             verbose,
             ','.join([v.as_posix() for v in self.package.config().build_entries()]),
-            self.package.config().build_html_template().as_posix(),
+            html_template.as_posix(),
             self.package.config().build_output(),
             json.dumps(manifest_config)
         ])
@@ -50,6 +52,22 @@ class Build(Task):
         if code != 0:
             sys.stderr.write("BUILD APP FAIL" + "\n")
             raise ChildProcessError(code)
+
+    def __resolve_html_template(self) -> Path:
+        if self.package.config().has_html_template_name():
+            return self.__tempate_path_for(self.package.config().html_template_name())
+        elif self.package.config().has_build_html_template():
+            return self.package.config().build_html_template()
+        else:
+            return self.__tempate_path_for('minimal')
+
+    def __tempate_path_for(self, name: str) -> Path:
+        template_html: Path = Path(os.path.dirname(
+            os.path.realpath(__file__)) + '/../../../build/html/' + name + '/index.html')
+        template_html.resolve()
+        if not template_html.is_file():
+            raise FileNotFoundError('No html template found for : ' + name)
+        return template_html
 
     def __build_bundle(self):
         print('****')
@@ -63,12 +81,15 @@ class Build(Task):
         if not self.package.config().has_build_output():
             raise KeyError('No path for build found into `hotballoon-shed` configuration')
         verbose: str = '-v' if self.options.debug else ''
+
+        html_template: Path = self.__resolve_html_template()
+
         child2: Popen = self.exec([
             'node',
             lib_builder.as_posix(),
             verbose,
             ','.join([v.as_posix() for v in self.package.config().build_entries()]),
-            self.package.config().build_html_template().as_posix(),
+            html_template.as_posix(),
             self.package.config().build_output()
         ])
         code = child2.returncode

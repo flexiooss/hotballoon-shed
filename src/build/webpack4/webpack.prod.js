@@ -12,6 +12,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const Terser = require('terser')
 const SriPlugin = require('webpack-subresource-integrity')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const babelOptions = require('../babel/getBabelConfig')
 const webpackBase = require('./webpack.base')
@@ -40,7 +41,21 @@ if (isVerbose) {
 
 webpackBase.optimization = {
   splitChunks: {
-    chunks: 'all'
+    chunks: 'all',
+    cacheGroups: {
+        flexioClient: {
+          test: /[\\/]node_modules[\\/]@flexio-corp[\\/].*-client[\\/]/,
+          name: 'api-client',
+          chunks: 'all',
+          reuseExistingChunk: true,
+        },
+        flexio: {
+          test: /[\\/]node_modules[\\/](@flexio-corp|@flexio-oss)[\\/]/,
+          name: 'corp',
+          chunks: 'all',
+          reuseExistingChunk: true,
+        }
+      }
   },
   minimizer: [
     new UglifyJsPlugin({
@@ -129,7 +144,8 @@ new WebpackPwaManifest({
   }),
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
-  })
+  }),
+  new WorkboxPlugin.GenerateSW()
 // new LinkStylesheetHtmlWebpackPlugin()
 )
 
