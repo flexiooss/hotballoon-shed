@@ -54,6 +54,14 @@ webpackBase.optimization = {
           name: 'corp',
           chunks: 'all',
           reuseExistingChunk: true,
+        },
+        styles: {
+          name: 'styles',
+//          type: 'css/mini-extract',
+          // For webpack@4
+           test: /\.css$/,
+          chunks: 'all',
+          enforce: true
         }
       }
   },
@@ -94,6 +102,14 @@ webpackBase.optimization = {
 }
 
 webpackBase.plugins.push(
+  new CleanWebpackPlugin([dist_path + '/*'], {
+    root: path.resolve(),
+    verbose: true,
+    watch: true
+  }),
+  new webpack.DefinePlugin({
+    'window.__DEVELOPMENT__': JSON.stringify(false)
+  }),
 new WebpackPwaManifest({
    filename: "manifest.json",
     inject: true,
@@ -130,17 +146,9 @@ new WebpackPwaManifest({
       favicon: path.resolve(__dirname,'./assets/favicon.ico')
     }
   ),
-  new CleanWebpackPlugin([dist_path + '/*'], {
-    root: path.resolve(),
-    verbose: true,
-    watch: true
-  }),
-  new webpack.DefinePlugin({
-    'window.__DEVELOPMENT__': JSON.stringify(false)
-  }),
   new MiniCssExtractPlugin({
     filename: '[name].[hash].css',
-    chunkFilename: '[id].[hash].css'
+    chunkFilename: '[id].[hash].css',
   }),
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
