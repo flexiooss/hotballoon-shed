@@ -61,6 +61,7 @@ NB : default config
         "src/js/bootstrap.js"
       ],
       "html_template": "src/js/index.html",
+      "html_template_name": "flexio-loader", // flexio-loader | minimal
       "output": "./dist"
     }
   }

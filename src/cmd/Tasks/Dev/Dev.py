@@ -24,6 +24,10 @@ class Dev(Task):
         elif self.package.config().has_build_html_template():
             return self.package.config().build_html_template()
         else:
+            if self.options.server_config == 'local':
+                return self.__tempate_path_for('local_dev_minimal')
+            if self.options.server_config == 'stack':
+                return self.__tempate_path_for('stack_dev_minimal')
             return self.__tempate_path_for('minimal')
 
     def __tempate_path_for(self, name: str) -> Path:
