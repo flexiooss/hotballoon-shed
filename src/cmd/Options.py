@@ -5,6 +5,7 @@ class Options:
     email: str = None
     entry: str = None
     html_template: str = None
+    html_template_name: str = None
     module_only: str = None
     password: str = None
     port: str = None

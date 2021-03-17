@@ -8,7 +8,7 @@ class Config:
     BUILDER_KEY: str = 'builder'
     BUILD_ENTRIES_KEY: str = 'entries'
     BUILD_HTML_TEMPLATE_KEY: str = 'html_template'
-    BUILD_HTML_TEMPLATE_NAME_KEY: str = 'html_template_name'
+    BUILD_HTML_TEMPLATE_NAME_KEY: str = 'build_html_template_name'
     BUILD_OUTPUT_KEY: str = 'output'
     BUILD_APPLICATION: str = 'application'
 
@@ -16,6 +16,8 @@ class Config:
     DEV_SERVER_KEY: str = 'server'
     DEV_PROXY_KEY: str = 'proxy'
     DEV_ENTRIES_KEY: str = 'entries'
+    DEV_HTML_TEMPLATE_KEY: str = 'html_template'
+    DEV_HTML_TEMPLATE_NAME_KEY: str = 'build_html_template_name'
 
     MODULES_KEY: str = 'modules'
 
@@ -128,6 +130,28 @@ class Config:
 
         return self.dev().get(self.DEV_SERVER_KEY)
 
+    def has_dev_html_template(self) -> bool:
+        return self.has_dev() and self.dev().get(self.DEV_HTML_TEMPLATE_KEY) is not None
+
+    def dev_html_template(self) -> Path:
+        if not self.has_dev_html_template():
+            raise ValueError('No html template path defined')
+
+        p: Path = Path(self.__cwd / self.dev().get(self.DEV_HTML_TEMPLATE_KEY))
+        p.resolve()
+
+        if not p.is_file():
+            raise FileNotFoundError('Not found html template : ' + p.as_posix())
+        return p
+
+    def has_dev_html_template_name(self) -> bool:
+        return self.has_dev() and self.dev().get(self.DEV_HTML_TEMPLATE_NAME_KEY) is not None
+
+    def dev_html_template_name(self) -> str:
+        if not self.has_dev_html_template_name():
+            raise ValueError('No html template name defined')
+        return self.dev().get(self.DEV_HTML_TEMPLATE_NAME_KEY)
+
     def has_dev_proxy(self) -> bool:
         return self.has_dev_server() and self.dev_server().get(self.DEV_PROXY_KEY) is not None
 
@@ -209,11 +233,11 @@ class Config:
             raise FileNotFoundError('Not found html template : ' + p.as_posix())
         return p
 
-    def has_html_template_name(self) -> bool:
+    def has_build_html_template_name(self) -> bool:
         return self.has_build() and self.build().get(self.BUILD_HTML_TEMPLATE_NAME_KEY) is not None
 
-    def html_template_name(self) -> str:
-        if not self.has_html_template_name():
+    def build_html_template_name(self) -> str:
+        if not self.has_build_html_template_name():
             raise ValueError('No html template name defined')
         return self.build().get(self.BUILD_HTML_TEMPLATE_NAME_KEY)
 
