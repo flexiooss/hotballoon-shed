@@ -54,8 +54,8 @@ class Build(Task):
             raise ChildProcessError(code)
 
     def __resolve_html_template(self) -> Path:
-        if self.package.config().has_html_template_name():
-            return self.__tempate_path_for(self.package.config().html_template_name())
+        if self.package.config().has_build_html_template_name():
+            return self.__tempate_path_for(self.package.config().build_html_template_name())
         elif self.package.config().has_build_html_template():
             return self.package.config().build_html_template()
         else:

@@ -19,16 +19,18 @@ class Dev(Task):
                 raise FileNotFoundError('No HTML template found at : ' + html_template.as_posix())
             return html_template
 
-        if self.package.config().has_html_template_name():
-            return self.__tempate_path_for(self.package.config().html_template_name())
-        elif self.package.config().has_build_html_template():
-            return self.package.config().build_html_template()
-        else:
-            if self.options.server_config == 'local':
-                return self.__tempate_path_for('local_dev_minimal')
-            if self.options.server_config == 'stack':
-                return self.__tempate_path_for('stack_dev_minimal')
-            return self.__tempate_path_for('minimal')
+        if self.options.html_template_name is not None:
+            return self.__tempate_path_for(self.options.html_template_name)
+        if self.package.config().has_dev_html_template_name():
+            return self.__tempate_path_for(self.package.config().dev_html_template_name())
+        if self.package.config().has_dev_html_template():
+            return self.package.config().dev_html_template()
+        if self.options.server_config == 'local':
+            return self.__tempate_path_for('local-dev-minimal')
+        if self.options.server_config == 'stack':
+            return self.__tempate_path_for('stack-dev-minimal')
+
+        return self.__tempate_path_for('minimal')
 
     def __tempate_path_for(self, name: str) -> Path:
         template_html: Path = Path(os.path.dirname(

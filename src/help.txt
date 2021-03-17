@@ -28,8 +28,12 @@ hbshed
                   --module-only     clean on single module level
               dev                   Build a dev server
                   <options>
-                  --restrict, -R    fileName (file path relative to the package)
-                  --server-config   local|stack [Not implemented yet !!!]
+                  --entry           path to app entry
+                  --server-config   local|stack
+                  --html-template   path to template
+                  --html-template-name  minimal|local-dev-minimal|stack-dev-minimal|flexio-loader
+                  --port            exposed port
+                  --verbose         verbose mode
               extract-package
                   <options>
                   --target, -T      target directory to extract [required]
