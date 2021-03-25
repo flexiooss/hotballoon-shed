@@ -61,7 +61,7 @@ NB : default config
         "src/js/bootstrap.js"
       ],
       "html_template": "src/js/index.html",
-      "build_html_template_name": "flexio-loader", // flexio-loader | minimal
+      "html_template_name": "flexio-loader", // flexio-loader | minimal
       "output": "./dist"
     }
   }
@@ -261,8 +261,8 @@ hbshed dev
 {
   "hotballoon-shed": {
     "dev": {
-      "html-template" : "./my/path/to/template.html",
-      "html-template-name" : "local-dev-minimal"
+      "html_template" : "./my/path/to/template.html",
+      "html_template_name" : "local-dev-minimal"  // local-dev-minimal|stack-dev-minimal
     }
   }
 }

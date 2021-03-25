@@ -8,7 +8,7 @@ class Config:
     BUILDER_KEY: str = 'builder'
     BUILD_ENTRIES_KEY: str = 'entries'
     BUILD_HTML_TEMPLATE_KEY: str = 'html_template'
-    BUILD_HTML_TEMPLATE_NAME_KEY: str = 'build_html_template_name'
+    BUILD_HTML_TEMPLATE_NAME_KEY: str = 'html_template_name'
     BUILD_OUTPUT_KEY: str = 'output'
     BUILD_APPLICATION: str = 'application'
 
@@ -17,7 +17,7 @@ class Config:
     DEV_PROXY_KEY: str = 'proxy'
     DEV_ENTRIES_KEY: str = 'entries'
     DEV_HTML_TEMPLATE_KEY: str = 'html_template'
-    DEV_HTML_TEMPLATE_NAME_KEY: str = 'build_html_template_name'
+    DEV_HTML_TEMPLATE_NAME_KEY: str = 'html_template_name'
 
     MODULES_KEY: str = 'modules'
 
