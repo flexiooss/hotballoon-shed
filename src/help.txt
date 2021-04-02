@@ -31,7 +31,7 @@ hbshed
                   --entry           path to app entry
                   --server-config   local|stack
                   --html-template   path to template
-                  --html-template-name  minimal|local-dev-minimal|stack-dev-minimal|flexio-loader
+                  --html-template-name  minimal|local-dev-minimal|stack-dev-minimal|flexio-loader|flexio-loader-embeded
                   --port            exposed port
                   --verbose         verbose mode
               extract-package
