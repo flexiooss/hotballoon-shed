@@ -15,6 +15,8 @@
             font-size: 12px;
             font-family: sans-serif;
             min-height: 332px;
+            animation: focus-in 1s 1s ease forwards;
+            opacity:0
         }
         .loading-wrapper {
           display: flex;
@@ -38,6 +40,14 @@
             height: 100%;
             position: absolute;
             width: 0;
+        }
+        @keyframes focus-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
         @keyframes loading-progress {
             from {
