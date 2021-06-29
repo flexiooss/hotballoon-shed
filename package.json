@@ -43,7 +43,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "file-loader": "^2.0.0",
-    "html-webpack-plugin": "^4.3.0",
+    "html-webpack-plugin": "^4.5.2",
     "link-stylesheet-html-webpack-plugin": "https://github.com/flexiooss/link-stylesheet-html-webpack-plugin.git",
     "mini-css-extract-plugin": "^0.4.4",
     "node-loader": "^0.6.0",
