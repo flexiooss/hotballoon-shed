@@ -9,7 +9,7 @@ const restrict = process.argv[4]
 const source_map = process.argv[5] === '1'
 const testTransformer = require('./transformer')
 const TEST_ID = Date.now() + ''
-const CodeAltimeter = require('code-altimeter-js')
+const CodeAltimeter = require('@flexio-oss/code-altimeter-js')
 
 CodeAltimeter.testsPath(argTestPath, (testsPath) => {
   if(restrict){
