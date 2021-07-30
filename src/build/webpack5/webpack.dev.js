@@ -27,6 +27,10 @@ webpackBase.plugins.push(
 webpackBase.target = 'web'
 webpackBase.module.rules.push(
   {
+    test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
+    type: 'asset'
+  },
+  {
     test: /\.css$/,
     use: [
       'style-loader',

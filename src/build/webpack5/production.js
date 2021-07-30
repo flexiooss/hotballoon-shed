@@ -7,36 +7,35 @@ const compiler = webpack(webpackProd)
 compiler.run((err, stats) => {
 
   if (err) {
-    console.error(err.stack || err);
+    console.error(err.stack || err)
     if (err.details) {
-      console.error("*** Webpack ERRORS : ")
-      console.error(err.details);
+      console.error('*** Webpack ERRORS : ')
+      console.error(err.details)
     }
   }
 
-  const info = stats.toJson();
+  if (verbose) {
+    const info = stats.toJson()
 
-  if (stats.hasErrors()) {
-    console.error("*** Webpack build ERRORS : ")
-    console.error(info.errors.toString());
+    if (stats.hasErrors()) {
+      console.error('*** Webpack build ERRORS : ')
+      console.error(info.errors)
+    }
+
+    if (stats.hasWarnings()) {
+      console.warn('*** Webpack build WARNING : ')
+      console.warn(info.warnings)
+    }
   }
+
+  console.log(
+    '***** [webpack:app:build]',
+    stats.toString({
+      chunks: false,
+      colors: true
+    }))
 
   if (err || stats.hasErrors()) {
     process.exit(1)
-  }
-
-
-if(verbose){
-
-  if (stats.hasWarnings()) {
-    console.error("*** Webpack build WARNING : ")
-    console.warn(info.warnings.toString());
-  }
-  console.log(
-  '***** [webpack:app:build]',
-  stats.toString({
-    chunks: false,
-    colors: true
-  }))
   }
 })

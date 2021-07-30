@@ -9,10 +9,7 @@ module.exports = {
   plugins: [],
   module: {
     rules: [
-      {
-        test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
-        type: 'asset'
-      }
+
     ]
   },
   resolveLoader: {
