@@ -2,20 +2,21 @@
 /* global require */
 
 const path = require('path')
-const { spawn } = require('child_process')
+const {spawn} = require('child_process')
 const argTestPath = process.argv[2]
 const verbose = process.argv[3] === '-v'
 const restrict = process.argv[4]
 const source_map = process.argv[5] === '1'
+const builder = process.argv[6]
 const testTransformer = require('./transformer')
 const TEST_ID = Date.now() + ''
 const CodeAltimeter = require('@flexio-oss/code-altimeter-js')
 
 CodeAltimeter.testsPath(argTestPath, (testsPath) => {
-  if(restrict){
-    console.log('\x1b[46m%s\x1b[0m', ' Restrict :'+restrict)
-    testsPath = testsPath.filter((name)=>{
-      const re = new RegExp('.*\/'+restrict+'.*');
+  if (restrict) {
+    console.log('\x1b[46m%s\x1b[0m', ' Restrict :' + restrict)
+    testsPath = testsPath.filter((name) => {
+      const re = new RegExp('.*\/' + restrict + '.*')
       return re.test(name)
     })
   }
@@ -35,11 +36,11 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
       'process.env.TEST_VERBOSE': JSON.stringify((verbose) ? 1 : 0)
     },
     (filePath, sourceMap) => {
-    const args = ['--stack-trace-limit=100000']
-    if(sourceMap){
-    args.push('--enable-source-maps')
-    }
-    args.push(filePath)
+      const args = ['--stack-trace-limit=100000']
+      if (sourceMap) {
+        args.push('--enable-source-maps')
+      }
+      args.push(filePath)
       const p = spawn('node',
         args,
         {
@@ -54,7 +55,8 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
         console.log(`Test child process exited with code ${code}`)
         process.exit(code)
       })
-         },
-         source_map
-         )
+    },
+    source_map,
+    builder
+  )
 })
