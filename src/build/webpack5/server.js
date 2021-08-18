@@ -37,6 +37,9 @@ options.overlay = true
 options.compress = true
 
 if (isVerbose) {
+  console.log('_________________ WEBPACK 5 _________________')
+  console.log('_________________ TEMPLATE _________________')
+  console.log(htmlTemplate)
   console.log('_________________ CUSTOM OPTIONS SERVER _________________')
   console.log(parsedOptions)
   console.log('_________________')
@@ -46,7 +49,6 @@ if (isVerbose) {
   console.log('_________________ WEBPACK CONF _________________')
   console.log(webpackDev)
   console.log('_________________')
-
 }
 //options.open = true
 

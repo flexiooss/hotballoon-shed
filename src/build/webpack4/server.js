@@ -33,16 +33,18 @@ options.contentBase = dist
 webpackDev.output.publicPath = ''
 
 if (isVerbose) {
+  console.log('_________________ WEBPACK 4 _________________')
+  console.log('_________________ TEMPLATE _________________')
+  console.log(htmlTemplate)
   console.log('_________________ CUSTOM OPTIONS SERVER _________________')
   console.log(parsedOptions)
   console.log('_________________')
-   console.log('_________________ FULL OPTIONS SERVER _________________')
+  console.log('_________________ FULL OPTIONS SERVER _________________')
   console.log(options)
   console.log('_________________')
-    console.log('_________________ WEBPACK CONF _________________')
+  console.log('_________________ WEBPACK CONF _________________')
   console.log(webpackDev)
   console.log('_________________')
-
 }
 
 
