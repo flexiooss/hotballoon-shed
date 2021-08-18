@@ -48,7 +48,7 @@ if (isVerbose) {
   console.log('_________________')
 
 }
-options.open = true
+//options.open = true
 
 const compiler = webpack(webpackDev)
 let server = new WebpackDevServer(compiler, options)
