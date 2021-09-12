@@ -11,6 +11,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 webpackBase.output.clean = true
 webpackBase.devtool = 'eval-cheap-module-source-map'
+webpackBase.devtool = 'eval'
 webpackBase.stats = {errorDetails: true}
 webpackBase.mode = 'development'
 

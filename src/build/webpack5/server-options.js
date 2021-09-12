@@ -10,6 +10,7 @@ module.exports = {
   historyApiFallback: true,
   https: CONFIG.https,
   clientLogLevel: 'info',
+  compress: true,
   stats: {
     colors: true
   }
