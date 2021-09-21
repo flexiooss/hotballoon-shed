@@ -8,20 +8,17 @@ module.exports = {
     [
       path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
       {
-        targets: {
-          'browsers': [
-            'edge >= 13'
-          ]
-        },
-//        compact:true
+        targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
+        // compact: false
       }
     ]
   ],
+  compact: false,
   plugins:
     [
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-named-capturing-groups-regex'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-syntax-dynamic-import'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-private-methods'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-class-properties')
-    ]
+  ]
 }

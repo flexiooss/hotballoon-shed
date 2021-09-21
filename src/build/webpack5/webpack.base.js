@@ -4,7 +4,9 @@ module.exports = {
   entry: CONFIG.entry,
   output: {
     path: CONFIG.dist_path,
-    filename: '[name].[fullhash].js'
+    publicPath: '',
+    filename: '[name].[fullhash].js',
+    assetModuleFilename: 'assets/[hash][ext][query]'
   },
   plugins: [],
   module: {

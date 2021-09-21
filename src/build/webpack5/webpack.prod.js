@@ -8,6 +8,7 @@ const {WebpackManifestPlugin} = require('webpack-manifest-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -34,7 +35,7 @@ webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path
 webpackBase.output.clean = true
 webpackBase.stats = {errorDetails: true}
-webpackBase.target = 'browserslist: > 0.5%, last 2 versions, Firefox ESR, not dead'
+webpackBase.target = 'browserslist: > 0.5%, last 3 versions, Firefox ESR, not dead'
 
 if (isVerbose) {
   console.log('_________________ PWA MANIFEST _________________')
@@ -45,16 +46,18 @@ webpackBase.optimization = {
   minimize: true,
   splitChunks: {
     chunks: 'all',
+    maxSize: 5000000,
     cacheGroups: {
       flexioClient: {
-        test: /[\\/]node_modules[\\/]@flexio-corp[\\/].*-client[\\/]/,
+        test: /\/node_modules\/@flexio-corp\/.*-client/,
         name: 'api-client',
         chunks: 'all',
         reuseExistingChunk: true,
+        priority:0
       },
       flexio: {
-        test: /[\\/]node_modules[\\/](@flexio-corp|@flexio-oss)[\\/]/,
-        name: 'corp',
+        test: /[\\/]node_modules[\\/]((@flexio-corp\/.*-bundle)|@flexio-oss)/,
+        name: 'corpjs',
         chunks: 'all',
         reuseExistingChunk: true,
       },
@@ -70,7 +73,8 @@ webpackBase.optimization = {
   },
   minimizer: [
     `...`,
-  new CssMinimizerPlugin()
+    new CssMinimizerPlugin(),
+    new HtmlMinimizerPlugin()
 //    new UglifyJsPlugin({
 //     uglifyOptions: {
 //          output: {
@@ -103,7 +107,7 @@ webpackBase.optimization = {
 //        preset: ['default', {discardComments: {removeAll: true}}]
 //      }
 //    })
-]
+  ]
 }
 
 webpackBase.plugins.push(
@@ -153,7 +157,9 @@ webpackBase.plugins.push(
   new SriPlugin({
     hashFuncNames: ['sha256', 'sha384']
   }),
-  new WorkboxPlugin.GenerateSW(),
+  new WorkboxPlugin.GenerateSW({
+    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
+  }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'})
 )
 
