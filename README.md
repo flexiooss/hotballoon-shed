@@ -1,6 +1,7 @@
 # hotballoon-shed
 Test, Develop, Manage, Generate sources, Build Hotballoon applications
-
+> **version** latest : webpack5
+> **version** <= 1.43.0 : webpack4
 ### Installation
 https://github.com/flexiooss/hotballoon-shed-playbook
 
@@ -14,7 +15,7 @@ package.json
 {
   "hotballoon-shed": {
     "build": {
-      "builder": "webpack4",
+      "builder": "webpack5",
       "entries": [
         "src/js/bootstrap.js"
       ],
@@ -56,7 +57,7 @@ NB : default config
         "orientation": "landscape",// any | natural | landscape | landscape-primary | landscape-secondary | portrait | portrait-primary | portrait-secondary
         "start_url": "/"
       },
-      "builder": "webpack4",
+      "builder": "webpack5",
       "entries": [
         "src/js/bootstrap.js"
       ],
@@ -73,7 +74,7 @@ NB : default config
 {
   "hotballoon-shed": {
     "build": {
-      "builder": "webpack4"
+      "builder": "webpack5"
     },
     "test": {
       "tester": "code-altimeter-js",
