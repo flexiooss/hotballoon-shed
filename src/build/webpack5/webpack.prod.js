@@ -9,13 +9,10 @@ const WorkboxPlugin = require('workbox-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-
-//const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-//const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-//const Terser = require('terser')
 
 const babelOptions = require('../babel/getBabelConfig')
 const webpackBase = require('./webpack.base')
@@ -49,21 +46,21 @@ webpackBase.optimization = {
     maxSize: 5000000,
     cacheGroups: {
       flexioClient: {
-        test: /\/node_modules\/@flexio-corp\/.*-client/,
+        test: /\/node_modules\/@flexio-corp\/.*-client\/.*\.js/,
         name: 'api-client',
         chunks: 'all',
         reuseExistingChunk: true,
-        priority:0
+        priority: 0
       },
       flexio: {
-        test: /[\\/]node_modules[\\/]((@flexio-corp\/.*-bundle)|@flexio-oss)/,
+        test: /[\\/]node_modules[\\/]((@flexio-corp\/.*-bundle)|@flexio-oss)\/.*\.js/,
         name: 'corpjs',
         chunks: 'all',
         reuseExistingChunk: true,
       },
       styles: {
         name: 'styles',
-//          type: 'css/mini-extract',
+        type: 'css/mini-extract',
         // For webpack@4
         test: /\.css$/,
         chunks: 'all',
@@ -75,38 +72,6 @@ webpackBase.optimization = {
     `...`,
     new CssMinimizerPlugin(),
     new HtmlMinimizerPlugin()
-//    new UglifyJsPlugin({
-//     uglifyOptions: {
-//          output: {
-//            comments: false,
-////      TODO: check this for tinymce
-//          "ascii_only": true
-//        }
-//      },
-//      sourceMap: true,
-//      minify(file, sourceMap) {
-//        const uglifyJsOptions = {
-//          output: {
-//              comments: false,
-//  //      TODO: check this for tinymce
-//            "ascii_only": true
-//          }
-//        }
-//
-//        if (sourceMap) {
-//          uglifyJsOptions.sourceMap = {
-//            content: sourceMap
-//          }
-//        }
-//
-//        return Terser.minify(file, uglifyJsOptions)
-//      }
-//    }),
-//    new OptimizeCSSAssetsPlugin({
-//      cssProcessorPluginOptions: {
-//        preset: ['default', {discardComments: {removeAll: true}}]
-//      }
-//    })
   ]
 }
 
@@ -137,6 +102,16 @@ webpackBase.plugins.push(
       }
     ]
   }),
+  new MiniCssExtractPlugin({
+    filename: "[name].[contenthash].css",
+    chunkFilename: "[id].[contenthash].css",
+    linkType:false,
+    attributes: {
+      rel: "preload",
+      as: "style",
+      onLoad: "this.onload=null;this.rel='stylesheet'"
+    }
+  }),
   new HtmlWebpackPlugin(
     {
       filename: 'index.html',
@@ -150,17 +125,14 @@ webpackBase.plugins.push(
       favicon: path.resolve(__dirname, '../html/assets/favicon.ico')
     }
   ),
-  new MiniCssExtractPlugin({
-    filename: '[name].[fullhash].css',
-    chunkFilename: '[id].css',
-  }),
-  new SriPlugin({
-    hashFuncNames: ['sha256', 'sha384']
-  }),
+  // new SriPlugin({
+  //   hashFuncNames: ['sha256', 'sha384']
+  // }),
   new WorkboxPlugin.GenerateSW({
     maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
   }),
-  new WebpackManifestPlugin({fileName: 'files-manifest.json'})
+  new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
+  // new BundleAnalyzerPlugin()
 )
 
 webpackBase.module.rules.push(

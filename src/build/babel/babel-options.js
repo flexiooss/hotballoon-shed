@@ -13,7 +13,7 @@ module.exports = {
       }
     ]
   ],
-  compact: false,
+  compact: "auto",
   plugins:
     [
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-named-capturing-groups-regex'),
