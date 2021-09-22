@@ -20,19 +20,19 @@ class Dev(Task):
             return html_template
 
         if self.options.html_template_name is not None:
-            return self.__tempate_path_for(self.options.html_template_name)
+            return self.__template_path_for(self.options.html_template_name)
         if self.package.config().has_dev_html_template_name():
-            return self.__tempate_path_for(self.package.config().dev_html_template_name())
+            return self.__template_path_for(self.package.config().dev_html_template_name())
         if self.package.config().has_dev_html_template():
             return self.package.config().dev_html_template()
         if self.options.server_config == 'local':
-            return self.__tempate_path_for('local-dev-minimal')
+            return self.__template_path_for('local-dev-minimal')
         if self.options.server_config == 'stack':
-            return self.__tempate_path_for('stack-dev-minimal')
+            return self.__template_path_for('stack-dev-minimal')
 
-        return self.__tempate_path_for('minimal')
+        return self.__template_path_for('minimal')
 
-    def __tempate_path_for(self, name: str) -> Path:
+    def __template_path_for(self, name: str) -> Path:
         template_html: Path = Path(os.path.dirname(
             os.path.realpath(__file__)) + '/../../../build/html/' + name + '/index.html')
         template_html.resolve()

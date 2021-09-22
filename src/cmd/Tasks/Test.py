@@ -28,8 +28,13 @@ class Test(Task):
                 shutil.rmtree(cache.as_posix())
                 print('**** CLEAN TEST CACHE')
 
+    def __ensure_builder(self):
+        if not self.package.config().has_builder():
+            raise KeyError('No builder found into `hotballoon-shed` configuration')
+
     def process(self):
         if self.package.config().has_test():
+            self.__ensure_builder()
             self.__ensure_clean()
             print('TEST : ' + self.package.name())
 
@@ -47,7 +52,7 @@ class Test(Task):
             restrict: str = self.options.restrict if self.options.restrict is not None else ''
             source_map:str = '1' if self.options.source_map else '0'
             child: Popen = self.exec(
-                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict,source_map])
+                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict,source_map, self.package.config().builder()])
 
             if child.returncode > 0:
                 sys.exit(child.returncode)

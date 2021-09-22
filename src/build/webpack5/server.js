@@ -8,6 +8,7 @@ const options = require('./server-options')
 const WebpackDevServer = require('webpack-dev-server')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpackBase = require('./webpack.base')
 
 const isVerbose = process.argv[2] === '-v'
 const entries = process.argv[3].split(',')
@@ -16,7 +17,10 @@ const dist = process.argv[5]
 const optionsCustom = process.argv[6]
 const parsedOptions = JSON.parse(optionsCustom)
 
+
+webpackDev.output.publicPath = ''
 webpackDev.entry.app = entries
+
 webpackDev.plugins.push(
   new HtmlWebpackPlugin(
     {
@@ -29,11 +33,11 @@ webpackDev.plugins.push(
 
 Object.assign(options, parsedOptions)
 options.contentBase = dist
-
-webpackDev.output.publicPath = ''
+options.overlay = true
+options.compress = true
 
 if (isVerbose) {
-  console.log('_________________ WEBPACK 4 _________________')
+  console.log('_________________ WEBPACK 5 _________________')
   console.log('_________________ TEMPLATE _________________')
   console.log(htmlTemplate)
   console.log('_________________ CUSTOM OPTIONS SERVER _________________')
@@ -46,17 +50,15 @@ if (isVerbose) {
   console.log(webpackDev)
   console.log('_________________')
 }
-
-
-WebpackDevServer.addDevServerEntrypoints(webpackDev, options)
+//options.open = true
 
 const compiler = webpack(webpackDev)
-
 let server = new WebpackDevServer(compiler, options)
+
 server.listen(options.port, options.host, (err) => {
   if (isVerbose) {
     console.log('_________________ SERVER LISTEN _________________')
-    console.log(webpackDev.output.publicPath)
+    console.log(options.public)
     console.log('_________________')
     if (err) {
       console.log('_________________ SERVER ERROR _________________')
