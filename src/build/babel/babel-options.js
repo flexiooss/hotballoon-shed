@@ -2,14 +2,13 @@ const path = require('path')
 
 module.exports = {
   prod: {
-
     root: path.resolve(__dirname, '../../..'),
     presets: [
       [
         path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
         {
           targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
-          useBuiltIns: 'usage',
+          useBuiltIns: 'entry',
           corejs: 3
         }
       ]
