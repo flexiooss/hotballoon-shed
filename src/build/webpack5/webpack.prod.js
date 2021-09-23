@@ -3,7 +3,6 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const SriPlugin = require('webpack-subresource-integrity')
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const WebpackPwaManifest = require('webpack-pwa-manifest')
