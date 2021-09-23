@@ -1,25 +1,40 @@
-'use strict'
-
 const path = require('path')
 
 module.exports = {
-  root: path.resolve(__dirname, '../../..'),
-  presets: [
-    [
-      path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
-      {
-        targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
-        useBuiltIns: 'usage',
-        corejs: 3
-      }
-    ]
-  ],
-  compact: "auto",
-  plugins:
-    [
+  prod: {
+
+    root: path.resolve(__dirname, '../../..'),
+    presets: [
+      [
+        path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
+        {
+          targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
+          useBuiltIns: 'usage',
+          corejs: 3
+        }
+      ]
+    ],
+    compact: "auto",
+    plugins:
+      [
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-named-capturing-groups-regex'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-syntax-dynamic-import'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-private-methods'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-class-properties')
-  ]
+    ]
+  },
+  test: {
+    root: path.resolve(__dirname, '../../..'),
+    presets: [
+      [
+        path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
+        {
+          targets: 'maintained node versions',
+        }
+      ]
+    ],
+    compact: false,
+    plugins:
+      []
+  }
 }

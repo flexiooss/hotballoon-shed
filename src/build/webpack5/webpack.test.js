@@ -25,7 +25,7 @@ const webpackBase = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        options: babelOptions,
+        options: babelOptions.test,
         exclude: /node_modules/
       },
       {
