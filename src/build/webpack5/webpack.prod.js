@@ -31,7 +31,8 @@ webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path
 webpackBase.output.clean = true
 webpackBase.stats = {errorDetails: true}
-webpackBase.target = 'browserslist: > 0.5%, last 3 versions, Firefox ESR, not dead'
+// webpackBase.target = 'browserslist: > 0.5%, last 3 versions, Firefox ESR, not dead'
+webpackBase.target = 'web'
 
 if (isVerbose) {
   console.log('_________________ PWA MANIFEST _________________')
