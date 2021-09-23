@@ -5,12 +5,12 @@ module.exports = {
     root: path.resolve(__dirname, '../../..'),
     presets: [
       [
-        path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),{}
-        // {
-        //   targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
-        //   useBuiltIns: 'usage',
-        //   corejs: 3
-        // }
+        path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
+        {
+          targets: 'defaults',
+          useBuiltIns: 'entry',
+          corejs: 3
+        }
       ]
     ],
     compact: "auto",

@@ -23,7 +23,7 @@ const html_template = process.argv[4]
 const dist_path = process.argv[5]
 const manifestConfig = process.argv[6]
 const parsedManifestConfig = JSON.parse(manifestConfig)
-
+entries.unshift(path.resolve(__dirname, './runtime.js'))
 webpackBase.entry.app = entries
 webpackBase.mode = 'production'
 webpackBase.devtool = false
@@ -124,9 +124,6 @@ webpackBase.plugins.push(
       favicon: path.resolve(__dirname, '../html/assets/favicon.ico')
     }
   ),
-  // new SriPlugin({
-  //   hashFuncNames: ['sha256', 'sha384']
-  // }),
   new WorkboxPlugin.GenerateSW({
     maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
   }),

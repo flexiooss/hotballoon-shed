@@ -43,33 +43,33 @@ webpackBase.optimization = {
   splitChunks: {
     chunks: 'all',
     cacheGroups: {
-        flexioClient: {
-          test: /[\\/]node_modules[\\/]@flexio-corp[\\/].*-client[\\/]/,
-          name: 'api-client',
-          chunks: 'all',
-          reuseExistingChunk: true,
-        },
-        flexio: {
-          test: /[\\/]node_modules[\\/](@flexio-corp|@flexio-oss)[\\/]/,
-          name: 'corp',
-          chunks: 'all',
-          reuseExistingChunk: true,
-        },
-        styles: {
-          name: 'styles',
+      flexioClient: {
+        test: /[\\/]node_modules[\\/]@flexio-corp[\\/].*-client[\\/]/,
+        name: 'api-client',
+        chunks: 'all',
+        reuseExistingChunk: true,
+      },
+      flexio: {
+        test: /[\\/]node_modules[\\/](@flexio-corp|@flexio-oss)[\\/]/,
+        name: 'corp',
+        chunks: 'all',
+        reuseExistingChunk: true,
+      },
+      styles: {
+        name: 'styles',
 //          type: 'css/mini-extract',
-          // For webpack@4
-           test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
+        // For webpack@4
+        test: /\.css$/,
+        chunks: 'all',
+        enforce: true
       }
+    }
   },
   minimizer: [
     new UglifyJsPlugin({
-     uglifyOptions: {
-          output: {
-            comments: false,
+      uglifyOptions: {
+        output: {
+          comments: false,
 //      TODO: check this for tinymce
           "ascii_only": true
         }
@@ -78,8 +78,8 @@ webpackBase.optimization = {
       minify(file, sourceMap) {
         const uglifyJsOptions = {
           output: {
-              comments: false,
-  //      TODO: check this for tinymce
+            comments: false,
+            //      TODO: check this for tinymce
             "ascii_only": true
           }
         }
@@ -110,8 +110,8 @@ webpackBase.plugins.push(
   new webpack.DefinePlugin({
     'window.__DEVELOPMENT__': JSON.stringify(false)
   }),
-new WebpackPwaManifest({
-   filename: "manifest.json",
+  new WebpackPwaManifest({
+    filename: "manifest.json",
     inject: true,
     fingerprints: true,
     ios: false,
@@ -120,15 +120,15 @@ new WebpackPwaManifest({
     name: parsedManifestConfig.name,
     short_name: parsedManifestConfig.short_name,
     description: parsedManifestConfig.description,
-    crossorigin:parsedManifestConfig.crossorigin,
-    display: parsedManifestConfig.display ,
-    theme_color:parsedManifestConfig.theme_color ,
+    crossorigin: parsedManifestConfig.crossorigin,
+    display: parsedManifestConfig.display,
+    theme_color: parsedManifestConfig.theme_color,
     background_color: parsedManifestConfig.background_color,
-    orientation:parsedManifestConfig.orientation ,
-    start_url:parsedManifestConfig.start_url,
+    orientation: parsedManifestConfig.orientation,
+    start_url: parsedManifestConfig.start_url,
     icons: [
       {
-        src: path.resolve(__dirname,'./assets/icon.png'),
+        src: path.resolve(__dirname, './assets/icon.png'),
         sizes: [96, 128, 192, 256, 384, 512, 1024]
       }
     ]
@@ -139,11 +139,11 @@ new WebpackPwaManifest({
       template: html_template,
       inject: true,
       scriptLoading: 'defer',
-      meta:{
+      meta: {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-        charset:"utf-8"
+        charset: "utf-8"
       },
-      favicon: path.resolve(__dirname,'./assets/favicon.ico')
+      favicon: path.resolve(__dirname, './assets/favicon.ico')
     }
   ),
   new MiniCssExtractPlugin({
@@ -173,7 +173,7 @@ webpackBase.module.rules.push(
           modules: true,
           importLoaders: 1,
           localIdentName: '[sha1:hash:hex:4]',
-          sourceMap:false,
+          sourceMap: false,
           camelCase: true
         }
       },
