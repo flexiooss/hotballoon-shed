@@ -1,6 +1,6 @@
-level: stable
+level: dev
 schemes:
 - package
 topics:
 - 69
-version: 1.49.3
+version: 1.50.0
