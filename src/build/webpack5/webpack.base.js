@@ -16,5 +16,8 @@ module.exports = {
   },
   resolveLoader: {
     modules: [CONFIG.vendors_path]
-  }
+  },
+  resolve: {
+    modules: [CONFIG.vendors_path, 'node_modules'],
+  },
 }
