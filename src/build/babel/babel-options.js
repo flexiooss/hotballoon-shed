@@ -7,7 +7,7 @@ module.exports = {
       [
         path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
         {
-          targets: 'defaults',
+          targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
           useBuiltIns: 'entry',
           corejs: 3
         }
@@ -23,7 +23,6 @@ module.exports = {
 //       [path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-runtime'),
 //         {
 //           corejs: 3,
-//           regenerator:false
 //         }
 //       ]
     ]
