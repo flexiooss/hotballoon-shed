@@ -9,7 +9,8 @@ module.exports = {
       path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
       {
         targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
-        // compact: false
+        useBuiltIns: 'usage',
+        corejs: 3
       }
     ]
   ],
