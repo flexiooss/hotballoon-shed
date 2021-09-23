@@ -142,7 +142,7 @@ webpackBase.module.rules.push(
   {
     test: /\.js$/,
     loader: 'babel-loader',
-    options: babelOptions
+    options: babelOptions.prod
   },
   {
     test: /\.module\.css$/,
