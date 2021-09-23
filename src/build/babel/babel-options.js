@@ -5,12 +5,12 @@ module.exports = {
     root: path.resolve(__dirname, '../../..'),
     presets: [
       [
-        path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
-        {
-          targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
-          useBuiltIns: 'entry',
-          corejs: 3
-        }
+        path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),{}
+        // {
+        //   targets: '> 0.5%, last 3 versions, Firefox ESR, not dead',
+        //   useBuiltIns: 'usage',
+        //   corejs: 3
+        // }
       ]
     ],
     compact: "auto",
@@ -20,6 +20,12 @@ module.exports = {
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-syntax-dynamic-import'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-private-methods'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-class-properties')
+//       [path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-runtime'),
+//         {
+//           corejs: 3,
+//           regenerator:false
+//         }
+//       ]
     ]
   },
   test: {
