@@ -45,23 +45,42 @@ webpackBase.optimization = {
     chunks: 'all',
     maxSize: 5000000,
     cacheGroups: {
-      flexioClient: {
-        test: /\/node_modules\/@flexio-corp\/.*-client\/.*\.js/,
+      apiClient: {
+        test: /\/node_modules\/@flexio-corp\/.*-client/,
         name: 'api-client',
         chunks: 'all',
         reuseExistingChunk: true,
-        priority: 0
+        priority: 1
       },
-      flexio: {
-        test: /[\\/]node_modules[\\/]((@flexio-corp\/.*-bundle)|@flexio-oss)\/.*\.js/,
-        name: 'corpjs',
+      oss: {
+        test: /[\\/]node_modules[\\/]@flexio-oss/,
+        name: 'oss',
         chunks: 'all',
         reuseExistingChunk: true,
+      },
+      corp: {
+        test: /[\\/]node_modules[\\/]@flexio-corp/,
+        name: 'corp',
+        chunks: 'all',
+        reuseExistingChunk: true,
+      },
+      eui: {
+        test: /[\\/]node_modules[\\/]@flexio-corp[\\/]component-standard-entity-bundle/,
+        name: 'eui',
+        chunks: 'all',
+        reuseExistingChunk: true,
+        priority: 1
+      },
+      tinymce: {
+        test: /[\\/]node_modules[\\/]tinymce/,
+        name: 'tinymce',
+        chunks: 'all',
+        reuseExistingChunk: true,
+        priority: 1
       },
       styles: {
         name: 'styles',
         type: 'css/mini-extract',
-        // For webpack@4
         test: /\.css$/,
         chunks: 'all',
         enforce: true
@@ -129,7 +148,7 @@ webpackBase.plugins.push(
     maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
   }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
-  // new BundleAnalyzerPlugin()
+  new BundleAnalyzerPlugin()
 )
 
 webpackBase.module.rules.push(
