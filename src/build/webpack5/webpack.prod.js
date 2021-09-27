@@ -22,6 +22,10 @@ const entries = process.argv[3].split(',')
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
 const manifestConfig = process.argv[6]
+/**
+ * @type {boolean}
+ */
+const inspect = process.argv[7] === '1'
 const parsedManifestConfig = JSON.parse(manifestConfig)
 entries.unshift(path.resolve(__dirname, './runtime.js'))
 webpackBase.entry.app = entries
@@ -124,7 +128,7 @@ webpackBase.plugins.push(
   new MiniCssExtractPlugin({
     filename: "[name].[contenthash].css",
     chunkFilename: "[id].[contenthash].css",
-    linkType:false,
+    linkType: false,
     attributes: {
       rel: "preload",
       as: "style",
@@ -148,8 +152,13 @@ webpackBase.plugins.push(
     maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
   }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
-  new BundleAnalyzerPlugin()
 )
+
+if (inspect) {
+  webpackBase.plugins.push(
+    new BundleAnalyzerPlugin()
+  )
+}
 
 webpackBase.module.rules.push(
   {
