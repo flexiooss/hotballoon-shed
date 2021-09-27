@@ -6,7 +6,7 @@ module.exports = {
     path: CONFIG.dist_path,
     publicPath: '',
     filename: '[name].[fullhash].js',
-    assetModuleFilename: 'assets/[hash][ext][query]'
+    assetModuleFilename: '[hash][ext][query]'
   },
   plugins: [],
   module: {
