@@ -19,6 +19,7 @@ from cmd.options.Clean import Clean
 from cmd.options.Entry import Entry
 from cmd.options.HTMLTemplate import HTMLTemplate
 from cmd.options.HTMLTemplateName import HTMLTemplateName
+from cmd.options.Inspect import Inspect
 from cmd.options.Port import Port
 from cmd.options.ServerConfig import ServerConfig
 from cmd.options.ModuleOnly import ModuleOnly
@@ -27,7 +28,7 @@ from cmd.options.ModuleOnly import ModuleOnly
 class Resolver:
     options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry,
                              Restrict, Clean, ModuleOnly, Entry, ServerConfig, Debug, Quiet, SourceMap, Bundle,
-                             HTMLTemplate, HTMLTemplateName, Port]
+                             HTMLTemplate, HTMLTemplateName, Port, Inspect]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option
