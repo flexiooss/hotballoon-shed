@@ -149,7 +149,9 @@ webpackBase.plugins.push(
     }
   ),
   new WorkboxPlugin.GenerateSW({
-    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
+    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+    clientsClaim: true,
+    skipWaiting: true
   }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
 )
