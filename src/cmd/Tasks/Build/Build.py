@@ -32,6 +32,7 @@ class Build(Task):
             raise KeyError('No path for build found into `hotballoon-shed` configuration')
 
         verbose: str = '-v' if self.options.debug else ''
+        inspect: str = '1' if self.options.inspect else '0'
 
         if self.package.config().has_application():
             manifest_config.update(self.package.config().application())
@@ -45,7 +46,8 @@ class Build(Task):
             ','.join([v.as_posix() for v in self.package.config().build_entries()]),
             html_template.as_posix(),
             self.package.config().build_output(),
-            json.dumps(manifest_config)
+            json.dumps(manifest_config),
+            inspect
         ])
         code = child.returncode
 
