@@ -32,7 +32,7 @@ webpackBase.module.rules.push(
     type: 'asset'
   },
   {
-    test: /\.css$/,
+    test: /\/[\d\w_-]+\.module\.css$/,
     use: [
       'style-loader',
       {
@@ -40,6 +40,18 @@ webpackBase.module.rules.push(
         options: {
           modules: true,
           importLoaders: 1
+        }
+      }
+    ]
+  },
+  {
+    test: /\/[\d\w_-]+\.css$/,
+    use: [
+      'style-loader',
+      {
+        loader: 'css-loader',
+        options: {
+          modules: false
         }
       }
     ]
