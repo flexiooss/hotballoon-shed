@@ -60,7 +60,7 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
       })
     },
     source_map,
-    strict
+    strict,
     builder
   )
 })
