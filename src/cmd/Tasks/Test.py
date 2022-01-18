@@ -50,9 +50,10 @@ class Test(Task):
 
             verbose: str = '-v' if self.options.debug else ''
             restrict: str = self.options.restrict if self.options.restrict is not None else ''
-            source_map:str = '1' if self.options.source_map else '0'
+            source_map: str = '1' if self.options.source_map else '0'
+            strict: str = '1' if self.options.strict else '0'
             child: Popen = self.exec(
-                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict,source_map, self.package.config().builder()])
+                ['node', tester.as_posix(), self.package.config().test_dir().as_posix(), verbose, restrict, source_map, self.package.config().builder(), strict])
 
             if child.returncode > 0:
                 sys.exit(child.returncode)

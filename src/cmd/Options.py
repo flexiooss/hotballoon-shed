@@ -16,6 +16,7 @@ class Options:
     server_config: str = None
     source_map: bool = False
     source: str = None
+    strict: bool = False
     target_path: str = None
     username: str = None
     verbose: bool = False
