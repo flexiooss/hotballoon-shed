@@ -9,6 +9,7 @@ from cmd.options.Quiet import Quiet
 from cmd.options.Registry import Registry
 from cmd.options.Restrict import Restrict
 from cmd.options.Source import Source
+from cmd.options.Strict import Strict
 from cmd.options.Username import Username
 from cmd.options.HelpOption import HelpOption
 from cmd.options.SourceMap import SourceMap
@@ -28,7 +29,7 @@ from cmd.options.ModuleOnly import ModuleOnly
 class Resolver:
     options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry,
                              Restrict, Clean, ModuleOnly, Entry, ServerConfig, Debug, Quiet, SourceMap, Bundle,
-                             HTMLTemplate, HTMLTemplateName, Port, Inspect]
+                             HTMLTemplate, HTMLTemplateName, Port, Inspect, Strict]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option

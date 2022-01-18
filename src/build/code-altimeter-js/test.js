@@ -8,6 +8,7 @@ const verbose = process.argv[3] === '-v'
 const restrict = process.argv[4]
 const source_map = process.argv[5] === '1'
 const builder = process.argv[6]
+const strict = process.argv[7] === '1'
 const testTransformer = require('./transformer')
 const TEST_ID = Date.now() + ''
 const CodeAltimeter = require('@flexio-oss/code-altimeter-js')
@@ -35,8 +36,11 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
     {
       'process.env.TEST_VERBOSE': JSON.stringify((verbose) ? 1 : 0)
     },
-    (filePath, sourceMap) => {
-      const args = ['--stack-trace-limit=100000','--unhandled-rejections=strict']
+    (filePath, sourceMap, strictMode) => {
+      const args = ['--stack-trace-limit=100000']
+      if (strictMode) {
+        args.push('--unhandled-rejections=strict')
+      }
       if (sourceMap) {
         args.push('--enable-source-maps')
       }
@@ -50,13 +54,13 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
         }
       )
 
-
       p.on('close', (code) => {
         console.log(`Test child process exited with code ${code}`)
         process.exit(code)
       })
     },
     source_map,
+    strict
     builder
   )
 })

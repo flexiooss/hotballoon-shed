@@ -56,7 +56,8 @@ hbshed
                   --clean, -C       clean cache directory
                   --restrict, -R    fileName (regexp validation /.*\/fileName.*/)
                   --module-only     test on single module level
-                  --source-map      test on single module level
+                  --source-map      show source map on stack trace (slower)
+                  --strict          strict mode (fail on unhandled error in promise)
 
 
 

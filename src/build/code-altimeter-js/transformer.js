@@ -8,10 +8,11 @@ const webpack = require('webpack')
  * @param {array<string>} testsPath
  * @param {Object} env
  * @param {Transformer~transformedCallback} clb
- * @param {boolean} sourceMap
+ * @param {boolean} [sourceMap=false]
+ * @param {boolean} [strict=false]
  * @param {string} builder
  */
-module.exports = function (testId, testsPath, env, clb, sourceMap = false, builder) {
+module.exports = function (testId, testsPath, env, clb, sourceMap = false,strict=false, builder) {
   console.log('writing test file... ... ...')
   const filePath = '/tmp/hotballoon-shed/tests'
   const fileName = 'test_' + testId + '.js'
@@ -64,11 +65,13 @@ module.exports = function (testId, testsPath, env, clb, sourceMap = false, build
 
   compiler.run((err, stats) => {
     console.log('test file write at : ' + filePath + '/' + fileName)
-    clb(filePath + '/' + fileName, sourceMap)
+    clb(filePath + '/' + fileName, sourceMap, strict)
   })
 }
 /**
  *
  * @callback Transformer~transformedCallback
  * @param {string} filePath
+  * @param {boolean} sourceMap
+ * @param {boolean} strict
  */
