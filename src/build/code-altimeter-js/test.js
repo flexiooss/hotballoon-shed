@@ -36,7 +36,7 @@ CodeAltimeter.testsPath(argTestPath, (testsPath) => {
       'process.env.TEST_VERBOSE': JSON.stringify((verbose) ? 1 : 0)
     },
     (filePath, sourceMap) => {
-      const args = ['--stack-trace-limit=100000']
+      const args = ['--stack-trace-limit=100000','--unhandled-rejections=strict']
       if (sourceMap) {
         args.push('--enable-source-maps')
       }
