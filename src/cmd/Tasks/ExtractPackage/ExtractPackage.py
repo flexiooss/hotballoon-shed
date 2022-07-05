@@ -80,6 +80,22 @@ class ExtractPackage(Task):
             os.remove(Path(self.target_path.as_posix() + '/.gitignore').as_posix())
             print('****     CLEAN : .gitignore')
 
+    def __rm_dev(self):
+        if Path(self.target_path.as_posix() + '/.ida').is_dir():
+            shutil.rmtree(Path(self.target_path.as_posix() + '/.ida').as_posix())
+            print('****     CLEAN : .ida')
+
+    def __rm_docker(self):
+        if Path(self.target_path.as_posix() + '/build-docker-image.sh').is_file():
+            os.remove(Path(self.target_path.as_posix() + '/build-docker-image.sh').as_posix())
+            print('****     CLEAN : build-docker-image.sh')
+        if Path(self.target_path.as_posix() + '/deploy-docker-image.sh').is_file():
+            os.remove(Path(self.target_path.as_posix() + '/deploy-docker-image.sh').as_posix())
+            print('****     CLEAN : deploy-docker-image.sh')
+        if Path(self.target_path.as_posix() + '/docker-compose-build.yml').is_file():
+            os.remove(Path(self.target_path.as_posix() + '/docker-compose-build.yml').as_posix())
+            print('****     CLEAN : docker-compose-build.yml')
+
     def __rm_dependencies(self):
         CleanDependenciesDir(self.options, self.target_package, self.target_path).process()
 
@@ -107,6 +123,8 @@ class ExtractPackage(Task):
         self.__rm_dependencies()
         self.__rm_build()
         self.__rm_git()
+        self.__rm_docker()
+        self.__rm_dev()
         self.__rm_poom_ci()
 
         print(self.package.name() + ' extracted to : ' + self.target_path.as_posix())
