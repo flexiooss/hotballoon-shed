@@ -20,7 +20,7 @@
     "@babel/preset-env": "^7.16.0",
     "@babel/runtime": "^7.16.0",
     "@babel/runtime-corejs3": "^7.16.0",
-    "@flexio-oss/code-altimeter-js": "1.8.0",
+    "@flexio-oss/code-altimeter-js": "1.9.0",
     "babel-loader": "^8.2.3",
     "circular-dependency-plugin": "^5.2.2",
     "core-js": "^3.19.1",
