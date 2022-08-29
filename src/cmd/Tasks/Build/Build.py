@@ -55,6 +55,49 @@ class Build(Task):
             sys.stderr.write("BUILD APP FAIL" + "\n")
             raise ChildProcessError(code)
 
+
+    def __build_app_debug(self):
+        print('****')
+        print('**** BUILD APP DEBUG : ' + self.package.name())
+        print('****')
+
+        if not self.package.config().has_builder():
+            raise KeyError('No builder found into `hotballoon-shed` configuration')
+
+        production_builder: Path = Path(os.path.dirname(
+            os.path.realpath(__file__)) + '/../../../build/' + self.package.config().builder() + '/production_debug.js')
+        production_builder.resolve()
+
+        if not production_builder.is_file():
+            raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())
+
+        if not self.package.config().has_build_output():
+            raise KeyError('No path for build found into `hotballoon-shed` configuration')
+
+        verbose: str = '-v' if self.options.debug else ''
+        inspect: str = '1' if self.options.inspect else '0'
+
+        if self.package.config().has_application():
+            manifest_config.update(self.package.config().application())
+
+        html_template: Path = self.__resolve_html_template()
+
+        child: Popen = self.exec([
+            'node',
+            production_builder.as_posix(),
+            verbose,
+            ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            html_template.as_posix(),
+            self.package.config().build_output(),
+            json.dumps(manifest_config),
+            inspect
+        ])
+        code = child.returncode
+
+        if code != 0:
+            sys.stderr.write("BUILD APP DEBUG FAIL" + "\n")
+            raise ChildProcessError(code)
+
     def __resolve_html_template(self) -> Path:
         if self.package.config().has_build_html_template_name():
             return self.__tempate_path_for(self.package.config().build_html_template_name())
@@ -101,6 +144,7 @@ class Build(Task):
 
     def process(self):
         self.__build_app()
+        self.__build_app_debug()
         if self.options.bundle:
             self.__build_bundle()
         else:
