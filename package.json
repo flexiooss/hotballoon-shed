@@ -10,7 +10,7 @@
     "core": {
       "generate-sources": {
         "value-objects": {
-          "version": "1.70.0"
+          "version": "1.77.0"
         }
       }
     }
