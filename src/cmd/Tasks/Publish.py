@@ -1,6 +1,8 @@
 import glob
 import os
 import sys
+import json
+from typing import List, Optional, Pattern, Match
 from pathlib import Path
 from subprocess import Popen, PIPE
 
@@ -12,7 +14,22 @@ from cmd.Tasks.Tasks import Tasks
 class Publish(Task):
     NAME = Tasks.PUBLISH
 
+    def __exec_for_json(self, args: List[str]) -> dict:
+        stdout, stderr = Popen(args, stdout=PIPE, cwd=self.cwd.as_posix()).communicate()
+        ret = self.__decode_stdout(stdout)
+        return json.loads(ret)
 
+    def __exec_for_stdout(self, args: List[str]) -> str:
+        stdout, stderr = Popen(args, stdout=PIPE, cwd=self.cwd.as_posix()).communicate()
+        return self.__decode_stdout(stdout)
+
+    def __decode_stdout(self, stdout) -> str:
+        return stdout.strip().decode('utf-8')
+
+    def __should_unpublish(self) -> bool:
+        resp = self.__exec_for_json(
+            ['npm', 'view', self.package.name(), '--registry', self.options.registry, '--json', '-s'])
+        return resp.get('error') is None
 
     def process(self):
         print('PUBLISH : ' + self.package.name())
@@ -28,17 +45,17 @@ class Publish(Task):
         print("deploying JS package in " + self.cwd.as_posix())
 
         print('****     ****    LOGIN')
-        p1 = Popen(
+        p_login = Popen(
             ['npm-cli-login', '-u', self.options.username, '-p', self.options.password, '-e', self.options.email, '-r',
              self.options.registry],
             stdout=PIPE,
             cwd=self.cwd.as_posix()
         )
 
-        p1.wait()
-        code = p1.returncode
+        p_login.wait()
+        code = p_login.returncode
         if code != 0:
-            sys.stderr.write("LOGIN ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
+            sys.stderr.write("LOGIN FAILED ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
 
             PrintNpmLogs.print_last_lines(50)
 
@@ -46,45 +63,57 @@ class Publish(Task):
             sys.exit(code)
         print('****     ****    LOGGED')
 
-        print('****     ****    UNPUBLISH')
-        p2 = Popen(
-            ['npm', 'unpublish', self.package.name() + '@' + self.package.version(), '--registry',
-             self.options.registry],
-            stdin=p1.stdout,
-            stdout=PIPE,
-            cwd=self.cwd.as_posix()
-        )
+        p_unpublish = None
+        should_unpublish = self.__should_unpublish()
 
-        p2.wait()
-        code = p2.returncode
+        if should_unpublish:
+            print('****     ****    UNPUBLISH')
+            p_unpublish = Popen(
+                ['npm', 'unpublish', self.package.name() + '@' + self.package.version(), '--registry',
+                 self.options.registry],
+                stdin=p_login.stdout,
+                stdout=PIPE,
+                cwd=self.cwd.as_posix()
+            )
 
-        if code != 0:
-            sys.stderr.write("UNPUBLISH ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
+            p_unpublish.wait()
+            code = p_unpublish.returncode
 
-            PrintNpmLogs.print_last_lines(50)
+            if code != 0:
+                sys.stderr.write("UNPUBLISH FAILED ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
 
-            sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
-            sys.exit(code)
+                PrintNpmLogs.print_last_lines(50)
 
-        print('****     ****    UNPUBLISHED')
+                sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
+                sys.exit(code)
+
+            print('****     ****    UNPUBLISHED')
+        else:
+            print('****     ****    NEW PACKAGE')
 
         print('****     ****    PUBLISH')
-        p3 = Popen(
+
+        stdin = p_login.stdout
+        if should_unpublish:
+            stdin = p_unpublish.stdout
+
+        p_publish = Popen(
             ['npm', 'publish', '--registry', self.options.registry],
-            stdin=p2.stdout,
+            stdin=stdin,
             stdout=PIPE,
             cwd=self.cwd.as_posix()
         )
-        p3.wait()
+        p_publish.wait()
 
-        p1.stdout.close()
-        p2.stdout.close()
-        p3.stdout.close()
+        p_login.stdout.close()
+        if should_unpublish:
+            p_unpublish.stdout.close()
+        p_publish.stdout.close()
 
-        code = p3.returncode
+        code = p_publish.returncode
 
         if code != 0:
-            sys.stderr.write("PUBLISH ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
+            sys.stderr.write("PUBLISH FAILED ****      Can't upload JS package: " + self.cwd.as_posix() + "\n")
 
             PrintNpmLogs.print_last_lines(50)
 
