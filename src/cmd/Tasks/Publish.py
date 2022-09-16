@@ -15,8 +15,8 @@ class Publish(Task):
     NAME = Tasks.PUBLISH
 
     def __exec_for_json(self, args: List[str]) -> dict:
-        stdout, stderr = Popen(args, stdout=PIPE, cwd=self.cwd.as_posix()).communicate()
-        ret = self.__decode_stdout(stdout)
+        ret = self.__exec_for_stdout(args)
+        print('RESULT `'+ret+'`')
         return json.loads(ret)
 
     def __exec_for_stdout(self, args: List[str]) -> str:
@@ -27,6 +27,7 @@ class Publish(Task):
         return stdout.strip().decode('utf-8')
 
     def __should_unpublish(self) -> bool:
+        print('****     ****    CHECK REGISTRY EXISTS')
         resp = self.__exec_for_json(
             ['npm', 'view', self.package.name(), '--registry', self.options.registry, '--json', '-s'])
         return resp.get('error') is None
