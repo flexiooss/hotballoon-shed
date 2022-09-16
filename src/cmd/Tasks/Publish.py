@@ -2,9 +2,10 @@ import glob
 import os
 import sys
 import json
+import subprocess
 from typing import List, Optional, Pattern, Match
 from pathlib import Path
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, check_output
 
 from cmd.Tasks.PrintNpmLogs import PrintNpmLogs
 from cmd.Tasks.Task import Task
@@ -16,12 +17,14 @@ class Publish(Task):
 
     def __exec_for_json(self, args: List[str]) -> dict:
         ret = self.__exec_for_stdout(args)
-        print('RESULT `'+ret+'`')
-        return json.loads(ret)
+        print('RESULT `' + ret + '`')
+        return json.loads(a.stdout)
 
     def __exec_for_stdout(self, args: List[str]) -> str:
-        stdout, stderr = Popen(args, stdout=PIPE, cwd=self.cwd.as_posix()).communicate()
-        return self.__decode_stdout(stdout)
+        stdout, stderr = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.cwd.as_posix()).communicate()
+        stdout = self.__decode_stdout(stdout)
+        stderr = self.__decode_stdout(stderr)
+        return stdout if stdout != '' else stderr
 
     def __decode_stdout(self, stdout) -> str:
         return stdout.strip().decode('utf-8')
