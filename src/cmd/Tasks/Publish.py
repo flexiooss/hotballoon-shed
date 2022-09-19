@@ -74,9 +74,16 @@ class Publish(Task):
 
         if should_unpublish:
             print('****     ****    UNPUBLISH')
+
+            if not self.package.version():
+                sys.stderr.write(
+                    "UNPUBLISH FAILED ****      Can't upload JS package: " + self.cwd.as_posix() + "\n" + "impossible to unpublish entire package, version is empty")
+                sys.stderr.write("Command terminated with wrong status code: " + str(code) + "\n")
+                sys.exit(code)
+
             p_unpublish = Popen(
                 ['npm', 'unpublish', self.package.name() + '@' + self.package.version(), '--registry',
-                 self.options.registry],
+                 self.options.registry, '--force'],
                 stdin=p_login.stdout,
                 stdout=PIPE,
                 cwd=self.cwd.as_posix()
