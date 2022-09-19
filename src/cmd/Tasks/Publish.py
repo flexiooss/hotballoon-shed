@@ -2,9 +2,10 @@ import glob
 import os
 import sys
 import json
+import subprocess
 from typing import List, Optional, Pattern, Match
 from pathlib import Path
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, check_output
 
 from cmd.Tasks.PrintNpmLogs import PrintNpmLogs
 from cmd.Tasks.Task import Task
@@ -15,18 +16,23 @@ class Publish(Task):
     NAME = Tasks.PUBLISH
 
     def __exec_for_json(self, args: List[str]) -> dict:
-        stdout, stderr = Popen(args, stdout=PIPE, cwd=self.cwd.as_posix()).communicate()
-        ret = self.__decode_stdout(stdout)
+        ret = self.__exec_for_stdout(args)
+        print('RESULT `' + ret + '`')
         return json.loads(ret)
 
     def __exec_for_stdout(self, args: List[str]) -> str:
-        stdout, stderr = Popen(args, stdout=PIPE, cwd=self.cwd.as_posix()).communicate()
-        return self.__decode_stdout(stdout)
+        stdout, stderr = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.cwd.as_posix()).communicate()
+        stdout = self.__decode_stdout(stdout)
+        print('RESULT STDOUT `' + stdout + '`')
+        stderr = self.__decode_stdout(stderr)
+        print('RESULT STDERR`' + stderr + '`')
+        return stdout if stdout != '' else stderr
 
     def __decode_stdout(self, stdout) -> str:
         return stdout.strip().decode('utf-8')
 
     def __should_unpublish(self) -> bool:
+        print('****     ****    CHECK REGISTRY EXISTS')
         resp = self.__exec_for_json(
             ['npm', 'view', self.package.name(), '--registry', self.options.registry, '--json', '-s'])
         return resp.get('error') is None
