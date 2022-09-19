@@ -17,13 +17,13 @@ class Publish(Task):
 
     def __exec_for_json(self, args: List[str]) -> dict:
         ret = self.__exec_for_stdout(args)
-        print('RESULT `' + ret + '`')
+        # print('RESULT `' + ret + '`')
         return json.loads(ret)
 
     def __exec_for_stdout(self, args: List[str]) -> str:
         stdout, stderr = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.cwd.as_posix()).communicate()
         stdout = self.__decode_stdout(stdout)
-        print('RESULT STDOUT `' + stdout + '`')
+        # print('RESULT STDOUT `' + stdout + '`')
         stderr = self.__decode_stdout(stderr)
         print('RESULT STDERR`' + stderr + '`')
         return stdout if stdout != '' else stderr
