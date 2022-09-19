@@ -23,7 +23,9 @@ class Publish(Task):
     def __exec_for_stdout(self, args: List[str]) -> str:
         stdout, stderr = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.cwd.as_posix()).communicate()
         stdout = self.__decode_stdout(stdout)
+        print('RESULT STDOUT `' + stdout + '`')
         stderr = self.__decode_stdout(stderr)
+        print('RESULT STDERR`' + stderr + '`')
         return stdout if stdout != '' else stderr
 
     def __decode_stdout(self, stdout) -> str:
