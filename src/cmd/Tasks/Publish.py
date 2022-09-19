@@ -82,8 +82,8 @@ class Publish(Task):
                 sys.exit(code)
 
             p_unpublish = Popen(
-                ['npm', 'unpublish', self.package.name() + '@' + self.package.version(), '--registry',
-                 self.options.registry, '--force'],
+                ['npm', 'unpublish', self.package.name() + '@' + self.package.version(), '--force', '--registry',
+                 self.options.registry],
                 stdin=p_login.stdout,
                 stdout=PIPE,
                 cwd=self.cwd.as_posix()
