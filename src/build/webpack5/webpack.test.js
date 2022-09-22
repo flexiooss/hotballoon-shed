@@ -2,6 +2,7 @@
 const path = require('path')
 const babelOptions = require('../babel/getBabelConfig')
 const CONFIG = require('./config')
+const webpack = require('webpack')
 
 const webpackBase = {
   entry: CONFIG.entry,
