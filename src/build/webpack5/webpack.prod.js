@@ -100,7 +100,9 @@ webpackBase.optimization = {
 
 webpackBase.plugins.push(
   new webpack.DefinePlugin({
-    'window.__DEVELOPMENT__': JSON.stringify(false)
+    'window.__DEVELOPMENT__': JSON.stringify(false),
+     'window.__ASSERT__': JSON.stringify(false),
+    'window.__DEBUG__': JSON.stringify(false)
   }),
   new WebpackPwaManifest({
     filename: 'manifest.json',
