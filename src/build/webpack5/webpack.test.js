@@ -45,5 +45,6 @@ webpackBase.plugins.push(
      'window.__ASSERT__': JSON.stringify(true),
     'window.__DEBUG__': JSON.stringify(true)
   })
+)
 
 module.exports = webpackBase
