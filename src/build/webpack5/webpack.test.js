@@ -8,9 +8,9 @@ const webpackBase = {
   entry: CONFIG.entry,
   plugins: [
    new webpack.DefinePlugin({
-    'window.__DEVELOPMENT__': JSON.stringify(true),
-     'window.__ASSERT__': JSON.stringify(true),
-    'window.__DEBUG__': JSON.stringify(true)
+    '__DEVELOPMENT__': JSON.stringify(true),
+     '__ASSERT__': JSON.stringify(true),
+    '__DEBUG__': JSON.stringify(true)
   })
   ],
   performance: {
