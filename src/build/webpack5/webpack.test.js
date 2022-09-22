@@ -6,7 +6,13 @@ const webpack = require('webpack')
 
 const webpackBase = {
   entry: CONFIG.entry,
-  plugins: [],
+  plugins: [
+   new webpack.DefinePlugin({
+    '__DEVELOPMENT__': JSON.stringify(true),
+     '__ASSERT__': JSON.stringify(true),
+    '__DEBUG__': JSON.stringify(true)
+  })
+  ],
   performance: {
     hints: false
   },
@@ -38,14 +44,6 @@ const webpackBase = {
   resolveLoader: {
     modules: [CONFIG.vendors_path]
   }
-}
-
-webpackBase.plugins.push(
-  new webpack.DefinePlugin({
-    'window.__DEVELOPMENT__': JSON.stringify(true),
-     'window.__ASSERT__': JSON.stringify(true),
-    'window.__DEBUG__': JSON.stringify(true)
-  })
-)
+};
 
 module.exports = webpackBase

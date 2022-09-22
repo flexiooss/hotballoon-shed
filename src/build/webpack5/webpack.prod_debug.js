@@ -48,9 +48,9 @@ if (isVerbose) {
 
 webpackBase.plugins.push(
   new webpack.DefinePlugin({
-    'window.__DEVELOPMENT__': JSON.stringify(false),
-    'window.__ASSERT__': JSON.stringify(true),
-    'window.__DEBUG__': JSON.stringify(true)
+    '__DEVELOPMENT__': JSON.stringify(false),
+    '__ASSERT__': JSON.stringify(true),
+    '__DEBUG__': JSON.stringify(true)
   }),
   new WebpackPwaManifest({
     filename: 'manifest.json',
