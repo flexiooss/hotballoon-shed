@@ -243,9 +243,10 @@ https://github.com/flexiooss/hotballoon-shed
         else:
             self.__install()
             self.__message()
-            self.__ensure_processors()
-            self.__check_modules_dependencies()
-            self.__check_root_package_parent_dependencies()
-            self.__check_external_parent()
-            self.__check_external_parent_dependencies()
-            self.__provision_modules_peer_dependencies()
+            if not self.options.bypass_dep_check:
+                self.__ensure_processors()
+                self.__check_modules_dependencies()
+                self.__check_root_package_parent_dependencies()
+                self.__check_external_parent()
+                self.__check_external_parent_dependencies()
+                self.__provision_modules_peer_dependencies()

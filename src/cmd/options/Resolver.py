@@ -24,12 +24,13 @@ from cmd.options.Inspect import Inspect
 from cmd.options.Port import Port
 from cmd.options.ServerConfig import ServerConfig
 from cmd.options.ModuleOnly import ModuleOnly
+from cmd.options.BypassDepCheck import BypassDepCheck
 
 
 class Resolver:
     options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry,
                              Restrict, Clean, ModuleOnly, Entry, ServerConfig, Debug, Quiet, SourceMap, Bundle,
-                             HTMLTemplate, HTMLTemplateName, Port, Inspect, Strict]
+                             HTMLTemplate, HTMLTemplateName, Port, Inspect, Strict, BypassDepCheck]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option

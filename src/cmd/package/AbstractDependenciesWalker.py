@@ -6,6 +6,7 @@ from typing import List
 
 from cmd.package.PackageHandler import PackageHandler
 from cmd.package.WalkerProcessor import WalkerProcessor
+from cmd.package.Version import Version
 
 
 class AbstractDependenciesWalker(abc.ABC):
@@ -29,7 +30,7 @@ class AbstractDependenciesWalker(abc.ABC):
                 'Package : ' + self.target_package_name + ' not found at : ' + self.node_modules.as_posix())
         package: PackageHandler = PackageHandler(target_path)
         if re.match(re.compile('.*\.git$'), self.target_package_version) is None:
-            if package.version() != self.target_package_version:
+            if not Version(package.version()).satisfies(self.target_package_version):
                 raise ImportError(
                     'Package : ' + self.prev_package.name() + ' version conflict with package : ' + self.target_package_name + ':' + self.target_package_version + ' version : ' + package.version() + ' already registered')
         return package
