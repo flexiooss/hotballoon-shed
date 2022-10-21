@@ -43,7 +43,7 @@ hbshed
                   --module-only     generate-sources on single module level
               install               Install dependencies
                   <options>
-                  --bypass_dep_check, -X       bypass dependencies check versions
+                  --bypass-dep-check, -X       bypass dependencies check versions
               publish
                   <options>
                   --registry        js registry url [required]
