@@ -20,3 +20,4 @@ class Options:
     target_path: str = None
     username: str = None
     verbose: bool = False
+    bypass_dep_check: bool = False

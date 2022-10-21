@@ -3,6 +3,7 @@ from typing import List, Set, Dict
 from cmd.package.PackageHandler import PackageHandler
 
 from cmd.package.WalkerProcessor import WalkerProcessor
+from cmd.package.Version import Version
 
 
 class PeerDependenciesWalkerProcessor(WalkerProcessor):
@@ -18,7 +19,7 @@ class PeerDependenciesWalkerProcessor(WalkerProcessor):
 
         if self.dependencies.get(package.name()) is not None:
 
-            if self.dependencies.get(package.name()) != package.version():
+            if not Version(self.dependencies.get(package.name())).satisfies(package.version()):
                 raise ImportError(
                     'Version conflict with package : ' + package.name() + ':' + package.version() + ' version : ' + self.dependencies.get(
                         package.name()) + ' already registered')
