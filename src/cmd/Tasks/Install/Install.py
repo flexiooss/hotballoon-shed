@@ -153,7 +153,7 @@ class Install(Task):
 
         if self.options.registry is None or self.options.email is None or self.options.password is None or self.options.username is None:
 
-            self.exec(['npm', 'install', '--prefix', self.__node_modules.as_posix(), '--no-package-lock', '--force'])
+            self.exec(['npm', 'install', '--prefix', self.__node_modules.as_posix(), '--no-package-lock', '--force', '--omit=optional'])
 
             print('## INSTALL node_modules at : ' + self.__node_modules.as_posix())
 
