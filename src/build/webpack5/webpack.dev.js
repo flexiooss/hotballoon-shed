@@ -31,6 +31,10 @@ webpackBase.module.rules.push(
     test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
     type: 'asset'
   },
+//  {
+//    test: /\.sw\.js$/,
+//    type: 'asset/resource'
+//  },
   {
     test: /\/[\d\w_-]+\.module\.css$/,
     use: [

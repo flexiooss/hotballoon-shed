@@ -35,6 +35,7 @@ Object.assign(options, parsedOptions)
 options.contentBase = dist
 options.overlay = true
 options.compress = true
+//options.writeToDisk= true
 
 if (isVerbose) {
   console.log('_________________ WEBPACK 5 _________________')

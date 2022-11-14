@@ -20,6 +20,7 @@ module.exports = {
     compact: "auto",
     plugins:
       [
+//      path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-unicode-regex')
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-named-capturing-groups-regex'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-syntax-dynamic-import'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-private-methods'),

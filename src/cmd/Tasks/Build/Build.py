@@ -29,7 +29,7 @@ class Build(Task):
             raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())
 
         if not self.package.config().has_build_output():
-            raise KeyError('No path for build found into `hotballoon-shed` configuration')
+            raise KeyError('No output path for build found into `hotballoon-shed` configuration')
 
         verbose: str = '-v' if self.options.debug else ''
         inspect: str = '1' if self.options.inspect else '0'
@@ -72,7 +72,7 @@ class Build(Task):
             raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())
 
         if not self.package.config().has_build_output():
-            raise KeyError('No path for build found into `hotballoon-shed` configuration')
+            raise KeyError('No output path for build found into `hotballoon-shed` configuration')
 
         verbose: str = '-v' if self.options.debug else ''
         inspect: str = '1' if self.options.inspect else '0'
@@ -124,7 +124,7 @@ class Build(Task):
         if not lib_builder.is_file():
             raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())
         if not self.package.config().has_build_output():
-            raise KeyError('No path for build found into `hotballoon-shed` configuration')
+            raise KeyError('No output path for build found into `hotballoon-shed` configuration')
         verbose: str = '-v' if self.options.debug else ''
 
         html_template: Path = self.__resolve_html_template()
