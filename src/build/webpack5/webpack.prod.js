@@ -9,6 +9,7 @@ const WebpackPwaManifest = require('webpack-pwa-manifest')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require("terser-webpack-plugin");
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -38,13 +39,24 @@ webpackBase.stats = {errorDetails: true}
 // webpackBase.target = 'browserslist: > 0.5%, last 3 versions, Firefox ESR, not dead'
 webpackBase.target = 'web'
 
-if (isVerbose) {
-  console.log('_________________ PWA MANIFEST _________________')
-  console.log(parsedManifestConfig)
-}
+//if (isVerbose) {
+//  console.log('_________________ PWA MANIFEST _________________')
+//  console.log(parsedManifestConfig)
+//}
 
 webpackBase.optimization = {
   minimize: true,
+//  minimizer: [new TerserPlugin({
+////  exclude:[/[\\/]node_modules[\\/]tinymce/],
+//  terserOptions:{
+//      format:{
+//        ascii_only:true
+//      },
+//      output:{
+//        ascii_only:true
+//      }
+//  }
+//  })],
   splitChunks: {
     chunks: 'all',
     maxSize: 5000000,
@@ -52,41 +64,35 @@ webpackBase.optimization = {
       apiClient: {
         test: /\/node_modules\/@flexio-corp\/.*-client/,
         name: 'api-client',
-        chunks: 'all',
         reuseExistingChunk: true,
         priority: 1
       },
       oss: {
         test: /[\\/]node_modules[\\/]@flexio-oss/,
         name: 'oss',
-        chunks: 'all',
         reuseExistingChunk: true,
       },
       corp: {
         test: /[\\/]node_modules[\\/]@flexio-corp/,
         name: 'corp',
-        chunks: 'all',
         reuseExistingChunk: true,
       },
       eui: {
         test: /[\\/]node_modules[\\/]@flexio-corp[\\/]component-standard-entity-bundle/,
         name: 'eui',
-        chunks: 'all',
         reuseExistingChunk: true,
         priority: 1
       },
       tinymce: {
         test: /[\\/]node_modules[\\/]tinymce/,
         name: 'tinymce',
-        chunks: 'all',
-        reuseExistingChunk: true,
-        priority: 1
+//        reuseExistingChunk: true,
+//        priority: 1
       },
       styles: {
         name: 'styles',
         type: 'css/mini-extract',
         test: /\.css$/,
-        chunks: 'all',
         enforce: true
       }
     }
@@ -104,29 +110,29 @@ webpackBase.plugins.push(
      '__ASSERT__': JSON.stringify(false),
     '__DEBUG__': JSON.stringify(false)
   }),
-  new WebpackPwaManifest({
-    filename: 'manifest.json',
-    inject: true,
-    fingerprints: true,
-    ios: false,
-    publicPath: null,
-    includeDirectory: true,
-    name: parsedManifestConfig.name,
-    short_name: parsedManifestConfig.short_name,
-    description: parsedManifestConfig.description,
-    crossorigin: parsedManifestConfig.crossorigin,
-    display: parsedManifestConfig.display,
-    theme_color: parsedManifestConfig.theme_color,
-    background_color: parsedManifestConfig.background_color,
-    orientation: parsedManifestConfig.orientation,
-    start_url: parsedManifestConfig.start_url,
-    icons: [
-      {
-        src: path.resolve(__dirname, '../html/assets/icon.png'),
-        sizes: [96, 128, 192, 256, 384, 512, 1024]
-      }
-    ]
-  }),
+//  new WebpackPwaManifest({
+//    filename: 'manifest.json',
+//    inject: true,
+//    fingerprints: true,
+//    ios: false,
+//    publicPath: null,
+//    includeDirectory: true,
+//    name: parsedManifestConfig.name,
+//    short_name: parsedManifestConfig.short_name,
+//    description: parsedManifestConfig.description,
+//    crossorigin: parsedManifestConfig.crossorigin,
+//    display: parsedManifestConfig.display,
+//    theme_color: parsedManifestConfig.theme_color,
+//    background_color: parsedManifestConfig.background_color,
+//    orientation: parsedManifestConfig.orientation,
+//    start_url: parsedManifestConfig.start_url,
+//    icons: [
+//      {
+//        src: path.resolve(__dirname, '../html/assets/icon.png'),
+//        sizes: [96, 128, 192, 256, 384, 512, 1024]
+//      }
+//    ]
+//  }),
   new MiniCssExtractPlugin({
     filename: "[name].[contenthash].css",
     chunkFilename: "[id].[contenthash].css",

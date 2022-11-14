@@ -34,16 +34,16 @@ webpackBase.devtool = 'inline-source-map'
 webpackBase.devtool = 'nosources-source-map'
 webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path+'/debug'
-webpackBase.output.publicPath = '/debug'
+//webpackBase.output.publicPath = '/debug'
 webpackBase.output.clean = true
 webpackBase.stats = {errorDetails: true}
 // webpackBase.target = 'browserslist: > 0.5%, last 3 versions, Firefox ESR, not dead'
 webpackBase.target = 'web'
 
-if (isVerbose) {
-  console.log('_________________ PWA MANIFEST _________________')
-  console.log(parsedManifestConfig)
-}
+//if (isVerbose) {
+//  console.log('_________________ PWA MANIFEST _________________')
+//  console.log(parsedManifestConfig)
+//}
 
 
 webpackBase.plugins.push(
@@ -52,29 +52,29 @@ webpackBase.plugins.push(
     '__ASSERT__': JSON.stringify(true),
     '__DEBUG__': JSON.stringify(true)
   }),
-  new WebpackPwaManifest({
-    filename: 'manifest.json',
-    inject: true,
-    fingerprints: true,
-    ios: false,
-    publicPath: null,
-    includeDirectory: true,
-    name: parsedManifestConfig.name+' [debug]',
-    short_name: parsedManifestConfig.short_name+' [debug]',
-    description: parsedManifestConfig.description,
-    crossorigin: parsedManifestConfig.crossorigin,
-    display: parsedManifestConfig.display,
-    theme_color: parsedManifestConfig.theme_color,
-    background_color: parsedManifestConfig.background_color,
-    orientation: parsedManifestConfig.orientation,
-    start_url: parsedManifestConfig.start_url,
-    icons: [
-      {
-        src: path.resolve(__dirname, '../html/assets/icon.png'),
-        sizes: [96, 128, 192, 256, 384, 512, 1024]
-      }
-    ]
-  }),
+//  new WebpackPwaManifest({
+//    filename: 'manifest.json',
+//    inject: true,
+//    fingerprints: true,
+//    ios: false,
+//    publicPath: null,
+//    includeDirectory: true,
+//    name: parsedManifestConfig.name+' [debug]',
+//    short_name: parsedManifestConfig.short_name+' [debug]',
+//    description: parsedManifestConfig.description,
+//    crossorigin: parsedManifestConfig.crossorigin,
+//    display: parsedManifestConfig.display,
+//    theme_color: parsedManifestConfig.theme_color,
+//    background_color: parsedManifestConfig.background_color,
+//    orientation: parsedManifestConfig.orientation,
+//    start_url: parsedManifestConfig.start_url,
+//    icons: [
+//      {
+//        src: path.resolve(__dirname, '../html/assets/icon.png'),
+//        sizes: [96, 128, 192, 256, 384, 512, 1024]
+//      }
+//    ]
+//  }),
   new MiniCssExtractPlugin({
     filename: "[name].[contenthash].css",
     chunkFilename: "[id].[contenthash].css",
