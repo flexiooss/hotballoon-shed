@@ -29,9 +29,7 @@ const parsedManifestConfig = JSON.parse(manifestConfig)
 entries.unshift(path.resolve(__dirname, './runtime.js'))
 webpackBase.entry.app = entries
 webpackBase.mode = 'development'
-webpackBase.devtool = 'eval'
-webpackBase.devtool = 'inline-source-map'
-webpackBase.devtool = 'nosources-source-map'
+webpackBase.devtool = 'source-map'
 webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path+'/debug'
 //webpackBase.output.publicPath = '/debug'
