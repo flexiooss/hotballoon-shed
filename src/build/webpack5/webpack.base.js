@@ -19,5 +19,8 @@ module.exports = {
   },
   resolve: {
     modules: [CONFIG.vendors_path, 'node_modules'],
+     fallback: {
+        fs: false
+    }
   },
 }

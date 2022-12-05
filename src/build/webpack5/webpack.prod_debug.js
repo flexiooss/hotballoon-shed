@@ -5,7 +5,7 @@ const webpack = require('webpack')
 
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
-const WebpackPwaManifest = require('webpack-pwa-manifest')
+//const WebpackPwaManifest = require('webpack-pwa-manifest')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -29,7 +29,7 @@ const parsedManifestConfig = JSON.parse(manifestConfig)
 entries.unshift(path.resolve(__dirname, './runtime.js'))
 webpackBase.entry.app = entries
 webpackBase.mode = 'development'
-webpackBase.devtool = 'source-map'
+webpackBase.devtool = 'inline-source-map'
 webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path+'/debug'
 //webpackBase.output.publicPath = '/debug'
