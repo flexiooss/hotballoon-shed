@@ -6,7 +6,6 @@ from subprocess import Popen
 
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
-from cmd.Tasks.Build.manifest_config import manifest_config
 import json
 
 
@@ -34,8 +33,6 @@ class Build(Task):
         verbose: str = '-v' if self.options.debug else ''
         inspect: str = '1' if self.options.inspect else '0'
 
-        if self.package.config().has_application():
-            manifest_config.update(self.package.config().application())
 
         html_template: Path = self.__resolve_html_template()
 
@@ -43,10 +40,10 @@ class Build(Task):
             'node',
             production_builder.as_posix(),
             verbose,
-            ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            # ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            json.dumps(self.package.config().build_entries()),
             html_template.as_posix(),
             self.package.config().build_output(),
-            json.dumps(manifest_config),
             inspect
         ])
         code = child.returncode
@@ -77,8 +74,6 @@ class Build(Task):
         verbose: str = '-v' if self.options.debug else ''
         inspect: str = '1' if self.options.inspect else '0'
 
-        if self.package.config().has_application():
-            manifest_config.update(self.package.config().application())
 
         html_template: Path = self.__resolve_html_template()
 
@@ -86,10 +81,10 @@ class Build(Task):
             'node',
             production_builder.as_posix(),
             verbose,
-            ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            # ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            json.dumps(self.package.config().build_entries()),
             html_template.as_posix(),
             self.package.config().build_output(),
-            json.dumps(manifest_config),
             inspect
         ])
         code = child.returncode
@@ -133,7 +128,8 @@ class Build(Task):
             'node',
             lib_builder.as_posix(),
             verbose,
-            ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            # ','.join([v.as_posix() for v in self.package.config().build_entries()]),
+            json.dumps(self.package.config().build_entries()),
             html_template.as_posix(),
             self.package.config().build_output()
         ])

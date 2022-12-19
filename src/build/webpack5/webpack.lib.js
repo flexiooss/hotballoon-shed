@@ -12,11 +12,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
-const entries = process.argv[3].split(',')
+//const entries = process.argv[3].split(',')
+const entries = JSON.parse(process.argv[3])
+
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
 
-webpackBase.entry.app = entries
+webpackBase.entry = entries
 
 webpackBase.mode = 'production'
 webpackBase.devtool = false
