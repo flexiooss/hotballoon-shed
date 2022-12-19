@@ -165,7 +165,7 @@ class Config:
 
     def dev_entries(self) -> List[Path]:
         if not self.has_dev_entries():
-            raise ValueError('No build entries defined')
+            raise ValueError('No build  dev entries defined')
         entries: List[Path] = []
         v: str
         for v in self.dev().get(self.DEV_ENTRIES_KEY):
@@ -173,7 +173,7 @@ class Config:
             p: Path = Path(self.__cwd / v)
             p.resolve()
             if not p.is_file():
-                raise FileNotFoundError('Not found entry path : ' + p.as_posix())
+                raise FileNotFoundError('Not found dev entry path : ' + p.as_posix())
             entries.append(p)
 
         return entries
@@ -190,17 +190,30 @@ class Config:
     def build_entries(self) -> List[Path]:
         if not self.has_build_entries():
             raise ValueError('No build entries defined')
-        entries: List[Path] = []
-        v: str
-        for v in self.build().get(self.BUILD_ENTRIES_KEY):
+        enties_raw: Dict = self.build().get(self.BUILD_ENTRIES_KEY)
+        if type(enties_raw) is dict:
+            for entry in enties_raw:
+                value = enties_raw.get(entry)
 
-            p: Path = Path(self.__cwd / v)
-            p.resolve()
-            if not p.is_file():
-                raise FileNotFoundError('Not found entry path : ' + p.as_posix())
-            entries.append(p)
+                p: Path = Path(self.__cwd / value.get('import'))
+                p.resolve()
+                if not p.is_file():
+                    raise FileNotFoundError('Not found entry path : ' + p.as_posix())
+                enties_raw[entry]['import'] = p.as_posix()
 
-        return entries
+            return enties_raw
+        else:
+            entries: List[Path] = []
+            v: str
+            for v in enties_raw:
+
+                p: Path = Path(self.__cwd / v)
+                p.resolve()
+                if not p.is_file():
+                    raise FileNotFoundError('Not found entry path : ' + p.as_posix())
+                entries.append(p)
+
+            return entries
 
     def has_build_output(self) -> bool:
         return self.has_build() and self.build().get(self.BUILD_OUTPUT_KEY) is not None
