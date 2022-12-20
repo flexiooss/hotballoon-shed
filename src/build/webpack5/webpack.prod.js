@@ -25,7 +25,7 @@ const dist_path = process.argv[5]
 /**
  * @type {boolean}
  */
-const inspect = process.argv[7] === '1'
+const inspect = process.argv[6] === '1'
 //entries.unshift(path.resolve(__dirname, './runtime.js'))
 //webpackBase.entry.app = entries
 webpackBase.entry = entries
@@ -51,8 +51,20 @@ webpackBase.optimization = {
 //      }
 //  }
 //  })],
+//    runtimeChunk: {
+//      name: (entrypoint) => {
+//        if (entrypoint.name.startsWith("boot")) {
+//          return null;
+//        }
+//
+//        return `runtime-${entrypoint.name}`
+//      }
+//    },
   splitChunks: {
-    chunks: 'all',
+//    chunks: 'all',
+    chunks(chunk) {
+        return chunk.name !== "boot" && chunk.name !== "service-worker";
+    },
     maxSize: 5000000,
     cacheGroups: {
       apiClient: {
