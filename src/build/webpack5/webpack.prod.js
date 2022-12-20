@@ -130,13 +130,14 @@ webpackBase.plugins.push(
     {
       filename: 'index.html',
       template: html_template,
-      inject: true,
+      inject: 'body',
       scriptLoading: 'defer',
       meta: {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
         charset: 'utf-8'
       },
-      favicon: path.resolve(__dirname, '../html/assets/favicon.ico')
+      favicon: path.resolve(__dirname, '../html/assets/favicon.ico'),
+      excludeChunks:['service-worker']
     }
   ),
   new WorkboxPlugin.GenerateSW({
