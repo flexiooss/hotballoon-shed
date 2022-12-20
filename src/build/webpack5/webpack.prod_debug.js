@@ -21,10 +21,6 @@ const entries = JSON.parse(process.argv[3])
 
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
-/**
- * @type {boolean}
- */
-const inspect = process.argv[7] === '1'
 //entries.unshift(path.resolve(__dirname, './runtime.js'))
 //webpackBase.entry.app = entries
 webpackBase.entry = entries
@@ -58,13 +54,14 @@ webpackBase.plugins.push(
     {
       filename: 'index.html',
       template: html_template,
-      inject: true,
+      inject: 'body',
       scriptLoading: 'defer',
       meta: {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
         charset: 'utf-8'
       },
-      favicon: path.resolve(__dirname, '../html/assets/favicon.ico')
+      favicon: path.resolve(__dirname, '../html/assets/favicon.ico'),
+      excludeChunks:['service-worker']
     }
   ),
   new WorkboxPlugin.GenerateSW({
@@ -74,12 +71,6 @@ webpackBase.plugins.push(
   }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
 )
-
-if (inspect) {
-  webpackBase.plugins.push(
-    new BundleAnalyzerPlugin()
-  )
-}
 
 webpackBase.module.rules.push(
   {

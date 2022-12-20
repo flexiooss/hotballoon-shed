@@ -40,7 +40,6 @@ class Build(Task):
             'node',
             production_builder.as_posix(),
             verbose,
-            # ','.join([v.as_posix() for v in self.package.config().build_entries()]),
             json.dumps(self.package.config().build_entries()),
             html_template.as_posix(),
             self.package.config().build_output(),
@@ -81,11 +80,9 @@ class Build(Task):
             'node',
             production_builder.as_posix(),
             verbose,
-            # ','.join([v.as_posix() for v in self.package.config().build_entries()]),
             json.dumps(self.package.config().build_entries()),
             html_template.as_posix(),
-            self.package.config().build_output(),
-            inspect
+            self.package.config().build_output()
         ])
         code = child.returncode
 
@@ -128,7 +125,6 @@ class Build(Task):
             'node',
             lib_builder.as_posix(),
             verbose,
-            # ','.join([v.as_posix() for v in self.package.config().build_entries()]),
             json.dumps(self.package.config().build_entries()),
             html_template.as_posix(),
             self.package.config().build_output()
