@@ -26,6 +26,12 @@ webpackBase.plugins.push(
 //webpackBase.target = 'browserslist: > 0.5%, last 2 versions, Firefox ESR, not dead' //will break HMR on  "webpack-dev-server": "^3.11.2"
 webpackBase.target = 'web'
 webpackBase.module.rules.push(
+// FOR TESTING ONLY
+//{
+//    test: /\.js$/,
+//    loader: 'babel-loader',
+//    options: babelOptions.prod
+//  },
   {
     test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
     type: 'asset'
