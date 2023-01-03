@@ -9,14 +9,19 @@ module.exports = {
         {
           targets: {
             'browsers': [
-              'edge >= 13'
+              'last 2 versions',
+              'edge >= 18',
+              'Safari >= 12',
+              'not dead'
             ]
           },
+          "bugfixes": true,
           useBuiltIns: 'entry',
           corejs: 3
         }
       ]
     ],
+    sourceType: "unambiguous",
     compact: "auto",
     plugins:
       [
