@@ -14,8 +14,8 @@ webpackBase.devtool = 'eval'
 webpackBase.stats = {errorDetails: true}
 webpackBase.mode = 'development'
 
-//  webpackBase.client= false
-//  webpackBase.webSocketServer= false
+  webpackBasedevServer..client= false
+  webpackBase.devServer.webSocketServer= false
 
 webpackBase.plugins.push(
   new webpack.DefinePlugin({
