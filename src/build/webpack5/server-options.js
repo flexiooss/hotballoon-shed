@@ -4,7 +4,7 @@ const CONFIG = require('./config')
 
 module.exports = {
   contentBase: CONFIG.dist_path,
-  hot: true,
+  hot: false,
   host: CONFIG.host,
   port: CONFIG.port,
   historyApiFallback: true,
