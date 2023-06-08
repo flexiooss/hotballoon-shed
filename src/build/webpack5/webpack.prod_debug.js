@@ -4,7 +4,7 @@ const path = require('path')
 const webpack = require('webpack')
 
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin')
-const WorkboxPlugin = require('workbox-webpack-plugin')
+//const WorkboxPlugin = require('workbox-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -64,11 +64,11 @@ webpackBase.plugins.push(
       excludeChunks:['service-worker']
     }
   ),
-  new WorkboxPlugin.GenerateSW({
-    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-    clientsClaim: true,
-    skipWaiting: true
-  }),
+//  new WorkboxPlugin.GenerateSW({
+//    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+//    clientsClaim: true,
+//    skipWaiting: true
+//  }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
 )
 
