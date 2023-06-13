@@ -30,11 +30,12 @@ module.exports = {
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-syntax-dynamic-import'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-private-methods'),
 //    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-class-properties')
-//       [path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-runtime'),
+       [path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-runtime')
+//       ,
 //         {
 //           corejs: 3,
 //         }
-//       ]
+       ]
     ]
   },
   test: {

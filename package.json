@@ -17,8 +17,9 @@
   },
   "dependencies": {
     "@babel/core": "^7.20.7",
+    "@babel/plugin-transform-runtime": "^7.22.5",
     "@babel/preset-env": "^7.20.2",
-    "@babel/runtime": "^7.20.7",
+    "@babel/runtime": "^7.22.5",
     "@babel/runtime-corejs3": "^7.20.7",
     "@flexio-oss/code-altimeter-js": "1.11.0",
     "ajv": "^8.12.0",
