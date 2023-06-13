@@ -6,7 +6,9 @@ module.exports = {
     path: CONFIG.dist_path,
     publicPath: '',
     filename: '[name].[fullhash].js',
-    assetModuleFilename: '[hash][ext][query]'
+    assetModuleFilename: '[hash][ext][query]',
+    globalObject: 'this',
+    library: 'flx'
   },
   plugins: [],
   module: {

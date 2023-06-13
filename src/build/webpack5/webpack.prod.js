@@ -51,15 +51,18 @@ webpackBase.optimization = {
 //      }
 //  }
 //  })],
-//    runtimeChunk: {
-//      name: (entrypoint) => {
-//        if (entrypoint.name.startsWith("boot")) {
-//          return null;
-//        }
-//
-//        return `runtime-${entrypoint.name}`
-//      }
-//    },
+    runtimeChunk: {
+      name: (entrypoint) => {
+        if (entrypoint.name.startsWith("boot")) {
+          return null;
+        }
+        if (entrypoint.name === "service-worker") {
+          return null;
+        }
+
+        return `runtime-${entrypoint.name}`
+      }
+    },
   splitChunks: {
 //    chunks: 'all',
     chunks(chunk) {
