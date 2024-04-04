@@ -77,6 +77,16 @@ webpackBase.module.rules.push(
     test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf|wav)(\?.*)?$/,
     type: 'asset/resource'
   },
+    {
+    test: /\/[\d\w_-]+\.txt\.css$/,
+    loader: 'css-loader',
+        options: {
+          modules: false,
+          exportType: 'string',
+          importLoaders: 1,
+          sourceMap:false
+        }
+  },
   {
     test: /\.module\.css$/,
     use: [

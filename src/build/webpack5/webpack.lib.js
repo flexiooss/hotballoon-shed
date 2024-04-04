@@ -82,6 +82,16 @@ webpackBase.module.rules.push(
         loader: 'babel-loader',
         options: babelOptions
       },
+       {
+    test: /\/[\d\w_-]+\.txt\.css$/,
+    loader: 'css-loader',
+        options: {
+          modules: false,
+          exportType: 'string',
+          importLoaders: 1,
+          sourceMap:false
+        }
+  },
   {
     test: /\.css$/,
     use: [
