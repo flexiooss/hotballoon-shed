@@ -57,12 +57,10 @@ if (isVerbose) {
 const compiler = webpack(webpackDev)
 let server = new WebpackDevServer( options,compiler)
 
-
   await server.start();
 
     if (isVerbose) {
     console.log('_________________ SERVER LISTEN _________________')
-    console.log(options.public)
     console.log('_________________')
   }
 
