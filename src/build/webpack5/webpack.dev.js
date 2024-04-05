@@ -43,6 +43,16 @@ webpackBase.module.rules.push(
 //    test: /\.sw\.js$/,
 //    type: 'asset/resource'
 //  },
+ {
+    test: /\/[\d\w_-]+\.txt\.css$/,
+    loader: 'css-loader',
+        options: {
+          modules: false,
+          exportType: 'string',
+          importLoaders: 1,
+          sourceMap:false
+        }
+  },
   {
     test: /\/[\d\w_-]+\.module\.css$/,
     use: [
@@ -56,6 +66,7 @@ webpackBase.module.rules.push(
       }
     ]
   },
+
   {
     test: /\/[\d\w_-]+\.css$/,
     use: [

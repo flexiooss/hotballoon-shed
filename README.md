@@ -7,6 +7,11 @@ https://github.com/flexiooss/hotballoon-shed-playbook
 
 > before usage : ensure you have your settings with de right access for `codingmatters-realeases` repository
 
+if  dev web server watch file is too short :
+```shell
+ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
+
 
 ### Configuration
 package.json

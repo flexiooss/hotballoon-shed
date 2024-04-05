@@ -4,7 +4,6 @@ const path = require('path')
 const webpack = require('webpack')
 
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin')
-const WorkboxPlugin = require('workbox-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -18,7 +17,6 @@ const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
 const isVerbose = process.argv[2] === '-v'
-//const entries = process.argv[3].split(',')
 const entries = JSON.parse(process.argv[3])
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
@@ -26,8 +24,6 @@ const dist_path = process.argv[5]
  * @type {boolean}
  */
 const inspect = process.argv[6] === '1'
-//entries.unshift(path.resolve(__dirname, './runtime.js'))
-//webpackBase.entry.app = entries
 webpackBase.entry = entries
 webpackBase.mode = 'production'
 webpackBase.devtool = false
@@ -40,17 +36,6 @@ webpackBase.target = 'web'
 
 webpackBase.optimization = {
   minimize: true,
-//  minimizer: [new TerserPlugin({
-////  exclude:[/[\\/]node_modules[\\/]tinymce/],
-//  terserOptions:{
-//      format:{
-//        ascii_only:true
-//      },
-//      output:{
-//        ascii_only:true
-//      }
-//  }
-//  })],
     runtimeChunk: {
       name: (entrypoint) => {
         if (entrypoint.name.startsWith("boot")) {
@@ -64,7 +49,6 @@ webpackBase.optimization = {
       }
     },
   splitChunks: {
-//    chunks: 'all',
     chunks(chunk) {
         return chunk.name !== "boot" && chunk.name !== "service-worker";
     },
@@ -95,8 +79,6 @@ webpackBase.optimization = {
       tinymce: {
         test: /[\\/]node_modules[\\/]tinymce/,
         name: 'tinymce',
-//        reuseExistingChunk: true,
-//        priority: 1
       },
       styles: {
         name: 'styles',
@@ -143,11 +125,6 @@ webpackBase.plugins.push(
       excludeChunks:['service-worker']
     }
   ),
-//  new WorkboxPlugin.GenerateSW({
-//    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-//    clientsClaim: true,
-//    skipWaiting: true
-//  }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
 )
 
@@ -166,6 +143,16 @@ webpackBase.module.rules.push(
     test: /\.js$/,
     loader: 'babel-loader',
     options: babelOptions.prod
+  },
+    {
+    test: /\/[\d\w_-]+\.txt\.css$/,
+    loader: 'css-loader',
+        options: {
+          modules: false,
+          exportType: 'string',
+          importLoaders: 1,
+          sourceMap:false
+        }
   },
   {
     test: /\.module\.css$/,
