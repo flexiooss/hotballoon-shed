@@ -13,6 +13,9 @@
           "version": "1.89.0"
         }
       }
+    },
+    "peerDependencies": {
+      "npm-cli-login": "^1.0.0"
     }
   },
   "dependencies": {
@@ -43,8 +46,5 @@
     "webpack-dev-server": "^5.0.4",
     "webpack-hot-middleware": "^2.21.1",
     "webpack-manifest-plugin": "^5.0.0"
-  },
-  "peerDependencies": {
-    "npm-cli-login": "^0.1.1"
   }
 }
