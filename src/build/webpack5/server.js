@@ -32,8 +32,8 @@ webpackDev.plugins.push(
 )
 
 Object.assign(options, parsedOptions)
-options.contentBase = dist
-options.overlay = true
+//options.contentBase = dist
+//options.overlay = true
 options.compress = true
 //options.writeToDisk= true
 
@@ -53,18 +53,19 @@ if (isVerbose) {
 }
 //options.open = true
 
+(async () => {
 const compiler = webpack(webpackDev)
-let server = new WebpackDevServer(compiler, options)
+let server = new WebpackDevServer( options,compiler)
 
-server.listen(options.port, options.host, (err) => {
-  if (isVerbose) {
+
+  await server.start();
+
+    if (isVerbose) {
     console.log('_________________ SERVER LISTEN _________________')
     console.log(options.public)
     console.log('_________________')
-    if (err) {
-      console.log('_________________ SERVER ERROR _________________')
-      console.error(err)
-      console.log('_________________')
-    }
   }
-})
+
+})();
+
+

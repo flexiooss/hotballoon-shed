@@ -4,7 +4,6 @@ const path = require('path')
 const webpack = require('webpack')
 
 const {WebpackManifestPlugin} = require('webpack-manifest-plugin')
-//const WorkboxPlugin = require('workbox-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -16,22 +15,17 @@ const webpackBase = require('./webpack.base')
 const CONFIG = require('./config')
 
 const isVerbose = process.argv[2] === '-v'
-//const entries = process.argv[3].split(',')
 const entries = JSON.parse(process.argv[3])
 
 const html_template = process.argv[4]
 const dist_path = process.argv[5]
-//entries.unshift(path.resolve(__dirname, './runtime.js'))
-//webpackBase.entry.app = entries
 webpackBase.entry = entries
 webpackBase.mode = 'development'
 webpackBase.devtool = 'inline-source-map'
 webpackBase.output.crossOriginLoading = 'anonymous'
 webpackBase.output.path = dist_path+'/debug'
-//webpackBase.output.publicPath = '/debug'
 webpackBase.output.clean = true
 webpackBase.stats = {errorDetails: true}
-// webpackBase.target = 'browserslist: > 0.5%, last 3 versions, Firefox ESR, not dead'
 webpackBase.target = 'web'
 
 webpackBase.plugins.push(
@@ -64,11 +58,6 @@ webpackBase.plugins.push(
       excludeChunks:['service-worker']
     }
   ),
-//  new WorkboxPlugin.GenerateSW({
-//    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-//    clientsClaim: true,
-//    skipWaiting: true
-//  }),
   new WebpackManifestPlugin({fileName: 'files-manifest.json'}),
 )
 

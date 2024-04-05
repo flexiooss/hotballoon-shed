@@ -1,7 +1,7 @@
 stack_server_config: dict = {
     "host": "172.17.0.1",
-    "disableHostCheck": True,
-    "publicPath": "/",
+    # "disableHostCheck": True,
+    "static": {"publicPath": "/"},
     "public": "https://dev.flexio.io/devui",
     "sockPath": "/socketjs",
     "proxy": [
