@@ -4,14 +4,16 @@ const CONFIG = require('./config')
 
 module.exports = {
 allowedHosts: 'all',
-  hot: false,
+  hot: true,
+  liveReload: false,
   host: CONFIG.host,
   port: CONFIG.port,
   historyApiFallback: true,
-  client: {
-      logging: 'info',
-      overlay: true
-    },
+//  client: {
+//      logging: 'info',
+//      overlay: false,
+//      webSocketTransport: 'sockjs'
+//    },
   compress: true,
   server: 'https'
 }

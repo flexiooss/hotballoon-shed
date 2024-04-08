@@ -34,7 +34,7 @@ webpackDev.plugins.push(
 Object.assign(options, parsedOptions)
 //options.contentBase = dist
 //options.overlay = true
-options.compress = true
+//options.compress = true
 //options.writeToDisk= true
 
 if (isVerbose) {
