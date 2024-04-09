@@ -17,7 +17,6 @@ const dist = process.argv[5]
 const optionsCustom = process.argv[6]
 const parsedOptions = JSON.parse(optionsCustom)
 
-
 webpackDev.output.publicPath = ''
 webpackDev.entry.app = entries
 
@@ -32,10 +31,6 @@ webpackDev.plugins.push(
 )
 
 Object.assign(options, parsedOptions)
-//options.contentBase = dist
-//options.overlay = true
-//options.compress = true
-//options.writeToDisk= true
 
 if (isVerbose) {
   console.log('_________________ WEBPACK 5 _________________')
