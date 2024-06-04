@@ -1,6 +1,13 @@
 local_server_config: dict = {
-    # 'host': 'localhost',
     'host': '0.0.0.0',
-    "static": {"publicPath": "/"},
-    # "disableHostCheck": True,
+    "hot": True,
+    "liveReload": False,
+    "client": {
+        "logging": 'info',
+        "overlay": {
+            "errors": True,
+            "warnings": False,
+            "runtimeErrors": True
+        }
+    }
 }

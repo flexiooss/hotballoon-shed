@@ -1,9 +1,17 @@
 stack_server_config: dict = {
     "host": "172.17.0.1",
-    # "disableHostCheck": True,
-    "static": {"publicPath": "/"},
-    "public": "https://dev.flexio.io/devui",
-    "sockPath": "/socketjs",
+    "hot": False,
+    "liveReload": True,
+    "client": {
+        "logging": 'verbose',
+        "overlay": {
+            "errors": True,
+            "warnings": False,
+            "runtimeErrors": True,
+        },
+        "webSocketTransport": 'sockjs',
+        "webSocketURL": "auto://dev.flexio.io/devui/socketjs"
+    },
     "proxy": [
         {
             "context": [
@@ -16,5 +24,6 @@ stack_server_config: dict = {
                 "^//[a-z]+/*": "/"
             }
         }
-    ]
+    ],
+    "webSocketServer": False
 }

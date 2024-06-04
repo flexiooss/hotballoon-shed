@@ -1,6 +1,6 @@
 {
   "name": "hotballoon-shed",
-  "version": "1.82.0",
+  "version": "1.83.0",
   "description": "Test, Develop, Manage, Generate sources, Build Hotballoon applications",
   "main": "index.js",
   "repository": "git@github.com:flexiooss/hotballoon-shed.git",
@@ -10,7 +10,7 @@
     "core": {
       "generate-sources": {
         "value-objects": {
-          "version": "1.89.0"
+          "version": "1.95.0"
         }
       }
     },
