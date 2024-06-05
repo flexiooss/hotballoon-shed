@@ -25,7 +25,7 @@ module.exports = {
         fs: false
     }
   },
-  experiments:{
-    asyncWebAssembly: true
-  }
+//  experiments:{
+//    asyncWebAssembly: true
+//  }
 }
