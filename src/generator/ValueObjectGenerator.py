@@ -54,7 +54,7 @@ class ValueObjectGenerator:
             generator: str = generator_path.as_posix()
             sources: str = sources_path.as_posix()
             target: str = Path(self.cwd / Directories.GENERATED).as_posix()
-            root_package: str = 'io.flexio.' + re.sub('^@flexio[-\w]+\/', '', self.package.name().replace('-', '_'))
+            root_package: str = 'io.flexio.' + re.sub(r'^@flexio[-\w]+\/', '', self.package.name().replace('-', '_'))
             extension: str = self.package.config().value_object_extension()
 
             verbose: str = '-v' if self.options.verbose is True else ''

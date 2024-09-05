@@ -29,7 +29,7 @@ class AbstractDependenciesWalker(abc.ABC):
             raise FileNotFoundError(
                 'Package : ' + self.target_package_name + ' not found at : ' + self.node_modules.as_posix())
         package: PackageHandler = PackageHandler(target_path)
-        if re.match(re.compile('.*\.git$'), self.target_package_version) is None:
+        if re.match(re.compile(r'.*\.git$'), self.target_package_version) is None:
             if not Version(package.version()).satisfies(self.target_package_version):
                 raise ImportError(
                     'Package : ' + self.prev_package.name() + ' version conflict with package : ' + self.target_package_name + ':' + self.target_package_version + ' version : ' + package.version() + ' already registered')

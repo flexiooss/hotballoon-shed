@@ -17,7 +17,7 @@ class ParentWalkerProcessor(WalkerProcessor):
 
     @staticmethod
     def cleanVersion(version: str) -> bool:
-        return re.sub('[~^<=>*]', '', version)
+        return re.sub(r'[~^<=>*]', '', version)
 
     def process(self, package: PackageHandler):
         hb_package: Optional[HBShedPackageHandler] = HBShedPackageHandler.from_package_handler(package)
