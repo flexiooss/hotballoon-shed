@@ -46,7 +46,7 @@ class CiDependencyApiHandler:
 
     def put_repo_meta(self):
         # params: () -> requests.Response
-        print "uploading repo metas : "
+        print( "uploading repo metas : ")
 
         repo = {
             'name': self.repository,
@@ -62,7 +62,7 @@ class CiDependencyApiHandler:
 
     def post_produced(self, produces):
         # params: (list) -> requests.Response
-        print "uploading produced modules meta : "
+        print( "uploading produced modules meta : ")
         pprint(produces)
 
         return requests.post(
@@ -73,7 +73,7 @@ class CiDependencyApiHandler:
 
     def post_depends_on(self, dependencies):
         # params: (list) -> requests.Response
-        print "uploading depends-on modules meta :"
+        print ("uploading depends-on modules meta :")
         pprint(dependencies)
 
         return requests.post(
