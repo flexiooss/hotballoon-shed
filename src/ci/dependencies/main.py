@@ -28,13 +28,13 @@ def parse_options(argv):
     try:
         opts, args = getopt.getopt(argv, "hi:u:v:d:", ["help", "ifile=", "url=", "version=", "docker_image="])
     except getopt.GetoptError:
-        print 'hotballoon-shed:ci:update_meta -i <package_file> -u <dependencies_url> -v <version> -d <docker_image>'
+        print( 'hotballoon-shed:ci:update_meta -i <package_file> -u <dependencies_url> -v <version> -d <docker_image>')
         sys.exit(2)
 
     for opt, arg in opts:
-        arg = re.sub('[\s+]', '', arg)
+        arg = re.sub(r'[\s+]', '', arg)
         if opt in ("-h", "--help"):
-            print 'hotballoon-shed:ci:update_meta -i <package_file> -u <dependencies_url> -v <version> -d <docker_image>'
+            print( 'hotballoon-shed:ci:update_meta -i <package_file> -u <dependencies_url> -v <version> -d <docker_image>')
             sys.exit()
         elif opt in ("-i", "--ifile"):
             package_file = arg

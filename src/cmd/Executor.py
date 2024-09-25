@@ -40,7 +40,7 @@ class Executor:
             sys.exit(2)
 
         for opt, arg in opts:
-            arg = re.sub('[\s+]', '', arg)
+            arg = re.sub(r'[\s+]', '', arg)
             self.__options_resolver.resolve(opt=opt, arg=arg, options=options)
         self.options = options
 
@@ -48,7 +48,7 @@ class Executor:
         tasks: List[Tasks] = []
         arg: str
         for arg in argv:
-            arg = re.sub('[\s+]', '', arg).lower()
+            arg = re.sub(r'[\s+]', '', arg).lower()
             if Tasks.has_value(arg):
                 tasks.append(Tasks[arg.replace('-', '_').upper()])
             else:
