@@ -25,7 +25,8 @@ package.json
         "src/js/bootstrap.js"
       ],
       "html_template": "src/js/index.html",
-      "output": "./dist"
+      "output": "./dist",
+      "output-type": "production" //production|debug
     },
     "generate-sources": {
       "value-objects": {

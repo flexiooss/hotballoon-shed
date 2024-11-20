@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from typing import List, Dict
+from typing import List, Dict, Optional
+from cmd.package.OutputType import OutputType
 
 
 class Config:
@@ -11,6 +12,7 @@ class Config:
     BUILD_HTML_TEMPLATE_NAME_KEY: str = 'html_template_name'
     BUILD_OUTPUT_KEY: str = 'output'
     BUILD_APPLICATION: str = 'application'
+    BUILD_OUTPUT_TYPE_KEY: str = 'output-type'
 
     DEV_KEY: str = 'dev'
     DEV_SERVER_KEY: str = 'server'
@@ -231,6 +233,12 @@ class Config:
             p.resolve()
 
         return p
+
+    def has_build_output_type(self) -> bool:
+        return self.has_build() and self.output_type() is not None
+
+    def output_type(self) -> Optional[OutputType]:
+        return self.build().get(self.BUILD_OUTPUT_TYPE_KEY)
 
     def has_build_html_template(self) -> bool:
         return self.has_build() and self.build().get(self.BUILD_HTML_TEMPLATE_KEY) is not None
