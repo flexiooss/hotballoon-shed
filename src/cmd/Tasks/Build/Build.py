@@ -6,7 +6,9 @@ from subprocess import Popen
 
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
+from cmd.package.OutputType import OutputType
 import json
+from typing import Optional
 
 
 class Build(Task):
@@ -185,11 +187,25 @@ class Build(Task):
             raise ChildProcessError(code)
 
     def process(self):
-        self.__build_app()
-        # self.__build_sw()
-        self.__build_app_debug()
-        if self.options.bundle:
+        output_type: Optional[OutputType] = OutputType.PRODUCTION.value
+        if self.package.config().has_build_output_type():
+            output_type = self.package.config().output_type()
+
+        if output_type == OutputType.DEBUG.value:
+            if self.options.debug:
+                print('build output type: DEBUG')
+            self.__build_app_debug()
+            return
+        elif output_type == OutputType.PRODUCTION.value:
+            if self.options.debug:
+                print('build output type: PRODUCTION')
+            self.__build_app()
+            return
+        elif output_type == OutputType.BUNDLE.value:
+            if self.options.debug:
+                print('build output type: BUNDLE')
             self.__build_bundle()
+            return
         else:
             if self.options.debug:
-                print('No bundle build required')
+                print('EMPTY build : No build required')

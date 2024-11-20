@@ -9,4 +9,5 @@ class Bundle(Option):
 
     def exec(self) -> Options:
         self.options.bundle = True
+        print('[DEPRECATED: bundle option is now deprecated prefer output-type build option]')
         return self.options
