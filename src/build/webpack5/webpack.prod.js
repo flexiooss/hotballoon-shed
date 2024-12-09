@@ -121,7 +121,7 @@ webpackBase.plugins.push(
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
         charset: 'utf-8'
       },
-      favicon: path.resolve(__dirname, '../html/assets/favicon.ico'),
+      favicon: path.resolve(__dirname, '../html/assets/favicon-32.png'),
       excludeChunks:['service-worker']
     }
   ),
