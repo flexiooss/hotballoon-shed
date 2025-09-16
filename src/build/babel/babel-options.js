@@ -11,7 +11,7 @@ module.exports = {
             'browsers': [
               'last 2 versions',
               'edge >= 18',
-              'Safari >= 12',
+              'Safari >= 14',
               'not dead'
             ]
           },
@@ -25,17 +25,7 @@ module.exports = {
     compact: "auto",
     plugins:
       [
-//      path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-unicode-regex')
-//    path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-named-capturing-groups-regex'),
-//    path.resolve(__dirname, '../../../node_modules/@babel/plugin-syntax-dynamic-import'),
-//    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-private-methods'),
-//    path.resolve(__dirname, '../../../node_modules/@babel/plugin-proposal-class-properties')
-       [path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-runtime')
-//       ,
-//         {
-//           corejs: 3,
-//         }
-       ]
+       path.resolve(__dirname, '../../../node_modules/@babel/plugin-transform-runtime')
     ]
   },
   test: {
