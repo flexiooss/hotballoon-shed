@@ -1,4 +1,4 @@
-stack_server_config: dict = {
+stack_server_config_v2: dict = {
     "host": "172.17.0.1",
     "hot": False,
     "liveReload": True,
