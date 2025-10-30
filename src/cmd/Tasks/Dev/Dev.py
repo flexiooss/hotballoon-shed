@@ -5,6 +5,7 @@ from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
 import json
 from cmd.Tasks.Dev.stack_server_config import stack_server_config
+from cmd.Tasks.Dev.stack_server_config_v2 import stack_server_config_v2
 from cmd.Tasks.Dev.local_server_config import local_server_config
 
 
@@ -28,6 +29,8 @@ class Dev(Task):
         if self.options.server_config == 'local':
             return self.__template_path_for('local-dev-minimal')
         if self.options.server_config == 'stack':
+            return self.__template_path_for('stack-dev-minimal')
+        if self.options.server_config == 'deported-stack':
             return self.__template_path_for('stack-dev-minimal')
 
         return self.__template_path_for('minimal')
@@ -86,6 +89,8 @@ class Dev(Task):
                 return local_server_config
             if self.options.server_config == 'stack':
                 return stack_server_config
+            if self.options.server_config == 'deported-stack':
+                return stack_server_config_v2
 
         return {}
 

@@ -16,7 +16,7 @@ module.exports = {
             ]
           },
           "bugfixes": true,
-          useBuiltIns: 'entry',
+          useBuiltIns: 'usage',
           corejs: 3
         }
       ]
