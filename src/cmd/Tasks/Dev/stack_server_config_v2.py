@@ -11,7 +11,7 @@ stack_server_config_v2: dict = {
             "runtimeErrors": True,
         },
         "webSocketTransport": 'sockjs',
-        "webSocketURL": "auto://dev-full-v2.flexio.io/devui/socketjs"
+        "webSocketURL": "auto://dev-full-v2.flexio.io/devui-deported/socketjs"
     },
     "proxy": [
         {
@@ -19,7 +19,7 @@ stack_server_config_v2: dict = {
                 "//[a-z]+/*"
             ],
             "logLevel": "debug",
-            "target": "https://dev-full-v2.flexio.io/devui",
+            "target": "https://dev-full-v2.flexio.io/devui-deported",
             "secure": False,
             "pathRewrite": {
                 "^//[a-z]+/*": "/"
