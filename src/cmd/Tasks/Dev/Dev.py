@@ -31,7 +31,7 @@ class Dev(Task):
         if self.options.server_config == 'stack':
             return self.__template_path_for('stack-dev-minimal')
         if self.options.server_config == 'deported-stack':
-            return self.__template_path_for('stack-dev-minimal')
+            return self.__template_path_for('deported-stack-dev-minimal')
 
         return self.__template_path_for('minimal')
 
