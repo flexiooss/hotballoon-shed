@@ -9,8 +9,39 @@ const path = require('path')
 
 webpackBase.output.clean = true
 webpackBase.devtool = 'eval'
+//webpackBase.devtool = false
 webpackBase.stats = {errorDetails: true}
 webpackBase.mode = 'development'
+
+webpackBase.optimization={
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        apiClient: {
+        test: /\/node_modules\/@flexio-corp\/.*-client/,
+        name: 'api-client',
+        reuseExistingChunk: true,
+        priority: 1
+      },
+      oss: {
+        test: /[\\/]node_modules[\\/]@flexio-oss/,
+        name: 'oss',
+        reuseExistingChunk: true,
+      },
+      corp: {
+        test: /[\\/]node_modules[\\/]@flexio-corp/,
+        name: 'corp',
+        reuseExistingChunk: true,
+      },
+      tinymce: {
+        test: /[\\/]node_modules[\\/]tinymce/,
+        name: 'tinymce',
+      },
+      },
+    },
+    runtimeChunk: 'single',
+    minimize: false,
+  }
 
 webpackBase.plugins.push(
   new webpack.DefinePlugin({

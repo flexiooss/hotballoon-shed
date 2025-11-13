@@ -1,5 +1,7 @@
 stack_server_config_v2: dict = {
     "host": "172.17.0.1",
+    "allowedHosts": ['.flexio.io'],
+    "compress": True,
     "server": "http",
     "hot": False,
     "liveReload": True,
