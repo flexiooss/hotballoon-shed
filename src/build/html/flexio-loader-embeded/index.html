@@ -2,6 +2,79 @@
 <html>
 <head>
     <title></title>
+    <script>
+      const ID_BTN_REFRESH = 'btn-refresh'
+
+      const loadedPromise = new Promise((resolve) => window.__setDomLoaded = resolve)
+
+      let reloadNow = false
+
+      function ensureRefreshButton() {
+        if (document.getElementById(ID_BTN_REFRESH) !== null) return
+
+        const button = document.createElement('button')
+        button.id = ID_BTN_REFRESH
+        button.innerText = 'CLEAR CACHE AND REFRESH'
+        button.addEventListener('click', function () {
+          button.disabled = true
+          setTimeout(function () {
+            button.disabled = false
+          }, 5_000)
+
+          if (reloadNow) {
+            reloadPage()
+          } else {
+            reloadNow = true
+            navigator.serviceWorker.ready.then(v => {
+              v.active.postMessage({type: 'CLEAR_CACHE'})
+            })
+            setTimeout(reloadPage, 1_500)
+          }
+        })
+        document.getElementById('errors-container').appendChild(button)
+      }
+
+      function reloadPage() {
+        const url = new URL(location.href)
+        url.searchParams.set('noCache', new Date().getTime().toString())
+        location.href = url.href
+      }
+
+      function showMessage(content) {
+        let div = content
+        if ('string' === typeof content) {
+          div = document.createElement('div')
+          div.innerText = content
+        }
+        document.getElementById('messages').appendChild(div)
+      }
+
+      async function errorsListener(e) {
+        const container = document.createElement('div')
+        container.appendChild(document.createTextNode('Error for file: ' + e.filename))
+        container.appendChild(document.createElement('br'))
+        container.appendChild(document.createTextNode('Message: ' + e.message))
+        await loadedPromise
+        showMessage(container)
+        ensureRefreshButton()
+      }
+
+      addEventListener('error', errorsListener)
+      loadedPromise.then(() => {
+        document.getElementById('loading').addEventListener('HB_DISABLE', () => {
+          removeEventListener('error', errorsListener)
+        })
+        document.getElementById('loading').addEventListener('HB_ENABLE', () => {
+          addEventListener('error', errorsListener)
+        })
+      })
+
+      setTimeout(async function () {
+        await loadedPromise
+        showMessage('Your network may be slow or your browser is stuck.')
+        ensureRefreshButton()
+      }, 15_000)
+    </script>
     <style id="loading-style">
         .loading-container {
             height: 100%;
@@ -15,15 +88,17 @@
             font-family: sans-serif;
             min-height: 332px;
             animation: focus-in 1s 1s ease forwards;
-            opacity:0
+            opacity: 0
         }
+
         .loading-wrapper {
-          display: flex;
-          align-items: center;
-          height: 100%;
-          flex-direction: column;
-          justify-content: center;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
         }
+
         .loading-progress {
             height: 4px;
             width: 300px;
@@ -31,6 +106,7 @@
             margin: 30px 0;
             max-width: 80%;
         }
+
         .loading-progress:before {
             animation: loading-progress 15s 1s cubic-bezier(.43, 1.16, .43, .62) forwards;
             background-color: #939ea9;
@@ -40,6 +116,7 @@
             position: absolute;
             width: 0;
         }
+
         @keyframes focus-in {
             from {
                 opacity: 0;
@@ -48,6 +125,7 @@
                 opacity: 1;
             }
         }
+
         @keyframes loading-progress {
             from {
                 width: 0;
@@ -56,68 +134,123 @@
                 width: 100%;
             }
         }
+
+        #errors-container {
+            margin-top: 2rem;
+        }
+
+        #messages > div {
+            color: red;
+            margin-top: 1rem;
+        }
+
+        #btn-refresh {
+            margin: 1rem;
+            padding: 1rem;
+            background-color: transparent;
+            border: white solid 1px;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #btn-refresh:disabled {
+            color: gray;
+            border-color: gray;
+        }
     </style>
 </head>
 <body>
 <div id="loading" class="loading-container">
     <div class="loading-wrapper">
         <svg width="250" height="250" viewBox="0 0 66.146 66.146" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <clipPath clipPathUnits="userSpaceOnUse" id="a">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-505.117 -208.817)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="b">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-1035.714 -338.672)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="c">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-1054.408 -272.291)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="d">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-927.114 -271.225)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="e">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-1036.322 -358.059)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="f">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-975.02 -338.672)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="g">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-974.62 -204.307)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="h">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-853.226 -253.189)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="i">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-701.927 -230.368)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="j">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-235.512 -368.93)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="k">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-289.845 -341.48)"/>
-        </clipPath>
-        <clipPath clipPathUnits="userSpaceOnUse" id="l">
-            <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-403.076 -270.625)"/>
-        </clipPath>
-    </defs>
-    <g style="display:inline;stroke-width:7.52135">
-        <path d="M0 0v106.274c0 39.871 33.787 72.499 75.079 72.499h30.077c3.367 0 6.125-2.663 6.125-5.918v-15.83c0-3.255-2.758-5.918-6.125-5.918H78.368c-26.051 0-47.364-20.58-47.364-45.736v-7.132c0-3.259 2.734-5.897 6.109-5.897h39.432c3.372 0 6.126-2.664 6.126-5.919v-18.14c0-3.255-2.754-5.919-6.126-5.919H37.13c-3.368 0-6.126-2.663-6.126-5.914V0c0-3.259-2.733-5.898-6.109-5.898H6.092C2.725-5.898-.037-3.251-.037 0z" style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 24.855 65.87)" clip-path="url(#a)"/>
-        <path d="M0 0h-45.367c-.493 0-.75-.389-1.069-.866L-64.56-27.844c0-.476.402-.87.895-.87h33.522v-105.74c0-.476.402-.865.895-.865H0c.493 0 .899.389.899.865V-.866C.899-.389.493 0 0 0" style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 49.743 59.778)" clip-path="url(#b)"/>
-        <path d="M0 0c0 38.252 32.218 69.347 71.816 69.347 39.614 0 71.815-31.095 71.815-69.347 0-38.235-32.238-69.331-71.815-69.331C32.218-69.331 0-38.219 0 0m31.041.017c0-21.694 18.29-39.354 40.775-39.354 22.468 0 40.774 17.66 40.774 39.354 0 21.693-18.306 39.391-40.774 39.391-22.485 0-40.775-17.698-40.775-39.391" style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 50.62 62.892)" clip-path="url(#c)"/>
-        <path d="m0 0-43.247 62.505c-1.859 2.721-6.146 4.941-9.513 4.941h-24.986c-3.368 0-4.618-2.24-2.742-4.941l39.503-57.618c1.859-2.721 1.859-7.144 0-9.845L-80.12-62.062c-1.859-2.717-.629-4.92 2.742-4.92h24.987c3.367 0 7.653 2.219 9.513 4.92z" style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 44.649 62.942)" clip-path="url(#d)"/>
-        <path d="M0 0h-31.766a.283.283 0 0 0-.29.277v30.677c0 .154.128.278.29.278H0c.161 0 .29-.124.29-.278V.277A.283.283 0 0 0 0 0" style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 49.771 58.869)" clip-path="url(#e)"/>
-        <path d="M0 0h-36.024a.46.46 0 0 1-.385-.203l-21.599-31.758 18.745-27.003L.385-.692C.588-.393.369 0 0 0" style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 46.896 59.778)" clip-path="url(#f)"/>
-        <path d="M0 0c.364 0 .588.393.389.687l-13.493 20.112-25.786 37.606-18.703-27.065L-36.417.203A.467.467 0 0 1-36.028 0Z" style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 46.877 66.08)" clip-path="url(#g)"/>
-        <path d="M0 0c-4.022 4.2-9.762-1.035-10.835-1.752-34.151-22.75-59.606-20.845-68.734-19.499-2.439.361-15.481 2.448-23.28 11.021-.36.398-.687.833-.878 1.375-.476 1.363-.029 2.908 1.118 3.852.427.348.858.584 1.322.716l94.486 26.759c2.804.787 4.502 3.45 3.956 6.196a110.725 110.725 0 0 1-2.382 9.257c-.36 1.193-.799 2.385-1.222 3.541-1.892 5.185-4.361 10.056-7.334 14.479-6.134 9.207-14.641 16.972-24.602 22.452l-.501.285c-.211.125-.422.245-.642.361l-.211.099c-10.317 5.38-21.839 8.279-33.323 8.383h-.659c-2.095 0-4.212-.091-6.303-.269A74.498 74.498 0 0 1-93.891 84.7c-.136-.037-.265-.087-.397-.136-.141-.05-.286-.1-.435-.145-4.361-1.293-8.486-2.912-12.255-4.813a70.77 70.77 0 0 1-16.181-11.265c-.112-.1-.228-.195-.344-.294a5.618 5.618 0 0 1-.302-.257 69.795 69.795 0 0 1-12.67-16.227c-4.555-8.035-7.372-16.67-8.374-25.665-.249-2.2-.406-4.457-.406-6.697 0-17.702 7.153-37.337 23.574-51.837 14.115-12.466 32.955-16.421 36.939-17.018.187-.025 21.094-3.152 39.221 4.925 19.031 8.477 28.917 17.572 34.392 23.756C-6.304-15.527-.808-8.263.903-3.458 1.528-1.698.994-1.04 0 0m-109.591 22.493a3.956 3.956 0 0 0-1.086-.157c-.94 0-1.847.348-2.559 1.002a3.66 3.66 0 0 0-1.093 3.591 42.455 42.455 0 0 0 4.108 10.491c5.484 9.757 14.492 16.827 25.363 19.912 10.781 3.086 22.543 1.848 32.355-3.396 3.967-2.112 7.517-4.763 10.54-7.881a2.65 2.65 0 0 0 .65-2.556 2.907 2.907 0 0 0-1.992-2.029z" style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 41.183 63.788)" clip-path="url(#h)"/>
-        <path d="M0 0c-1.371 1.942-3.856 2.862-6.212 2.265-2.601-.658-5.24-1.076-8.383-1.275-3.098-.195-7.724-.323-13.307 2.162a6.838 6.838 0 0 0-.617.31c-6.192 3.521-9.737 10.35-9.737 19.097v129.078c0 3.086-2.589 5.583-5.782 5.583h-18.235c-3.194 0-5.782-2.497-5.782-5.583V12.433c0-22.025 17.56-39.884 50.478-39.884 9.169 0 17.763 1.939 25.173 5.318 3.185 1.454 4.228 5.347 2.249 8.159z" style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 34.087 64.858)" clip-path="url(#i)"/>
-        <path d="m0 0-.331.476-6.668 9.642c-1.611 2.357-4.279 4.494-7.273 6.043-2.978 1.54-6.275 2.497-9.182 2.497h-43.214c-5.823 0-7.989-3.872-4.742-8.54l68.324-99.656c3.214-4.7 3.214-12.354 0-17.022l-.542-.791-40.203-58.662h64.63l46.995 68.026z" style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 12.21 58.36)" clip-path="url(#j)"/>
-        <path d="M0 0h64.647L32.918 45.856a.597.597 0 0 1-.489.253H-30.52c-.468 0-.749-.502-.488-.883z" style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 14.758 59.647)" clip-path="url(#k)"/>
-        <path d="M0 0a.554.554 0 0 1 0 .634l-31.464 45.475h-64.804L-65.044.572a.55.55 0 0 0 0-.63l-46.361-67.649h64.625z" style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135" transform="matrix(.0469 0 0 -.0469 20.07 62.97)" clip-path="url(#l)"/>
-    </g>
-</svg>
+            <defs>
+                <clipPath clipPathUnits="userSpaceOnUse" id="a">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-505.117 -208.817)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="b">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-1035.714 -338.672)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="c">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-1054.408 -272.291)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="d">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-927.114 -271.225)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="e">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-1036.322 -358.059)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="f">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-975.02 -338.672)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="g">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-974.62 -204.307)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="h">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-853.226 -253.189)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="i">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-701.927 -230.368)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="j">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-235.512 -368.93)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="k">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-289.845 -341.48)"/>
+                </clipPath>
+                <clipPath clipPathUnits="userSpaceOnUse" id="l">
+                    <path d="M0 1190.551h1360.63V0H0Z" transform="translate(-403.076 -270.625)"/>
+                </clipPath>
+            </defs>
+            <g style="display:inline;stroke-width:7.52135">
+                <path d="M0 0v106.274c0 39.871 33.787 72.499 75.079 72.499h30.077c3.367 0 6.125-2.663 6.125-5.918v-15.83c0-3.255-2.758-5.918-6.125-5.918H78.368c-26.051 0-47.364-20.58-47.364-45.736v-7.132c0-3.259 2.734-5.897 6.109-5.897h39.432c3.372 0 6.126-2.664 6.126-5.919v-18.14c0-3.255-2.754-5.919-6.126-5.919H37.13c-3.368 0-6.126-2.663-6.126-5.914V0c0-3.259-2.733-5.898-6.109-5.898H6.092C2.725-5.898-.037-3.251-.037 0z"
+                      style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 24.855 65.87)" clip-path="url(#a)"/>
+                <path d="M0 0h-45.367c-.493 0-.75-.389-1.069-.866L-64.56-27.844c0-.476.402-.87.895-.87h33.522v-105.74c0-.476.402-.865.895-.865H0c.493 0 .899.389.899.865V-.866C.899-.389.493 0 0 0"
+                      style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 49.743 59.778)" clip-path="url(#b)"/>
+                <path d="M0 0c0 38.252 32.218 69.347 71.816 69.347 39.614 0 71.815-31.095 71.815-69.347 0-38.235-32.238-69.331-71.815-69.331C32.218-69.331 0-38.219 0 0m31.041.017c0-21.694 18.29-39.354 40.775-39.354 22.468 0 40.774 17.66 40.774 39.354 0 21.693-18.306 39.391-40.774 39.391-22.485 0-40.775-17.698-40.775-39.391"
+                      style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 50.62 62.892)" clip-path="url(#c)"/>
+                <path d="m0 0-43.247 62.505c-1.859 2.721-6.146 4.941-9.513 4.941h-24.986c-3.368 0-4.618-2.24-2.742-4.941l39.503-57.618c1.859-2.721 1.859-7.144 0-9.845L-80.12-62.062c-1.859-2.717-.629-4.92 2.742-4.92h24.987c3.367 0 7.653 2.219 9.513 4.92z"
+                      style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 44.649 62.942)" clip-path="url(#d)"/>
+                <path d="M0 0h-31.766a.283.283 0 0 0-.29.277v30.677c0 .154.128.278.29.278H0c.161 0 .29-.124.29-.278V.277A.283.283 0 0 0 0 0"
+                      style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 49.771 58.869)" clip-path="url(#e)"/>
+                <path d="M0 0h-36.024a.46.46 0 0 1-.385-.203l-21.599-31.758 18.745-27.003L.385-.692C.588-.393.369 0 0 0"
+                      style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 46.896 59.778)" clip-path="url(#f)"/>
+                <path d="M0 0c.364 0 .588.393.389.687l-13.493 20.112-25.786 37.606-18.703-27.065L-36.417.203A.467.467 0 0 1-36.028 0Z"
+                      style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 46.877 66.08)" clip-path="url(#g)"/>
+                <path d="M0 0c-4.022 4.2-9.762-1.035-10.835-1.752-34.151-22.75-59.606-20.845-68.734-19.499-2.439.361-15.481 2.448-23.28 11.021-.36.398-.687.833-.878 1.375-.476 1.363-.029 2.908 1.118 3.852.427.348.858.584 1.322.716l94.486 26.759c2.804.787 4.502 3.45 3.956 6.196a110.725 110.725 0 0 1-2.382 9.257c-.36 1.193-.799 2.385-1.222 3.541-1.892 5.185-4.361 10.056-7.334 14.479-6.134 9.207-14.641 16.972-24.602 22.452l-.501.285c-.211.125-.422.245-.642.361l-.211.099c-10.317 5.38-21.839 8.279-33.323 8.383h-.659c-2.095 0-4.212-.091-6.303-.269A74.498 74.498 0 0 1-93.891 84.7c-.136-.037-.265-.087-.397-.136-.141-.05-.286-.1-.435-.145-4.361-1.293-8.486-2.912-12.255-4.813a70.77 70.77 0 0 1-16.181-11.265c-.112-.1-.228-.195-.344-.294a5.618 5.618 0 0 1-.302-.257 69.795 69.795 0 0 1-12.67-16.227c-4.555-8.035-7.372-16.67-8.374-25.665-.249-2.2-.406-4.457-.406-6.697 0-17.702 7.153-37.337 23.574-51.837 14.115-12.466 32.955-16.421 36.939-17.018.187-.025 21.094-3.152 39.221 4.925 19.031 8.477 28.917 17.572 34.392 23.756C-6.304-15.527-.808-8.263.903-3.458 1.528-1.698.994-1.04 0 0m-109.591 22.493a3.956 3.956 0 0 0-1.086-.157c-.94 0-1.847.348-2.559 1.002a3.66 3.66 0 0 0-1.093 3.591 42.455 42.455 0 0 0 4.108 10.491c5.484 9.757 14.492 16.827 25.363 19.912 10.781 3.086 22.543 1.848 32.355-3.396 3.967-2.112 7.517-4.763 10.54-7.881a2.65 2.65 0 0 0 .65-2.556 2.907 2.907 0 0 0-1.992-2.029z"
+                      style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 41.183 63.788)" clip-path="url(#h)"/>
+                <path d="M0 0c-1.371 1.942-3.856 2.862-6.212 2.265-2.601-.658-5.24-1.076-8.383-1.275-3.098-.195-7.724-.323-13.307 2.162a6.838 6.838 0 0 0-.617.31c-6.192 3.521-9.737 10.35-9.737 19.097v129.078c0 3.086-2.589 5.583-5.782 5.583h-18.235c-3.194 0-5.782-2.497-5.782-5.583V12.433c0-22.025 17.56-39.884 50.478-39.884 9.169 0 17.763 1.939 25.173 5.318 3.185 1.454 4.228 5.347 2.249 8.159z"
+                      style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 34.087 64.858)" clip-path="url(#i)"/>
+                <path d="m0 0-.331.476-6.668 9.642c-1.611 2.357-4.279 4.494-7.273 6.043-2.978 1.54-6.275 2.497-9.182 2.497h-43.214c-5.823 0-7.989-3.872-4.742-8.54l68.324-99.656c3.214-4.7 3.214-12.354 0-17.022l-.542-.791-40.203-58.662h64.63l46.995 68.026z"
+                      style="fill:#002337;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 12.21 58.36)" clip-path="url(#j)"/>
+                <path d="M0 0h64.647L32.918 45.856a.597.597 0 0 1-.489.253H-30.52c-.468 0-.749-.502-.488-.883z"
+                      style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 14.758 59.647)" clip-path="url(#k)"/>
+                <path d="M0 0a.554.554 0 0 1 0 .634l-31.464 45.475h-64.804L-65.044.572a.55.55 0 0 0 0-.63l-46.361-67.649h64.625z"
+                      style="fill:#ff8512;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.52135"
+                      transform="matrix(.0469 0 0 -.0469 20.07 62.97)" clip-path="url(#l)"/>
+            </g>
+        </svg>
         <div class="loading-progress"></div>
         <div>the Flexio team is preparing your application</div>
     </div>
+    <div id="errors-container">
+        <div id="messages"></div>
+    </div>
 </div>
+<script>
+  window.__setDomLoaded()
+</script>
 </body>
 </html>
