@@ -5,7 +5,7 @@
     <script>
       const ID_BTN_REFRESH = 'btn-refresh'
 
-      const loadedPromise = new Promise((resolve) => window.__setDomLoaded = resolve)
+      const loadedPromise = new Promise((resolve) => window.__Flexio__setDomLoaded = resolve)
 
       let reloadNow = false
 
@@ -31,7 +31,7 @@
             setTimeout(reloadPage, 1_500)
           }
         })
-        document.getElementById('errors-container').appendChild(button)
+        document.getElementById('errors-container')?.appendChild(button)
       }
 
       function reloadPage() {
@@ -46,17 +46,19 @@
           div = document.createElement('div')
           div.innerText = content
         }
-        document.getElementById('messages').appendChild(div)
+        document.getElementById('messages')?.appendChild(div)
       }
 
-      async function errorsListener(e) {
-        const container = document.createElement('div')
-        container.appendChild(document.createTextNode('Error for file: ' + e.filename))
-        container.appendChild(document.createElement('br'))
-        container.appendChild(document.createTextNode('Message: ' + e.message))
-        await loadedPromise
-        showMessage(container)
-        ensureRefreshButton()
+      function errorsListener(e) {
+        setTimeout(async function () {
+          await loadedPromise
+          ensureRefreshButton()
+          const container = document.createElement('div')
+          container.appendChild(document.createTextNode('Error for file: ' + e.filename))
+          container.appendChild(document.createElement('br'))
+          container.appendChild(document.createTextNode('Message: ' + e.message))
+          showMessage(container)
+        }, 1_500)
       }
 
       addEventListener('error', errorsListener)
@@ -71,8 +73,8 @@
 
       setTimeout(async function () {
         await loadedPromise
-        showMessage('Your network may be slow or your browser is stuck.')
         ensureRefreshButton()
+        showMessage('Your network may be slow or your browser is stuck.')
       }, 15_000)
     </script>
     <style id="loading-style">
@@ -253,7 +255,7 @@
     </div>
 </div>
 <script>
-  window.__setDomLoaded()
+  window.__Flexio__setDomLoaded()
 </script>
 </body>
 </html>
