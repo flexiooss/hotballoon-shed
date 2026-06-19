@@ -1,12 +1,12 @@
+import json
 import os
 from pathlib import Path
 
-from cmd.Tasks.Task import Task
-from cmd.Tasks.Tasks import Tasks
-import json
+from cmd.Tasks.Dev.local_server_config import local_server_config
 from cmd.Tasks.Dev.stack_server_config import stack_server_config
 from cmd.Tasks.Dev.stack_server_config_v2 import stack_server_config_v2
-from cmd.Tasks.Dev.local_server_config import local_server_config
+from cmd.Tasks.Task import Task
+from cmd.Tasks.Tasks import Tasks
 
 
 class Dev(Task):
@@ -99,7 +99,7 @@ class Dev(Task):
 
         self.__ensure_builder()
 
-        self.exec([
+        args = [
             'node',
             self.__node_server().as_posix(),
             self.__verbose(),
@@ -107,4 +107,10 @@ class Dev(Task):
             self.__template_html().as_posix(),
             self.__build_output().as_posix(),
             json.dumps(self.__server_config())
-        ])
+        ]
+        if os.environ.get('E2E_TRANSPORT') == 'dev':
+            # I can't understand how Playwright invokes the process, but it seems that it only shows stderr upon error
+            # But our process needs a live stderr to stay alive, so it would crash immediately by default
+            self.exec_piped(args)
+        else:
+            self.exec(args)

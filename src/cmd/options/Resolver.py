@@ -25,12 +25,13 @@ from cmd.options.Port import Port
 from cmd.options.ServerConfig import ServerConfig
 from cmd.options.ModuleOnly import ModuleOnly
 from cmd.options.BypassDepCheck import BypassDepCheck
+from cmd.options.E2ETransport import E2ETransport
 
 
 class Resolver:
     options: List[Option] = [Source, VerboseOption, HelpOption, TargetPath, Username, Password, Email, Registry,
                              Restrict, Clean, ModuleOnly, Entry, ServerConfig, Debug, Quiet, SourceMap, Bundle,
-                             HTMLTemplate, HTMLTemplateName, Port, Inspect, Strict, BypassDepCheck]
+                             HTMLTemplate, HTMLTemplateName, Port, Inspect, Strict, BypassDepCheck, E2ETransport]
 
     def resolve(self, opt: str, arg: str, options: Options):
         o: Option

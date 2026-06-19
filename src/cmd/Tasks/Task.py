@@ -1,8 +1,8 @@
 from __future__ import annotations
+
 import abc
 from pathlib import Path
 from subprocess import Popen, PIPE
-
 from typing import List, Optional
 
 from cmd.Options import Options
@@ -29,7 +29,12 @@ class Task(abc.ABC):
 
     def exec_for_stdout(self, args: List[str]) -> str:
         stdout, stderr = Popen(args, stdout=PIPE, cwd=self.cwd.as_posix()).communicate()
-        return self.decode_stdout(stdout)
+        return self.decode_stdstream(stdout)
 
-    def decode_stdout(self, stdout) -> str:
-        return stdout.strip().decode('utf-8')
+    def decode_stdstream(self, stream) -> str:
+        return stream.strip().decode('utf-8')
+
+    def exec_piped(self, args: List[str]) -> tuple[Popen, str, str]:
+        child = Popen(args, stdout=PIPE, stderr=PIPE, cwd=self.cwd.as_posix())
+        stdout, stderr = child.communicate()
+        return child, self.decode_stdstream(stdout), self.decode_stdstream(stderr)

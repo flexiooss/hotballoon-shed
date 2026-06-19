@@ -2,6 +2,7 @@ class Options:
     bundle: bool = False
     clean: str = None
     debug: bool = False
+    e2e_transport: str = None
     email: str = None
     entry: str = None
     html_template: str = None
