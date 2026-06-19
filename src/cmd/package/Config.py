@@ -37,6 +37,7 @@ class Config:
 
     BROWSER_TEST_KEY: str = 'browserTest'
     BROWSER_TEST_PATH_KEY: str = 'path'
+    BROWSER_TEST_TESTER_KEY: str = 'tester'
 
     CORE: str = 'core'
     GENERATE_SOURCES_KEY: str = 'generate-sources'
@@ -301,7 +302,7 @@ class Config:
         return self.__data.get(self.BROWSER_TEST_KEY)
 
     def browser_has_test_dir(self) -> bool:
-        return self.test().get(self.BROWSER_TEST_PATH_KEY) is not None
+        return self.browser_test().get(self.BROWSER_TEST_PATH_KEY) is not None
 
     def browser_test_dir(self) -> Path:
         if not self.browser_has_test_dir():
@@ -313,6 +314,12 @@ class Config:
         if not p.is_dir():
             raise FileNotFoundError('Not found browserTest path')
         return p
+
+    def has_browser_tester(self) -> bool:
+        return self.has_browser_test() and self.browser_test().get(self.BROWSER_TEST_TESTER_KEY) is not None
+
+    def browser_tester(self) -> str:
+        return self.browser_test().get(self.BROWSER_TEST_TESTER_KEY)
 
     def has_modules(self) -> bool:
         return self.__data.get(self.MODULES_KEY) is not None and len(self.modules())
