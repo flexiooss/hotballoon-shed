@@ -140,7 +140,7 @@ class BrowserTest(Task):
                     raise KeyError('No browser test dir found for this package')
                 os.environ['E2E_TEST_DIR'] = (self.cwd / self.package.config().browser_test_dir()).as_posix()
 
-            case 'static':
+            case 'static' | 'docker':
                 print('**** BUILD FIXTURES')
                 self.__ensure_builder()
                 self.__build_modules(run_dir)

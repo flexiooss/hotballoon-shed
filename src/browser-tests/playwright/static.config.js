@@ -12,7 +12,7 @@ const browsers = [
   { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
 ]
 
-module.exports = function (config) {
+module.exports = function () {
   const runDir = process.env.E2E_RUN_DIR
   if (!runDir) throw new Error('E2E_RUN_DIR is not set')
 

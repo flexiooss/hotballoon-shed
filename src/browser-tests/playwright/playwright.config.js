@@ -12,16 +12,7 @@ const VERBOSE = process.env.E2E_VERBOSE === '1'
 
 const TRANSPORT = process.env.E2E_TRANSPORT
 if (!TRANSPORT) throw new Error('E2E_TRANSPORT is not set')
-const DEV = TRANSPORT === 'dev'
-
-// const TARGETS = JSON.parse(getArgv(2))
-// const target = TARGETS.find(t => t.name === process.env.E2E_TARGET)
-// if (DEV && !target) throw new Error('E2E_TRANSPORT=dev requires E2E_TARGET=<name>')
-
-const configBuilder = DEV ? require('./dev.config') : require('./static.config')
-const config = configBuilder({
-  DEV,
-})
+const config = require(`./${TRANSPORT}.config.js`)
 
 if (VERBOSE) {
   console.log('**** BASE CONFIG ****')
