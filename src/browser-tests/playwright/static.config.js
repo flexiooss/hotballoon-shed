@@ -12,12 +12,8 @@ const browsers = [
   {name: 'firefox', use: {...devices['Desktop Firefox']}},
 ]
 
-module.exports = {
-  const runDir = process.env.E2E_RUN_DIR
-  if(
-!runDir
-)
-throw new Error('E2E_RUN_DIR is not set')
+const runDir = process.env.E2E_RUN_DIR
+if (!runDir) throw new Error('E2E_RUN_DIR is not set')
 
 const testsRoot = path.join(runDir, 'tests')
 const distRoot = path.join(runDir, 'dist')
@@ -43,7 +39,7 @@ const projects = modules.flatMap(name => {
   }))
 })
 
-return {
+module.exports = {
   ...baseConfig,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
