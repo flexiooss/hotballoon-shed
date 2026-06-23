@@ -1,4 +1,5 @@
 module.exports = {
+  outputDir: process.cwd() + '/test-results',
   reporter: [
     ['list'],
     ['html', {open: 'never'}]
