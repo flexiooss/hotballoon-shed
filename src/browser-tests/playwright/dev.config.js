@@ -6,6 +6,10 @@ if (!testDir) throw new Error('E2E_TEST_DIR is not set')
 module.exports = {
   ...baseConfig,
   testDir,
+  reporter: [
+    ['list'],
+    ['html', {open: 'on-failure'}]
+  ],
   use: {
     baseURL: 'https://localhost:8080',
     ignoreHTTPSErrors: true,

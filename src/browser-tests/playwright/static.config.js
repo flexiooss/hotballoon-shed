@@ -45,6 +45,10 @@ module.exports = {
   forbidOnly: !!process.env.CI,
   retries: !!process.env.CI ? 2 : 0,
   projects,
+  reporter: [
+    ['list'],
+    ['html', {open: 'never'}]
+  ],
   use: {
     ignoreHTTPSErrors: false,
     trace: 'on-first-retry',
