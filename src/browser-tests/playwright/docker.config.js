@@ -2,9 +2,9 @@ const staticConfig = require('./static.config.js')
 
 module.exports = {
   ...staticConfig,
-  outputDir: '/test-results/playwright',
+  outputDir: '/test-results/playwright/results',
   reporter: [
-    ['list'],
+    ['dot'],
     [
       'html',
       {
