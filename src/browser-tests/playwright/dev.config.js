@@ -7,6 +7,7 @@ module.exports = function (config) {
   return {
     ...baseConfig,
     testDir,
+    outputDir: process.cwd() + '/test-results',
     use: {
       baseURL: 'https://localhost:8080',
       ignoreHTTPSErrors: config.DEV,
