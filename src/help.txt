@@ -60,6 +60,14 @@ hbshed
                   --module-only     test on single module level
                   --source-map      show source map on stack trace (slower)
                   --strict          strict mode (fail on unhandled error in promise)
+              browser-test          run end-to-end tests. Make sure you ran `hbshed cig` before
+                  <options>
+                  --verbose         verbose mode
+                  --e2e-transport   how to run tests. The available modes are:
+                                    dev: run on a single module, use the framework's GUI if available and hot reload
+                                    static: build all test fixtures (recursively) and run non-visual tests [default]
+                                    docker: build all test fixtures (recursively) and run all tests in a standardized
+                                        Docker container. If not run from a `ci-js-tools` image, it will invoke it.
 
 
 

@@ -1,13 +1,18 @@
 import os
+import shlex
 import sys
 import time
 from pathlib import Path
 from subprocess import Popen
+from typing import Optional
 
+from cmd.Options import Options
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
+from cmd.package.HBShedPackageHandler import HBShedPackageHandler
 from cmd.package.modules.Module import Module
 from cmd.package.modules.ModulesHandler import ModulesHandler
+from cmd.package.modules.RootParentPackage import RootParentPackage
 
 BROWSER_TESTS_DIR = '/tmp/hotballoon-shed/browser-tests'
 
@@ -16,11 +21,13 @@ BROWSER_TESTS_DIR = '/tmp/hotballoon-shed/browser-tests'
 class BrowserTest(Task):
     NAME = Tasks.BROWSER_TEST
 
+    def __init__(self, options: Options, package: Optional[HBShedPackageHandler], cwd: Path):
+        super().__init__(options, package, cwd)
+        self.__reminder = None
+
     def __ensure_folders(self, run_dir: str, transport: str):
         Path(os.path.join(run_dir, 'dist')).mkdir(0o700, parents=True, exist_ok=True)
         Path(os.path.join(run_dir, 'tests')).mkdir(0o700, parents=True, exist_ok=True)
-        if transport == 'docker':
-            Path('/test-results/playwright').mkdir(0o700, parents=True, exist_ok=True)
 
     def __build_modules(self, run_dir: str):
         if self.package is None: return
@@ -66,7 +73,7 @@ class BrowserTest(Task):
         test_dir = self.package.config().browser_test_dir()
         if not test_dir.is_dir():
             raise FileNotFoundError('Could not find test dir: ' + test_dir.as_posix())
-        print('**** TESTS DIR: ' + test_dir.as_posix())
+        print('**** TESTS DIR: ' + test_dir.as_posix(), flush=True)
 
         child: Popen = self.exec([
             'node',
@@ -99,7 +106,7 @@ class BrowserTest(Task):
 
         os.environ['E2E_RUN_DIR'] = run_dir
 
-        print('**** INVOKING TESTER')
+        print('**** INVOKING TESTER', flush=True)
         match browser_tester:
             case 'playwright':
                 args = [
@@ -113,22 +120,51 @@ class BrowserTest(Task):
 
                 child = self.exec(args)
 
+                print('\n**** Tests completed')
+                if self.__reminder is not None: print('**** reminder: ' + self.__reminder)
+
                 match transport:
                     case 'static' | 'dev':
-                        sys.stderr.write('**** Additional assets may be available in the `test-results` folder')
+                        print('**** Additional assets may be available in the `test-results` folder')
                     case 'docker':
-                        sys.stderr.write(
-                            '**** Additional assets may be available in the `<test-results-mount-point>/playwright/results` folder')
+                        print('**** Assets can be found in the the container\'s `/test-results` folder')
+                        print('**** If it was mounted as a shared volume, you can find them on your mount point')
+                        print('**** To see the full report: `npx playwright show-report <mount-point>/playwright/html`')
 
-                code = child.returncode
-                if code != 0:
-                    sys.stderr.write('**** ERROR RETURNED BY PLAYWRIGHT\n')
-
-                    raise ChildProcessError(code)
+                        code = child.returncode
+                        if code != 0:
+                            sys.stderr.write('**** ERROR RETURNED BY PLAYWRIGHT\n')
+                            raise ChildProcessError(code)
             case _:
                 raise ValueError('Unsupported browser tester: ' + browser_tester)
 
+    def __run_in_docker_and_exit(self):
+        if self.package is None: return
+        print('**** It seems that you are not running this from the ci-js-tools image!')
+        package_path = RootParentPackage.from_module_package(self.package).cwd.as_posix()
+
+        command = [
+            'docker', 'run', '--rm', '--ipc=host',
+            '--user', str(os.getuid()),
+            '-v', package_path + ':/src',
+            '-v', '/tmp/test-results:/test-results',
+            '--workdir', '/src/' + os.path.relpath(Path.cwd().as_posix(), package_path),
+            'codingmatters/ci-js-tools',
+            'hbshed', 'browser-test', '--e2e-transport=docker'
+        ]
+
+        print(
+            'Here is the suggested command for using docker. We will ensure the `/tmp/test-results` folder exists.')
+        print('Press enter to accept and run.')
+        input(shlex.join(command))
+
+        Path('/tmp/test-results').mkdir(0o700, parents=True, exist_ok=True)
+        code = self.exec(command).returncode
+        print('**** docker invocation completed')
+        sys.exit(code)
+
     def __check_js_tools(self, transport: str, is_tools: bool):
+        if self.package is None: return
         if is_tools:
             match transport:
                 case 'dev':
@@ -138,24 +174,19 @@ class BrowserTest(Task):
                         'static transport is meant to be used without docker. Use `--e2e-transport=docker` if you want standardized visual tests')
                 case 'docker':
                     print('**** DOCKER TRANSPORT MODE')
-                    print('**** note: don\'t forget to check and commit any generated screenshots')
+                    self.__reminder = 'don\'t forget to check and commit any generated screenshots'
         else:
             match transport:
                 case 'dev':
                     print('**** DEV TRANSPORT MODE')
-                    print(
-                        '**** note: generated screenshots using this mode are NOT standardized and must NOT be committed')
+                    self.__reminder = 'generated screenshots using this mode are NOT standardized and must NOT be committed'
                 case 'static':
                     print('**** STATIC TRANSPORT MODE')
-                    print('**** note: use the docker transport mode to run visual tests')
+                    self.__reminder = 'This mode ignores visual tests. Use the docker transport mode if needed'
                 case 'docker':
-                    print(
-                        'In order to generate the same screenshots in any context, this transport mode requires a standardized Docker image.')
-                    print('Usage:')
-                    print('mkdir /tmp/test-results')
-                    print(
-                        'docker run --rm --user $UID --ipc=host -v $PWD:/src -v /tmp/test-results:/test-results localhost:5000/codingmatters/ci-js-tools hbshed browser-test --e2e-transport=docker')
-                    raise EnvironmentError('docker transport is meant to be used with docker')
+                    print('**** DOCKER TRANSPORT MODE')
+                    self.__run_in_docker_and_exit()
+        if self.__reminder is not None: print('**** note: ' + self.__reminder)
 
     def __ensure_builder(self):
         if not self.package.config().has_builder():
@@ -163,6 +194,7 @@ class BrowserTest(Task):
 
     def process(self):
         if self.package is None: return
+        self.__reminder = None
 
         print('BROWSER TEST: ' + self.package.name())
         if not self.package.config().has_browser_tester():
