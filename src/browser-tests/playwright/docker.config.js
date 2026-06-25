@@ -1,7 +1,7 @@
-const staticConfig = require('./static.config.js')
+const commonConfig = require('./built-commons.config')
 
 module.exports = {
-  ...staticConfig,
+  ...commonConfig,
   outputDir: '/test-results/playwright/results',
   reporter: [
     ['dot'],

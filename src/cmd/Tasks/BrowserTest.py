@@ -117,7 +117,8 @@ class BrowserTest(Task):
                     case 'static' | 'dev':
                         sys.stderr.write('**** Additional assets may be available in the `test-results` folder')
                     case 'docker':
-                        sys.stderr.write('**** Additional assets may be available in the `<test-results-mount-point>/playwright/results` folder')
+                        sys.stderr.write(
+                            '**** Additional assets may be available in the `<test-results-mount-point>/playwright/results` folder')
 
                 code = child.returncode
                 if code != 0:
@@ -126,6 +127,35 @@ class BrowserTest(Task):
                     raise ChildProcessError(code)
             case _:
                 raise ValueError('Unsupported browser tester: ' + browser_tester)
+
+    def __check_js_tools(self, transport: str, is_tools: bool):
+        if is_tools:
+            match transport:
+                case 'dev':
+                    raise EnvironmentError('dev transport is meant to be used without docker')
+                case 'static':
+                    raise EnvironmentError(
+                        'static transport is meant to be used without docker. Use `--e2e-transport=docker` if you want standardized visual tests')
+                case 'docker':
+                    print('**** DOCKER TRANSPORT MODE')
+                    print('**** note: don\'t forget to check and commit any generated screenshots')
+        else:
+            match transport:
+                case 'dev':
+                    print('**** DEV TRANSPORT MODE')
+                    print(
+                        '**** note: generated screenshots using this mode are NOT standardized and must NOT be committed')
+                case 'static':
+                    print('**** STATIC TRANSPORT MODE')
+                    print('**** note: use the docker transport mode to run visual tests')
+                case 'docker':
+                    print(
+                        'In order to generate the same screenshots in any context, this transport mode requires a standardized Docker image.')
+                    print('Usage:')
+                    print('mkdir /tmp/test-results')
+                    print(
+                        'docker run --rm --user $UID --ipc=host -v $PWD:/src -v /tmp/test-results:/test-results localhost:5000/codingmatters/ci-js-tools hbshed browser-test --e2e-transport=docker')
+                    raise EnvironmentError('docker transport is meant to be used with docker')
 
     def __ensure_builder(self):
         if not self.package.config().has_builder():
@@ -146,14 +176,13 @@ class BrowserTest(Task):
         if self.options.verbose:
             os.environ['E2E_VERBOSE'] = '1'
 
-        # TODO hints about running with or without docker
+        self.__check_js_tools(transport, os.environ.__contains__('CI_JS_TOOLS'))
 
         self.__ensure_folders(run_dir, transport)
 
         match transport:
             case 'dev':
                 # Reuses `hbshed dev`
-                print('**** DEV MODE')
                 if not self.package.config().browser_has_test_dir():
                     raise KeyError('No browser test dir found for this package')
                 os.environ['E2E_TEST_DIR'] = (self.cwd / self.package.config().browser_test_dir()).as_posix()
