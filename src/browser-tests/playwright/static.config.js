@@ -47,7 +47,13 @@ module.exports = {
   projects,
   reporter: [
     ['list'],
-    ['html', {open: 'never'}]
+    [
+      'html',
+      {
+        open: 'never',
+        outputFolder: process.cwd() + '/playwright-report',
+      }
+    ]
   ],
   use: {
     ignoreHTTPSErrors: false,

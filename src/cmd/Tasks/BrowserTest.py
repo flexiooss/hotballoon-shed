@@ -16,9 +16,11 @@ BROWSER_TESTS_DIR = '/tmp/hotballoon-shed/browser-tests'
 class BrowserTest(Task):
     NAME = Tasks.BROWSER_TEST
 
-    def __ensure_folders(self, run_dir: str):
+    def __ensure_folders(self, run_dir: str, transport: str):
         Path(os.path.join(run_dir, 'dist')).mkdir(0o700, parents=True, exist_ok=True)
         Path(os.path.join(run_dir, 'tests')).mkdir(0o700, parents=True, exist_ok=True)
+        if transport == 'docker':
+            Path('/test-results/playwright').mkdir(0o700, parents=True, exist_ok=True)
 
     def __build_modules(self, run_dir: str):
         if self.package is None: return
@@ -86,7 +88,7 @@ class BrowserTest(Task):
             True
         )
 
-    def __run_tests(self, run_dir: str):
+    def __run_tests(self, run_dir: str, transport: str):
         if self.package is None: return
 
         browser_tester = self.package.config().browser_tester()
@@ -106,9 +108,22 @@ class BrowserTest(Task):
                     'test',
                     '--config', tester.as_posix()
                 ]
-                if os.environ['E2E_TRANSPORT'] == 'dev':
+                if transport == 'dev':
                     args.append('--ui')
-                self.exec(args)
+
+                child = self.exec(args)
+
+                match transport:
+                    case 'static' | 'dev':
+                        sys.stderr.write('**** Additional assets may be available in the `test-results` folder')
+                    case 'docker':
+                        sys.stderr.write('**** Additional assets may be available in the `<test-results-mount-point>/playwright/results` folder')
+
+                code = child.returncode
+                if code != 0:
+                    sys.stderr.write('**** ERROR RETURNED BY PLAYWRIGHT\n')
+
+                    raise ChildProcessError(code)
             case _:
                 raise ValueError('Unsupported browser tester: ' + browser_tester)
 
@@ -125,12 +140,15 @@ class BrowserTest(Task):
                 'No browser tester found for this package. If you want to run tests in sub-modules, you must at least add a tester entry in this module, without path.')
 
         run_dir = os.path.join(BROWSER_TESTS_DIR, str(time.time_ns()))
-        self.__ensure_folders(run_dir)
 
         transport = self.options.e2e_transport or 'static'
         os.environ['E2E_TRANSPORT'] = transport
         if self.options.verbose:
             os.environ['E2E_VERBOSE'] = '1'
+
+        # TODO hints about running with or without docker
+
+        self.__ensure_folders(run_dir, transport)
 
         match transport:
             case 'dev':
@@ -148,4 +166,4 @@ class BrowserTest(Task):
             case _:
                 raise ValueError('Unknown E2E transport mode: ' + transport)
 
-        self.__run_tests(run_dir)
+        self.__run_tests(run_dir, transport)
