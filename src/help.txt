@@ -68,6 +68,8 @@ hbshed
                                     static: build all test fixtures (recursively) and run non-visual tests [default]
                                     docker: build all test fixtures (recursively) and run all tests in a standardized
                                         Docker container. If not run from a `ci-js-tools` image, it will invoke it.
+                  --allow-dockerization
+                                   bypass the confirmation step when using the `docker' transport mode without docker
 
 
 

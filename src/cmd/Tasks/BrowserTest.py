@@ -153,14 +153,20 @@ class BrowserTest(Task):
             'hbshed', 'browser-test', '--e2e-transport=docker'
         ]
 
-        print(
-            'Here is the suggested command for using docker. We will ensure the `/tmp/test-results` folder exists.')
-        print('Press enter to accept and run.')
-        input(shlex.join(command))
+        if self.options.allow_dockerization:
+            print('**** Running the following command (as allowed):')
+            print('**** ' + shlex.join(command))
+        else:
+            print('Below is the suggested command for using docker from this module.')
+            print('We will also ensure the `/tmp/test-results` folder exists.')
+            print(shlex.join(command))
+            input('Press enter to accept and run. Add `--allow-dockerization` to skip this question next time.')
 
+        print('**** Re-invoking inside Docker image...')
         Path('/tmp/test-results').mkdir(0o700, parents=True, exist_ok=True)
         code = self.exec(command).returncode
         print('**** docker invocation completed')
+        print('**** The results\'s mount point is `/tmp/test-results`')
         sys.exit(code)
 
     def __check_js_tools(self, transport: str, is_tools: bool):
