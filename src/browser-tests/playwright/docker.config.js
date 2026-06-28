@@ -2,14 +2,14 @@ const commonConfig = require('./built-commons.config')
 
 module.exports = {
   ...commonConfig,
-  grepInvert: /@visual/,
+  outputDir: '/test-results/playwright/results',
   reporter: [
-    ['list'],
+    ['dot'],
     [
       'html',
       {
         open: 'never',
-        outputFolder: process.cwd() + '/playwright-report',
+        outputFolder: '/test-results/playwright/html',
       }
     ]
   ],

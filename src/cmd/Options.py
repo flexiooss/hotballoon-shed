@@ -1,4 +1,5 @@
 class Options:
+    allow_dockerization: bool = False
     bundle: bool = False
     clean: str = None
     debug: bool = False
