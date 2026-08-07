@@ -45,7 +45,7 @@ class BrowserTest(Task):
         if self.package is None: return
         if not self.package.config().browser_has_test_dir(): return
 
-        module_name = self.package.name()
+        module_name = self.package.name().replace('/', '__')
         dist_dir = os.path.join(run_dir, 'dist', module_name)
         tests_link = os.path.join(run_dir, 'tests', module_name)
 
@@ -208,6 +208,7 @@ class BrowserTest(Task):
                 'No browser tester found for this package. If you want to run tests in sub-modules, you must at least add a tester entry in this module, without path.')
 
         run_dir = os.path.join(BROWSER_TESTS_DIR, str(time.time_ns()))
+        print('**** TEMP DIRECTORY: ' + run_dir)
 
         transport = self.options.e2e_transport or 'static'
         os.environ['E2E_TRANSPORT'] = transport
