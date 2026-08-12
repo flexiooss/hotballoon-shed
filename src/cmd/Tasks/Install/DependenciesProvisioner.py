@@ -4,6 +4,7 @@ import sys
 from cmd.Tasks.Install.ParentDependenciesWalkerProcessor import ParentDependenciesWalkerProcessor
 from cmd.Tasks.Install.ParentWalkerProcessor import ParentWalkerProcessor
 from cmd.Tasks.Install.PeerDependenciesWalkerProcessor import PeerDependenciesWalkerProcessor
+from cmd.package.AbstractDependenciesWalker import AbstractDependenciesWalker
 from cmd.package.DependenciesWalker import DependenciesWalker
 from cmd.package.DevDependenciesWalker import DevDependenciesWalker
 from cmd.package.PackageHandler import PackageHandler
@@ -28,6 +29,8 @@ class DependenciesProvisioner:
         self.__parent_dependencies_processor.process(self.__package)
 
     def process(self):
+        AbstractDependenciesWalker.resolved = {}
+
         self.__process_for_root_package()
 
         if self.__package.has_dependencies():
