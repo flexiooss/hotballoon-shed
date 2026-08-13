@@ -5,6 +5,11 @@ from cmd.package.PackageHandler import PackageHandler
 class DependenciesWalker(AbstractDependenciesWalker):
 
     def process_all(self):
+        already_resolved: bool = self.target_package_name in AbstractDependenciesWalker.resolved
+        if already_resolved:
+            self._validate_version(AbstractDependenciesWalker.resolved[self.target_package_name])
+            return
+
         package: PackageHandler = self.process()
 
         if package.has_dependencies():
