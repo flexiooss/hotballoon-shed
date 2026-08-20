@@ -8,12 +8,7 @@ module.exports = {
         path.resolve(__dirname, '../../../node_modules/@babel/preset-env'),
         {
           targets: {
-            'browsers': [
-              'last 2 versions',
-              'edge >= 18',
-              'Safari >= 14',
-              'not dead'
-            ]
+            'browsers': 'baseline widely available, last 2 Samsung versions, last 2 Opera versions, last 2 OperaMobile versions',
           },
           "bugfixes": true,
           useBuiltIns: 'entry',
