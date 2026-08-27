@@ -17,5 +17,5 @@ class HBShedPackageHandler(PackageHandler):
 
     def config(self) -> Config:
         if self.package_data[self.HOTBALLOON_SHED_KEY] is None:
-            raise ValueError('No `hotballoon-shed` configuration founded')
+            raise ValueError('No `hotballoon-shed` configuration found')
         return Config(self.data[self.HOTBALLOON_SHED_KEY], self.cwd)
