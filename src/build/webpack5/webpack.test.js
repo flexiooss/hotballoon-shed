@@ -1,5 +1,6 @@
 'use strict'
 const path = require('path')
+const crypto = require('crypto')
 const babelOptions = require('../babel/getBabelConfig')
 const CONFIG = require('./config')
 const webpack = require('webpack')
@@ -7,17 +8,17 @@ const webpack = require('webpack')
 const webpackBase = {
   entry: CONFIG.entry,
   plugins: [
-   new webpack.DefinePlugin({
-    '__DEVELOPMENT__': JSON.stringify(true),
-     '__ASSERT__': JSON.stringify(true),
-    '__DEBUG__': JSON.stringify(true)
-  })
+    new webpack.DefinePlugin({
+      '__DEVELOPMENT__': JSON.stringify(true),
+      '__ASSERT__': JSON.stringify(true),
+      '__DEBUG__': JSON.stringify(true)
+    })
   ],
   performance: {
     hints: false
   },
-  mode:'development',
-  target: "node",
+  mode: 'development',
+  target: 'node',
   optimization: {
     removeAvailableModules: false,
     removeEmptyChunks: false,
@@ -49,6 +50,6 @@ const webpackBase = {
   resolveLoader: {
     modules: [CONFIG.vendors_path]
   }
-};
+}
 
 module.exports = webpackBase
