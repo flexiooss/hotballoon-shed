@@ -25,7 +25,12 @@ const webpackBase = {
   },
   cache: {
     type: 'filesystem',
-    cacheDirectory: path.resolve('/tmp/hotballoon-shed/cache')
+    cacheDirectory: path.resolve('/tmp/hotballoon-shed/cache'),
+    name: `test-${path.basename(CONFIG.root_path)}-${crypto.createHash('md5').update(CONFIG.root_path).digest('hex').substring(0, 12)}`,
+    version: '1',
+    buildDependencies: {
+      config: [__filename, require.resolve('../babel/getBabelConfig')]
+    }
   },
   module: {
     rules: [
