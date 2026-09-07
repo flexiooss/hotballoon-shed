@@ -34,9 +34,9 @@ class Executor:
                 self.__options_resolver.name_options()
             )
 
-        except getopt.GetoptError:
-            print('OUPS !!!')
-            print('Oh buddy try `hbshed -H`')
+        except getopt.GetoptError as err:
+            print('Could not parse argument:', err)
+            print('Try `hbshed -H`')
             sys.exit(2)
 
         for opt, arg in opts:

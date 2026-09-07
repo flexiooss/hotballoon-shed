@@ -1,14 +1,14 @@
 #! /usr/bin/env python3.7
-import time
-
 import sys
+import time
+import traceback
 from pathlib import Path
 
 from cmd.Executor import Executor
 
 
 def main(argv) -> None:
-    start_time: time = time.time()
+    start_time: float = time.time()
     executor: Executor = Executor(cwd=Path.cwd())
     executor.extract_argv(argv)
     if executor.options.debug:
@@ -17,16 +17,18 @@ def main(argv) -> None:
         try:
             executor.exec()
         except KeyboardInterrupt:
-            print(  "\n\n"+'\033[95m' + '###  YOU KILL ME !  ###' +'\x1b[0m'+ "\n")
-        except (FileNotFoundError, FileExistsError, ImportError, AttributeError, ValueError, KeyError,ChildProcessError) as err:
+            print("\n\n" + '\033[95m' + '###  YOU KILL ME !  ###' + '\x1b[0m' + "\n")
+        except (FileNotFoundError, FileExistsError, ImportError, AttributeError, ValueError, KeyError,
+                ChildProcessError) as err:
             sys.stderr.write("""
     
 \033[31m#######################################
-# OUPS !!!
-# {type}:{error}
+# OOPS!!!
+# {type}: {error}
 #######################################\x1b[0m
-    
-""".format(type=err.__class__.__name__, error=err))
+
+{stack}
+""".format(type=err.__class__.__name__, error=err, stack=''.join(traceback.format_tb(err.__traceback__))))
             sys.stderr.write("Command terminated with wrong status code: 1" + "\n")
             sys.exit(1)
     if not executor.options.quiet:

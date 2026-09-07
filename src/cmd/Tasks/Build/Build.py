@@ -1,20 +1,20 @@
+import json
 import os
-import shutil
 import sys
 from pathlib import Path
 from subprocess import Popen
+from typing import Optional
 
 from cmd.Tasks.Task import Task
 from cmd.Tasks.Tasks import Tasks
 from cmd.package.OutputType import OutputType
-import json
-from typing import Optional
 
 
 class Build(Task):
     NAME = Tasks.BUILD
 
     def __build_app(self):
+        if self.package is None: return
 
         # print(self.package.config().build_entries())
         # exit(0)
@@ -38,12 +38,9 @@ class Build(Task):
         verbose: str = '-v' if self.options.debug else ''
         inspect: str = '1' if self.options.inspect else '0'
 
-
         html_template: Path = self.__resolve_html_template()
 
-        entries: Dict = self.package.config().build_entries()
-        # if(entries.has_key('service-worker')):
-        #     del entries['service-worker']
+        entries = self.package.config().build_entries()
 
         child: Popen = self.exec([
             'node',
@@ -59,50 +56,6 @@ class Build(Task):
         if code != 0:
             sys.stderr.write("BUILD APP FAIL" + "\n")
             raise ChildProcessError(code)
-
-
-    def __build_sw(self):
-        print('****')
-        print('**** BUILD APP SW: ' + self.package.name())
-        print('****')
-
-        if not self.package.config().has_builder():
-            raise KeyError('No builder found into `hotballoon-shed` configuration')
-
-        production_builder: Path = Path(os.path.dirname(
-            os.path.realpath(__file__)) + '/../../../build/' + self.package.config().builder() + '/productionsw.js')
-        production_builder.resolve()
-
-        if not production_builder.is_file():
-            raise FileNotFoundError('No builder file found for this builder : ' + self.package.config().builder())
-
-        if not self.package.config().has_build_output():
-            raise KeyError('No output path for build found into `hotballoon-shed` configuration')
-
-        verbose: str = '-v' if self.options.debug else ''
-        inspect: str = '1' if self.options.inspect else '0'
-
-        entries: Dict = self.package.config().build_entries()
-        if (entries.has_key('service-worker')):
-            entry= entries['service-worker']
-
-            html_template: Path = self.__resolve_html_template()
-
-            child: Popen = self.exec([
-                'node',
-                production_builder.as_posix(),
-                verbose,
-                json.dumps(entry),
-                html_template.as_posix(),
-                self.package.config().build_output(),
-                inspect
-            ])
-            code = child.returncode
-
-            if code != 0:
-                sys.stderr.write("BUILD APP SW FAIL" + "\n")
-                raise ChildProcessError(code)
-
 
     def __build_app_debug(self):
         print('****')
@@ -124,7 +77,6 @@ class Build(Task):
 
         verbose: str = '-v' if self.options.debug else ''
         inspect: str = '1' if self.options.inspect else '0'
-
 
         html_template: Path = self.__resolve_html_template()
 

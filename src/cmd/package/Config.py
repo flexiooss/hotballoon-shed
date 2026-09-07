@@ -193,22 +193,22 @@ class Config:
     def build_entries(self) -> List[Path]:
         if not self.has_build_entries():
             raise ValueError('No build entries defined')
-        enties_raw: Dict = self.build().get(self.BUILD_ENTRIES_KEY)
-        if type(enties_raw) is dict:
-            for entry in enties_raw:
-                value = enties_raw.get(entry)
+        entries_raw = self.build().get(self.BUILD_ENTRIES_KEY)
+        if type(entries_raw) is dict:
+            for entry in entries_raw:
+                value = entries_raw.get(entry)
 
                 p: Path = Path(self.__cwd / value.get('import'))
                 p.resolve()
                 if not p.is_file():
                     raise FileNotFoundError('Not found entry path : ' + p.as_posix())
-                enties_raw[entry]['import'] = p.as_posix()
+                entries_raw[entry]['import'] = p.as_posix()
 
-            return enties_raw
+            return entries_raw
         else:
             entries: List[Path] = []
             v: str
-            for v in enties_raw:
+            for v in entries_raw:
 
                 p: Path = Path(self.__cwd / v)
                 p.resolve()
