@@ -120,7 +120,7 @@ class BrowserTest(Task):
 
                 child = self.exec(args)
 
-                print('\n**** Tests completed')
+                print('\n**** Tester returned')
                 if self.__reminder is not None: print('**** reminder: ' + self.__reminder)
 
                 match transport:
@@ -131,10 +131,11 @@ class BrowserTest(Task):
                         print('**** If it was mounted as a shared volume, you can find them on your mount point')
                         print('**** To see the full report: `npx playwright show-report <mount-point>/playwright/html`')
 
-                        code = child.returncode
-                        if code != 0:
-                            sys.stderr.write('**** ERROR RETURNED BY PLAYWRIGHT\n')
-                            raise ChildProcessError(code)
+                code = child.returncode
+                if code != 0:
+                    sys.stderr.write('**** ERROR RETURNED BY PLAYWRIGHT\n')
+                    raise ChildProcessError(code)
+
             case _:
                 raise ValueError('Unsupported browser tester: ' + browser_tester)
 
@@ -149,7 +150,7 @@ class BrowserTest(Task):
             '-v', package_path + ':/src',
             '-v', '/tmp/test-results:/test-results',
             '--workdir', '/src/' + os.path.relpath(Path.cwd().as_posix(), package_path),
-            'harbor.ci.flexio.io/flexio/flexio-playwright-tester:1.2.0',
+            'harbor.ci.flexio.io/flexio/flexio-playwright-tester:1.3.0',
             'hbshed', 'browser-test', '--e2e-transport=docker'
         ]
 
