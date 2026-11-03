@@ -30,10 +30,10 @@ hbshed
               dev                   Build a dev server
                   <options>
                   --entry           path to app entry
-                  --server-config   local|stack
+                  --server-config   local|stack|deported-stack
                   --html-template   path to template
                   --html-template-name  minimal|local-dev-minimal|stack-dev-minimal|flexio-loader|flexio-loader-embeded
-                  --port            exposed port
+                  --port            exposed port (only for `local` server config)
                   --verbose         verbose mode
               extract-package
                   <options>
