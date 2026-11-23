@@ -150,7 +150,7 @@ class BrowserTest(Task):
             '-v', package_path + ':/src',
             '-v', '/tmp/test-results:/test-results',
             '--workdir', '/src/' + os.path.relpath(Path.cwd().as_posix(), package_path),
-            'harbor.ci.flexio.io/flexio/flexio-playwright-tester:1.3.0',
+            'harbor.ci.flexio.io/flexio/flexio-playwright-tester:1.4.0',
             'hbshed', 'browser-test', '--e2e-transport=docker'
         ]
 
